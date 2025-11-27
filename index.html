@@ -412,6 +412,67 @@
       color: var(--bg-dark);
     }
 
+    /* Rhythm Selector */
+    .rhythm-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      margin-left: 8px;
+    }
+
+    .comping-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      margin-left: 8px;
+    }
+
+    .rhythm-nav-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rhythm-nav-btn:hover {
+      background: var(--accent-purple);
+      color: white;
+    }
+
+    .rhythm-nav-btn:active {
+      transform: scale(0.9);
+    }
+
+    .rhythm-name {
+      min-width: 100px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+    }
+
+    .comping-name {
+      min-width: 90px;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent-coral);
+    }
+
     /* Tempo Display */
     .tempo-section {
       display: flex;
@@ -1155,6 +1216,112 @@
       color: var(--accent-green);
     }
 
+    /* Song Library */
+    .song-library {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .song-genre-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .song-list {
+      max-height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-right: 4px;
+    }
+
+    .song-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .song-list::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 3px;
+    }
+
+    .song-item {
+      padding: 10px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .song-item:hover {
+      border-color: var(--accent-green);
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    .song-item.active {
+      border-color: var(--accent-green);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .song-item-name {
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .song-item-info {
+      display: flex;
+      gap: 10px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .song-item-key {
+      color: var(--accent-green);
+    }
+
+    .song-item-tempo {
+      color: var(--accent-blue);
+    }
+
+    .song-item-chords {
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+
+    /* Chord Section Labels */
+    .chord-section {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .chord-section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      background: rgba(167, 139, 250, 0.1);
+      border-radius: 4px;
+      display: inline-block;
+    }
+
     /* Slider */
     .slider-container {
       display: flex;
@@ -1631,40 +1798,428 @@ const CHORD_TYPES = {
   add9: { intervals: [0, 4, 7, 14], symbol: "add9", name: "Add 9", short: "add9" }
 };
 
-// === AKOR DİZİLİM KALIPLARI ===
+// === AKOR DİZİLİM KALIPLARI - PROFESİYONEL KÜTÜPHANE ===
+// Dünyanın en ikonik ve yaratıcı akor dizilimleri
+
 const PROGRESSION_PATTERNS = {
-  pop: [
-    { degrees: [1, 5, 6, 4], name: "Pop Klasik" },
-    { degrees: [6, 4, 1, 5], name: "Sad Pop" },
-    { degrees: [1, 4, 5, 4], name: "Simple Pop" },
-    { degrees: [1, 6, 4, 5], name: "50s" }
-  ],
-  rock: [
-    { degrees: [1, 4, 5, 4], name: "Rock Klasik" },
-    { degrees: [1, 5, 4, 5], name: "Power Rock" },
-    { degrees: [1, 7, 4, 4], name: "Hard Rock" }
-  ],
-  jazz: [
-    { degrees: [2, 5, 1], name: "ii-V-I" },
-    { degrees: [2, 5, 1, 6], name: "Turnaround" },
-    { degrees: [1, 6, 2, 5], name: "Rhythm Changes" }
-  ],
-  blues: [
-    { degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Blues" },
-    { degrees: [1, 4, 1, 5], name: "Simple Blues" }
-  ],
-  ballad: [
-    { degrees: [1, 6, 2, 5], name: "Ballad Klasik" },
-    { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Canon" }
-  ],
-  edm: [
-    { degrees: [1, 5, 6, 4], name: "EDM Anthem" },
-    { degrees: [6, 4, 1, 5], name: "Emotional" }
-  ],
-  latin: [
-    { degrees: [2, 5, 1, 1], name: "Salsa" },
-    { degrees: [1, 4, 5, 4], name: "Bossa" }
-  ]
+  
+  // ========== POP / ROCK ==========
+  pop: {
+    "4": [
+      { degrees: [1, 5, 6, 4], name: "Axis (I-V-vi-IV)" },
+      { degrees: [1, 4, 5, 4], name: "Classic Rock" },
+      { degrees: [6, 4, 1, 5], name: "Sensitive" },
+      { degrees: [1, 6, 4, 5], name: "50s Doo-Wop" },
+      { degrees: [1, 4, 6, 5], name: "Millennial Whoop" },
+      { degrees: [4, 5, 6, 1], name: "K-Pop Standard" },
+      { degrees: [1, 3, 4, 5], name: "Beatles Pop" },
+      { degrees: [1, 5, 4, 5], name: "Power Pop" },
+      { degrees: [6, 5, 4, 5], name: "Descending Minor" },
+      { degrees: [1, 2, 4, 5], name: "Motown Classic" }
+    ],
+    "8": [
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4], name: "Extended Axis" },
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Pachelbel Canon" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 5], name: "Emotional Journey" },
+      { degrees: [1, 6, 2, 5, 1, 4, 5, 1], name: "Classic Turnaround" },
+      { degrees: [1, 4, 6, 5, 1, 4, 2, 5], name: "Verse-Chorus Bridge" },
+      { degrees: [1, 3, 4, 4, 6, 6, 5, 5], name: "Slow Build" },
+      { degrees: [6, 3, 4, 1, 6, 3, 4, 5], name: "Epic Ballad" },
+      { degrees: [1, 1, 4, 4, 5, 4, 1, 1], name: "Country Pop" },
+      { degrees: [1, 5, 2, 4, 6, 3, 4, 5], name: "Complex Pop" },
+      { degrees: [4, 1, 5, 6, 4, 1, 2, 5], name: "Uplifting Journey" }
+    ],
+    "12": [
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4, 4, 5, 6, 1], name: "Full Song Structure" },
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1], name: "Complete Journey" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 3, 4, 5, 6, 1], name: "Emotional Arc" },
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5, 1, 6, 4, 5], name: "Canon Extended" },
+      { degrees: [1, 4, 5, 4, 6, 4, 5, 5, 1, 4, 2, 5], name: "Dynamic Build" }
+    ],
+    "16": [
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4, 6, 4, 1, 5, 6, 4, 1, 1], name: "Full Verse-Chorus" },
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 1, 4, 5, 4, 6, 4, 5, 1], name: "Epic Pop Song" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 3, 4, 5, 6, 1, 4, 5, 6, 1], name: "Cinematic Pop" },
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5, 1, 5, 6, 3, 4, 1, 2, 5], name: "Double Canon" },
+      { degrees: [1, 4, 6, 5, 1, 4, 2, 5, 6, 3, 4, 1, 6, 4, 5, 1], name: "Full Production" }
+    ]
+  },
+
+  rock: {
+    "4": [
+      { degrees: [1, 4, 5, 4], name: "Classic Rock" },
+      { degrees: [1, 5, 4, 5], name: "Power Chord" },
+      { degrees: [1, 7, 4, 4], name: "Hard Rock" },
+      { degrees: [1, 6, 3, 7], name: "Metal Minor" },
+      { degrees: [1, 4, 1, 5], name: "Blues Rock" },
+      { degrees: [6, 7, 1, 1], name: "Dark Rock" },
+      { degrees: [1, 3, 4, 6], name: "Grunge" },
+      { degrees: [1, 5, 7, 4], name: "Alternative" }
+    ],
+    "8": [
+      { degrees: [1, 4, 5, 4, 1, 4, 5, 5], name: "Rock Anthem" },
+      { degrees: [1, 5, 6, 4, 5, 6, 4, 5], name: "Arena Rock" },
+      { degrees: [6, 4, 1, 5, 6, 7, 1, 1], name: "Epic Rock" },
+      { degrees: [1, 7, 6, 7, 1, 4, 5, 5], name: "Progressive Rock" },
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 4], name: "Verse-Chorus Rock" },
+      { degrees: [6, 3, 7, 4, 6, 3, 4, 5], name: "Dark Anthem" },
+      { degrees: [1, 5, 4, 1, 5, 4, 6, 5], name: "Classic Stadium" },
+      { degrees: [1, 6, 3, 4, 1, 6, 5, 5], name: "Power Ballad" }
+    ],
+    "12": [
+      { degrees: [1, 4, 5, 4, 1, 4, 5, 5, 6, 4, 5, 1], name: "Complete Rock Song" },
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4, 4, 5, 1, 1], name: "Rock Ballad" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 7, 6, 7, 1, 1], name: "Dramatic Rock" },
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 4, 6, 4, 5, 1], name: "Blues Rock Extended" }
+    ],
+    "16": [
+      { degrees: [1, 4, 5, 4, 1, 4, 5, 5, 6, 4, 1, 5, 6, 4, 5, 1], name: "Epic Rock Journey" },
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 7, 1, 4, 5, 4, 6, 4, 5, 1], name: "Stadium Anthem" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 1, 4, 5, 6, 7, 1, 4, 5, 1], name: "Progressive Epic" }
+    ]
+  },
+
+  // ========== JAZZ ==========
+  jazz: {
+    "4": [
+      { degrees: [2, 5, 1, 1], name: "ii-V-I" },
+      { degrees: [1, 6, 2, 5], name: "Rhythm Changes A" },
+      { degrees: [3, 6, 2, 5], name: "iii-VI-ii-V" },
+      { degrees: [1, 4, 3, 6], name: "I-IV-iii-vi" },
+      { degrees: [2, 5, 3, 6], name: "Minor Turnaround" },
+      { degrees: [1, 7, 3, 6], name: "Chromatic Descent" },
+      { degrees: [4, 7, 3, 6], name: "Backdoor ii-V" },
+      { degrees: [1, 1, 4, 4], name: "Jazz Blues Start" }
+    ],
+    "8": [
+      { degrees: [1, 6, 2, 5, 1, 6, 2, 5], name: "Extended Turnaround" },
+      { degrees: [1, 6, 2, 5, 3, 6, 2, 5], name: "Rhythm Changes AB" },
+      { degrees: [2, 5, 1, 4, 3, 6, 2, 5], name: "Circle of Fifths" },
+      { degrees: [1, 4, 3, 6, 2, 5, 1, 1], name: "Standard 8-Bar" },
+      { degrees: [1, 7, 6, 5, 4, 3, 2, 5], name: "Chromatic Jazz" },
+      { degrees: [2, 5, 1, 6, 2, 5, 3, 6], name: "Coltrane Style" },
+      { degrees: [1, 4, 1, 5, 2, 5, 1, 6], name: "Bebop Standard" },
+      { degrees: [3, 6, 2, 5, 1, 4, 7, 3], name: "Giant Steps Lite" }
+    ],
+    "12": [
+      { degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Jazz Blues" },
+      { degrees: [1, 6, 2, 5, 1, 6, 2, 5, 3, 6, 2, 5], name: "Extended Rhythm" },
+      { degrees: [1, 4, 1, 5, 2, 5, 1, 6, 2, 5, 1, 1], name: "Jazz Standard 12" },
+      { degrees: [2, 5, 1, 6, 2, 5, 3, 6, 4, 7, 3, 6], name: "Complex Changes" },
+      { degrees: [1, 7, 3, 6, 2, 5, 1, 4, 3, 6, 2, 5], name: "Sophisticated Jazz" }
+    ],
+    "16": [
+      { degrees: [1, 6, 2, 5, 1, 6, 2, 5, 3, 6, 2, 5, 1, 6, 2, 5], name: "Full Rhythm Changes" },
+      { degrees: [1, 4, 1, 5, 2, 5, 1, 6, 2, 5, 1, 4, 3, 6, 2, 5], name: "Complete Jazz Standard" },
+      { degrees: [2, 5, 1, 6, 2, 5, 3, 6, 2, 5, 1, 4, 7, 3, 6, 2], name: "Advanced Changes" },
+      { degrees: [1, 6, 2, 5, 3, 6, 4, 7, 1, 6, 2, 5, 3, 6, 2, 5], name: "Pro Jazz Chart" }
+    ]
+  },
+
+  // ========== BLUES ==========
+  blues: {
+    "4": [
+      { degrees: [1, 4, 1, 5], name: "Simple Blues" },
+      { degrees: [1, 1, 4, 1], name: "Blues Start" },
+      { degrees: [5, 4, 1, 5], name: "Turnaround" },
+      { degrees: [1, 4, 5, 4], name: "Quick Change" }
+    ],
+    "8": [
+      { degrees: [1, 1, 1, 1, 4, 4, 1, 1], name: "8-Bar Blues" },
+      { degrees: [1, 4, 1, 1, 4, 4, 1, 5], name: "Early Blues" },
+      { degrees: [1, 1, 4, 4, 1, 5, 4, 1], name: "Slow Blues" },
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 1], name: "Country Blues" }
+    ],
+    "12": [
+      { degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Blues Classic" },
+      { degrees: [1, 4, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "Quick Change Blues" },
+      { degrees: [1, 1, 1, 1, 4, 4, 1, 6, 2, 5, 1, 5], name: "Jazz Blues" },
+      { degrees: [1, 4, 1, 5, 4, 4, 1, 1, 5, 4, 1, 5], name: "Texas Blues" },
+      { degrees: [1, 1, 1, 1, 4, 4, 1, 3, 4, 5, 1, 5], name: "Chicago Blues" }
+    ],
+    "16": [
+      { degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5, 1, 4, 1, 5], name: "Extended 16-Bar Blues" },
+      { degrees: [1, 4, 1, 1, 4, 4, 1, 1, 5, 4, 1, 6, 2, 5, 1, 5], name: "Jazz Blues Extended" },
+      { degrees: [1, 1, 4, 4, 1, 1, 5, 5, 1, 4, 1, 5, 1, 4, 5, 1], name: "Double Blues" }
+    ]
+  },
+
+  // ========== BALLAD / EMOTIONAL ==========
+  ballad: {
+    "4": [
+      { degrees: [1, 6, 4, 5], name: "Heart Ballad" },
+      { degrees: [6, 4, 1, 5], name: "Sensitive" },
+      { degrees: [1, 5, 6, 4], name: "Hope & Pain" },
+      { degrees: [1, 3, 4, 5], name: "Dreamy" },
+      { degrees: [6, 5, 4, 5], name: "Melancholy" },
+      { degrees: [1, 2, 4, 5], name: "Gentle Rise" }
+    ],
+    "8": [
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Canon Ballad" },
+      { degrees: [6, 4, 1, 5, 6, 3, 4, 5], name: "Tearjerker" },
+      { degrees: [1, 6, 4, 5, 1, 3, 4, 5], name: "Wedding Song" },
+      { degrees: [1, 5, 6, 4, 4, 5, 6, 1], name: "Hopeful End" },
+      { degrees: [6, 3, 4, 1, 6, 5, 4, 5], name: "Bittersweet" },
+      { degrees: [1, 6, 2, 5, 3, 6, 4, 5], name: "Jazz Ballad" },
+      { degrees: [1, 4, 6, 5, 1, 4, 2, 5], name: "Cinematic Emotion" }
+    ],
+    "12": [
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5, 1, 6, 4, 5], name: "Complete Ballad" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 3, 4, 5, 6, 1], name: "Emotional Journey" },
+      { degrees: [1, 6, 4, 5, 1, 3, 4, 5, 6, 4, 5, 1], name: "Full Heart" },
+      { degrees: [1, 6, 2, 5, 1, 6, 2, 5, 3, 6, 4, 5], name: "Sophisticated Ballad" }
+    ],
+    "16": [
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5, 1, 5, 6, 3, 4, 1, 2, 5], name: "Epic Ballad" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 3, 4, 5, 6, 1, 4, 5, 6, 1], name: "Dramatic Ballad" },
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 3, 6, 4, 1, 6, 4, 5, 1], name: "Wedding Epic" }
+    ]
+  },
+
+  // ========== EDM / ELECTRONIC ==========
+  edm: {
+    "4": [
+      { degrees: [1, 5, 6, 4], name: "EDM Anthem" },
+      { degrees: [6, 4, 1, 5], name: "Emotional EDM" },
+      { degrees: [1, 6, 4, 5], name: "Festival" },
+      { degrees: [6, 1, 5, 4], name: "Progressive House" },
+      { degrees: [1, 4, 6, 5], name: "Future Bass" },
+      { degrees: [6, 5, 4, 5], name: "Melodic Techno" },
+      { degrees: [1, 5, 4, 5], name: "Big Room" },
+      { degrees: [6, 7, 1, 5], name: "Dark EDM" }
+    ],
+    "8": [
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4], name: "Main Stage Anthem" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 5], name: "Emotional Build" },
+      { degrees: [1, 6, 4, 5, 1, 6, 4, 5], name: "Festival Anthem" },
+      { degrees: [6, 1, 5, 4, 6, 1, 5, 5], name: "Progressive Journey" },
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Melodic EDM" },
+      { degrees: [6, 5, 4, 5, 6, 5, 4, 1], name: "Melodic House" },
+      { degrees: [1, 4, 6, 5, 1, 4, 2, 5], name: "Future Pop" }
+    ],
+    "12": [
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4, 4, 5, 6, 1], name: "Full EDM Track" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 3, 4, 5, 6, 1], name: "Emotional Arc" },
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1], name: "Progressive Build" }
+    ],
+    "16": [
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 4, 6, 4, 1, 5, 6, 4, 5, 1], name: "Complete EDM Song" },
+      { degrees: [6, 4, 1, 5, 6, 4, 1, 5, 4, 5, 6, 1, 4, 5, 6, 1], name: "Festival Journey" },
+      { degrees: [1, 6, 4, 5, 1, 6, 4, 5, 6, 3, 4, 1, 6, 4, 5, 1], name: "Epic Drop" }
+    ]
+  },
+
+  // ========== LATIN ==========
+  latin: {
+    "4": [
+      { degrees: [2, 5, 1, 1], name: "Salsa Basic" },
+      { degrees: [1, 4, 5, 4], name: "Bossa Nova" },
+      { degrees: [1, 4, 2, 5], name: "Samba" },
+      { degrees: [6, 3, 4, 5], name: "Flamenco" },
+      { degrees: [1, 7, 6, 5], name: "Andalusian Cadence" },
+      { degrees: [1, 4, 5, 1], name: "Son Cubano" },
+      { degrees: [2, 5, 1, 6], name: "Latin Jazz" }
+    ],
+    "8": [
+      { degrees: [2, 5, 1, 6, 2, 5, 1, 1], name: "Salsa Montuno" },
+      { degrees: [1, 4, 2, 5, 1, 4, 5, 1], name: "Bossa Standard" },
+      { degrees: [1, 6, 2, 5, 1, 4, 5, 1], name: "Latin Ballad" },
+      { degrees: [6, 3, 4, 5, 6, 3, 7, 1], name: "Flamenco 8" },
+      { degrees: [1, 7, 6, 5, 4, 3, 2, 1], name: "Full Andalusian" },
+      { degrees: [1, 4, 5, 4, 1, 4, 2, 5], name: "Cumbia" },
+      { degrees: [2, 5, 1, 4, 2, 5, 3, 6], name: "Afro-Cuban" }
+    ],
+    "12": [
+      { degrees: [2, 5, 1, 6, 2, 5, 1, 4, 2, 5, 1, 1], name: "Salsa Extended" },
+      { degrees: [1, 4, 2, 5, 1, 4, 5, 1, 6, 2, 5, 1], name: "Bossa Completa" },
+      { degrees: [1, 7, 6, 5, 4, 3, 2, 1, 4, 5, 1, 1], name: "Flamenco Full" },
+      { degrees: [1, 6, 2, 5, 3, 6, 2, 5, 1, 4, 5, 1], name: "Latin Jazz Standard" }
+    ],
+    "16": [
+      { degrees: [2, 5, 1, 6, 2, 5, 1, 1, 2, 5, 1, 4, 2, 5, 1, 1], name: "Complete Salsa" },
+      { degrees: [1, 4, 2, 5, 1, 4, 5, 1, 1, 6, 2, 5, 1, 4, 5, 1], name: "Full Bossa Nova" },
+      { degrees: [6, 3, 4, 5, 6, 7, 1, 1, 6, 3, 4, 5, 6, 7, 1, 1], name: "Flamenco Epic" }
+    ]
+  },
+
+  // ========== R&B / SOUL ==========
+  rnb: {
+    "4": [
+      { degrees: [1, 6, 4, 5], name: "R&B Classic" },
+      { degrees: [2, 5, 1, 6], name: "Neo Soul" },
+      { degrees: [1, 4, 3, 6], name: "Motown" },
+      { degrees: [6, 2, 5, 1], name: "Soul Ballad" },
+      { degrees: [1, 3, 4, 6], name: "90s R&B" },
+      { degrees: [2, 3, 4, 5], name: "Gospel Soul" }
+    ],
+    "8": [
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5], name: "R&B Standard" },
+      { degrees: [2, 5, 1, 6, 2, 5, 3, 6], name: "Neo Soul Journey" },
+      { degrees: [1, 4, 3, 6, 2, 5, 1, 1], name: "Classic Motown" },
+      { degrees: [1, 3, 4, 6, 1, 5, 4, 5], name: "90s Slow Jam" },
+      { degrees: [6, 2, 5, 1, 4, 2, 5, 1], name: "Soul Groove" },
+      { degrees: [1, 6, 2, 5, 3, 6, 4, 5], name: "Sophisticated R&B" }
+    ],
+    "12": [
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1], name: "Complete R&B" },
+      { degrees: [2, 5, 1, 6, 2, 5, 1, 4, 3, 6, 2, 5], name: "Neo Soul Extended" },
+      { degrees: [1, 4, 3, 6, 2, 5, 1, 6, 4, 5, 1, 1], name: "Motown Classic" }
+    ],
+    "16": [
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1, 6, 4, 5, 1], name: "Full R&B Song" },
+      { degrees: [2, 5, 1, 6, 2, 5, 3, 6, 4, 7, 3, 6, 2, 5, 1, 1], name: "Neo Soul Epic" }
+    ]
+  },
+
+  // ========== CLASSICAL / CINEMATIC ==========
+  classical: {
+    "4": [
+      { degrees: [1, 4, 5, 1], name: "Authentic Cadence" },
+      { degrees: [1, 5, 6, 3], name: "Romantic" },
+      { degrees: [4, 5, 3, 6], name: "Deceptive" },
+      { degrees: [1, 4, 1, 5], name: "Plagal Motion" },
+      { degrees: [6, 4, 5, 1], name: "Baroque Cadence" },
+      { degrees: [2, 5, 1, 4], name: "Mozart Style" }
+    ],
+    "8": [
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Canon in D Style" },
+      { degrees: [1, 4, 5, 1, 4, 5, 6, 3], name: "Classical Period" },
+      { degrees: [6, 3, 4, 1, 2, 5, 1, 1], name: "Romantic Period" },
+      { degrees: [1, 6, 2, 5, 1, 4, 5, 1], name: "Baroque Standard" },
+      { degrees: [1, 4, 1, 5, 6, 4, 5, 1], name: "Sonata Form" },
+      { degrees: [4, 5, 6, 3, 4, 5, 1, 1], name: "Chopin Style" }
+    ],
+    "12": [
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5, 1, 4, 5, 1], name: "Full Canon" },
+      { degrees: [1, 4, 5, 1, 6, 3, 4, 5, 1, 2, 5, 1], name: "Sonata Extended" },
+      { degrees: [6, 3, 4, 1, 6, 3, 2, 5, 1, 4, 5, 1], name: "Romantic Epic" },
+      { degrees: [1, 6, 4, 5, 3, 6, 2, 5, 1, 4, 5, 1], name: "Film Score" }
+    ],
+    "16": [
+      { degrees: [1, 5, 6, 3, 4, 1, 4, 5, 1, 5, 6, 3, 4, 1, 5, 1], name: "Full Pachelbel" },
+      { degrees: [1, 4, 5, 1, 6, 3, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1], name: "Classical Epic" },
+      { degrees: [6, 3, 4, 1, 6, 5, 4, 5, 1, 6, 4, 5, 1, 4, 5, 1], name: "Cinematic Score" }
+    ]
+  },
+
+  // ========== FUNK / GROOVE ==========
+  funk: {
+    "4": [
+      { degrees: [1, 4, 1, 4], name: "Basic Funk" },
+      { degrees: [1, 7, 4, 4], name: "James Brown" },
+      { degrees: [2, 5, 1, 4], name: "Funky Turnaround" },
+      { degrees: [1, 4, 5, 4], name: "P-Funk" },
+      { degrees: [6, 5, 4, 4], name: "Dark Funk" }
+    ],
+    "8": [
+      { degrees: [1, 4, 1, 4, 5, 4, 1, 4], name: "Classic Funk" },
+      { degrees: [1, 7, 4, 4, 1, 7, 4, 5], name: "JB Extended" },
+      { degrees: [2, 5, 1, 4, 2, 5, 1, 1], name: "Fusion Funk" },
+      { degrees: [1, 4, 5, 4, 1, 4, 5, 5], name: "Disco Funk" },
+      { degrees: [1, 1, 4, 4, 1, 5, 4, 1], name: "Groove Standard" }
+    ],
+    "12": [
+      { degrees: [1, 4, 1, 4, 5, 4, 1, 4, 5, 4, 1, 1], name: "Full Funk" },
+      { degrees: [1, 7, 4, 4, 1, 7, 4, 5, 1, 4, 5, 1], name: "Parliament Style" },
+      { degrees: [2, 5, 1, 4, 2, 5, 1, 6, 2, 5, 1, 1], name: "Jazz Funk" }
+    ],
+    "16": [
+      { degrees: [1, 4, 1, 4, 5, 4, 1, 4, 1, 7, 4, 4, 5, 4, 1, 1], name: "Epic Funk" },
+      { degrees: [1, 4, 1, 4, 5, 4, 1, 4, 2, 5, 1, 4, 5, 4, 1, 1], name: "Complete Groove" }
+    ]
+  },
+
+  // ========== COUNTRY / FOLK ==========
+  country: {
+    "4": [
+      { degrees: [1, 4, 5, 1], name: "Country Basic" },
+      { degrees: [1, 4, 1, 5], name: "Nashville" },
+      { degrees: [1, 5, 4, 1], name: "Folk" },
+      { degrees: [1, 6, 4, 5], name: "Country Ballad" },
+      { degrees: [1, 4, 5, 4], name: "Bluegrass" }
+    ],
+    "8": [
+      { degrees: [1, 4, 5, 1, 1, 4, 5, 1], name: "Country Standard" },
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 1], name: "Nashville 8" },
+      { degrees: [1, 6, 4, 5, 1, 6, 4, 5], name: "Country Ballad 8" },
+      { degrees: [1, 5, 4, 1, 1, 5, 4, 5], name: "Folk Journey" },
+      { degrees: [1, 4, 5, 4, 1, 4, 5, 1], name: "Bluegrass Standard" }
+    ],
+    "12": [
+      { degrees: [1, 4, 5, 1, 1, 4, 5, 1, 4, 5, 1, 1], name: "Country Song" },
+      { degrees: [1, 6, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1], name: "Country Ballad Full" },
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 4, 1, 4, 5, 1], name: "Nashville Complete" }
+    ],
+    "16": [
+      { degrees: [1, 4, 5, 1, 1, 4, 5, 1, 1, 6, 4, 5, 1, 4, 5, 1], name: "Full Country Song" },
+      { degrees: [1, 6, 4, 5, 1, 6, 4, 5, 4, 5, 6, 1, 4, 5, 1, 1], name: "Epic Country Ballad" }
+    ]
+  },
+
+  // ========== GOSPEL / SPIRITUAL ==========
+  gospel: {
+    "4": [
+      { degrees: [1, 4, 1, 5], name: "Gospel Basic" },
+      { degrees: [1, 1, 4, 4], name: "Praise" },
+      { degrees: [4, 5, 1, 1], name: "Amen Cadence" },
+      { degrees: [2, 5, 1, 4], name: "Gospel Turnaround" },
+      { degrees: [1, 3, 4, 5], name: "Worship" }
+    ],
+    "8": [
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 1], name: "Gospel Standard" },
+      { degrees: [1, 1, 4, 4, 1, 5, 4, 1], name: "Church Groove" },
+      { degrees: [2, 5, 1, 4, 2, 5, 1, 1], name: "Gospel Jazz" },
+      { degrees: [1, 3, 4, 5, 1, 6, 2, 5], name: "Worship Build" },
+      { degrees: [4, 5, 1, 6, 4, 5, 1, 1], name: "Praise Anthem" }
+    ],
+    "12": [
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 1, 4, 5, 1, 1], name: "Full Gospel" },
+      { degrees: [1, 3, 4, 5, 1, 6, 2, 5, 1, 4, 5, 1], name: "Worship Song" },
+      { degrees: [2, 5, 1, 4, 2, 5, 1, 6, 4, 5, 1, 1], name: "Gospel Praise" }
+    ],
+    "16": [
+      { degrees: [1, 4, 1, 5, 1, 4, 5, 1, 1, 6, 4, 5, 1, 4, 5, 1], name: "Complete Gospel" },
+      { degrees: [1, 3, 4, 5, 1, 6, 2, 5, 4, 5, 6, 1, 4, 5, 1, 1], name: "Epic Worship" }
+    ]
+  },
+
+  // ========== WORLD / ETHNIC ==========
+  world: {
+    "4": [
+      { degrees: [1, 7, 6, 7], name: "Arabic Maqam" },
+      { degrees: [1, 5, 4, 1], name: "Celtic" },
+      { degrees: [1, 4, 7, 1], name: "Indian Raga" },
+      { degrees: [6, 7, 1, 5], name: "Klezmer" },
+      { degrees: [1, 3, 4, 5], name: "Chinese Pentatonic" },
+      { degrees: [1, 5, 6, 4], name: "Japanese Pop" }
+    ],
+    "8": [
+      { degrees: [1, 7, 6, 7, 1, 7, 6, 1], name: "Arabic Journey" },
+      { degrees: [1, 5, 4, 1, 1, 5, 4, 5], name: "Celtic Dance" },
+      { degrees: [1, 4, 7, 1, 1, 4, 5, 1], name: "Raga Inspired" },
+      { degrees: [6, 7, 1, 5, 6, 7, 1, 1], name: "Eastern European" },
+      { degrees: [1, 3, 4, 5, 1, 5, 4, 1], name: "Asian Fusion" },
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 5], name: "J-Pop Standard" }
+    ],
+    "12": [
+      { degrees: [1, 7, 6, 7, 1, 4, 5, 1, 7, 6, 7, 1], name: "Arabic Full" },
+      { degrees: [1, 5, 4, 1, 1, 5, 4, 5, 1, 4, 5, 1], name: "Celtic Epic" },
+      { degrees: [6, 7, 1, 5, 6, 7, 1, 1, 6, 7, 1, 5], name: "Klezmer Dance" }
+    ],
+    "16": [
+      { degrees: [1, 7, 6, 7, 1, 4, 5, 1, 1, 7, 6, 7, 1, 4, 5, 1], name: "Middle Eastern Epic" },
+      { degrees: [1, 5, 4, 1, 1, 5, 4, 5, 1, 5, 6, 4, 1, 5, 4, 1], name: "Celtic Journey" },
+      { degrees: [1, 5, 6, 4, 1, 5, 6, 3, 4, 1, 4, 5, 1, 5, 6, 1], name: "Anime Epic" }
+    ]
+  },
+
+  // ========== RANDOM / EXPERIMENTAL ==========
+  random: {
+    "4": [],
+    "8": [],
+    "12": [],
+    "16": []
+  }
 };
 
 // === PRESET'LER ===
@@ -1675,6 +2230,503 @@ const PRESETS = {
   rock1: { key: "G", scale: "major", degrees: [1, 4, 5], name: "I-IV-V" },
   sad1: { key: "A", scale: "naturalMinor", degrees: [1, 6, 3, 7], name: "Sad Progression" }
 };
+
+// === RİTİM PATTERN'LERİ ===
+const RHYTHM_PATTERNS = {
+  pop: {
+    name: "Pop 4/4",
+    subdivisions: 8,
+    bpm: 120,
+    // [accent, vel, vel, vel, accent, vel, vel, vel] - 8'lik notalar
+    pattern: [1.0, 0.3, 0.7, 0.3, 0.8, 0.3, 0.7, 0.4],
+    sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat']
+  },
+  rock: {
+    name: "Rock 4/4",
+    subdivisions: 8,
+    bpm: 130,
+    pattern: [1.0, 0.5, 0.9, 0.5, 0.8, 0.6, 1.0, 0.5],
+    sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'kick', 'snare', 'hihat']
+  },
+  jazz: {
+    name: "Jazz Swing",
+    subdivisions: 12,
+    bpm: 140,
+    swing: true,
+    pattern: [0.8, 0, 0.4, 0.6, 0, 0.5, 0.7, 0, 0.4, 0.6, 0, 0.6],
+    sounds: ['ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'hihat']
+  },
+  blues: {
+    name: "Blues Shuffle",
+    subdivisions: 12,
+    bpm: 90,
+    swing: true,
+    pattern: [1.0, 0, 0.4, 0.7, 0, 0.4, 0.6, 0, 0.4, 0.9, 0, 0.5],
+    sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null, 'hihat', 'snare', null, 'hihat']
+  },
+  ballad: {
+    name: "Ballad 4/4",
+    subdivisions: 8,
+    bpm: 70,
+    pattern: [0.7, 0, 0.5, 0.2, 0.4, 0.2, 0.6, 0],
+    sounds: ['kick', null, 'snare', 'hihat', 'kick', 'hihat', 'snare', null]
+  },
+  edm: {
+    name: "EDM Four-on-floor",
+    subdivisions: 16,
+    bpm: 128,
+    pattern: [1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.9, 0.3, 1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 1.0, 0.4],
+    sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat']
+  },
+  latin: {
+    name: "Latin Clave",
+    subdivisions: 8,
+    bpm: 100,
+    pattern: [1.0, 0, 0.8, 0, 0.7, 0.8, 0, 0.7],
+    sounds: ['clave', null, 'clave', null, 'clave', 'clave', null, 'clave']
+  },
+  rnb: {
+    name: "R&B Groove",
+    subdivisions: 16,
+    bpm: 85,
+    pattern: [0.9, 0.2, 0.4, 0.2, 0.7, 0.3, 0.8, 0.2, 0.6, 0.2, 0.4, 0.3, 0.7, 0.2, 0.9, 0.3],
+    sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat']
+  },
+  funk: {
+    name: "Funk Groove",
+    subdivisions: 16,
+    bpm: 110,
+    pattern: [1.0, 0.3, 0.6, 0.3, 0.8, 0.4, 0.7, 0.3, 0.5, 0.3, 0.6, 0.4, 0.9, 0.3, 0.7, 0.5],
+    sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat']
+  },
+  classical: {
+    name: "Classical 4/4",
+    subdivisions: 4,
+    bpm: 80,
+    pattern: [1.0, 0.5, 0.7, 0.5],
+    sounds: ['click', 'click', 'click', 'click']
+  },
+  country: {
+    name: "Country 4/4",
+    subdivisions: 8,
+    bpm: 115,
+    pattern: [1.0, 0.4, 0.8, 0.4, 0.7, 0.4, 0.8, 0.4],
+    sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat']
+  },
+  gospel: {
+    name: "Gospel 4/4",
+    subdivisions: 8,
+    bpm: 95,
+    pattern: [1.0, 0.3, 0.7, 0.4, 0.8, 0.3, 0.9, 0.4],
+    sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat']
+  },
+  world: {
+    name: "World 4/4",
+    subdivisions: 8,
+    bpm: 100,
+    pattern: [1.0, 0.5, 0.7, 0.3, 0.6, 0.8, 0.4, 0.6],
+    sounds: ['kick', 'clave', 'snare', 'clave', 'kick', 'clave', 'snare', 'clave']
+  },
+  random: {
+    name: "Basic 4/4",
+    subdivisions: 4,
+    bpm: 120,
+    pattern: [1.0, 0.5, 0.7, 0.5],
+    sounds: ['click', 'click', 'click', 'click']
+  }
+};
+
+// === ÜNLÜ ŞARKI KÜTÜPHANESİ ===
+const FAMOUS_SONGS = {
+  
+  // ========== POP ==========
+  pop: [
+    // 1950s-1960s
+    { name: "Stand By Me - Ben E. King", key: "A", chords: ["A", "F#m", "D", "E"], tempo: 118 },
+    { name: "Twist and Shout - The Beatles", key: "D", chords: ["D", "G", "A", "A"], tempo: 125 },
+    { name: "La Bamba - Ritchie Valens", key: "C", chords: ["C", "F", "G", "G"], tempo: 142 },
+    { name: "I'm a Believer - The Monkees", key: "G", chords: ["G", "C", "G", "D"], tempo: 160 },
+    
+    // 1970s-1980s
+    { name: "Let It Be - The Beatles", key: "C", chords: ["C", "G", "Am", "F", "C", "G", "F", "C"], tempo: 76 },
+    { name: "Hotel California - Eagles", key: "Bm", chords: ["Bm", "F#", "A", "E", "G", "D", "Em", "F#"], tempo: 75 },
+    { name: "Africa - Toto", key: "A", chords: ["A", "C#m", "F#m", "D", "A", "C#m", "F#m", "E"], tempo: 93 },
+    { name: "Take On Me - a-ha", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 169 },
+    { name: "Billie Jean - Michael Jackson", key: "F#m", chords: ["F#m", "G#m", "F#m", "G#m"], tempo: 117 },
+    { name: "Every Breath You Take - The Police", key: "Ab", chords: ["Ab", "Fm", "Db", "Eb"], tempo: 104 },
+    { name: "Sweet Child O' Mine - Guns N' Roses", key: "D", chords: ["D", "C", "G", "D"], tempo: 122 },
+    { name: "Livin' on a Prayer - Bon Jovi", key: "Em", chords: ["Em", "C", "D", "Em"], tempo: 123 },
+    
+    // 1990s
+    { name: "Wonderwall - Oasis", key: "F#m", chords: ["Em", "G", "D", "A"], tempo: 87 },
+    { name: "Creep - Radiohead", key: "G", chords: ["G", "B", "C", "Cm"], tempo: 92 },
+    { name: "Smells Like Teen Spirit - Nirvana", key: "Fm", chords: ["Fm", "Bb", "Ab", "Db"], tempo: 117 },
+    { name: "Zombie - The Cranberries", key: "Em", chords: ["Em", "C", "G", "D"], tempo: 83 },
+    { name: "I Will Always Love You - Whitney Houston", key: "A", chords: ["A", "F#m", "D", "E"], tempo: 68 },
+    { name: "My Heart Will Go On - Celine Dion", key: "E", chords: ["E", "B", "A", "B"], tempo: 100 },
+    { name: "Wannabe - Spice Girls", key: "B", chords: ["B", "F#", "G#m", "E"], tempo: 110 },
+    { name: "Iris - Goo Goo Dolls", key: "D", chords: ["D", "Em", "G", "Bm", "A"], tempo: 80 },
+    
+    // 2000s
+    { name: "Clocks - Coldplay", key: "Eb", chords: ["Eb", "Bbm", "Fm", "Fm"], tempo: 130 },
+    { name: "Mr. Brightside - The Killers", key: "D", chords: ["D", "G", "Bm", "A"], tempo: 148 },
+    { name: "Hey Ya! - OutKast", key: "G", chords: ["G", "C", "D", "E"], tempo: 160 },
+    { name: "Since U Been Gone - Kelly Clarkson", key: "G", chords: ["G", "Em", "C", "D"], tempo: 132 },
+    { name: "Hips Don't Lie - Shakira", key: "Am", chords: ["Am", "Dm", "G", "C"], tempo: 100 },
+    { name: "Crazy in Love - Beyoncé", key: "Dm", chords: ["Dm", "Bb", "Gm", "A"], tempo: 99 },
+    { name: "Toxic - Britney Spears", key: "Cm", chords: ["Cm", "Ab", "Bb", "G"], tempo: 143 },
+    { name: "Beautiful Day - U2", key: "A", chords: ["A", "Bm", "D", "G", "D", "A"], tempo: 136 },
+    { name: "Seven Nation Army - White Stripes", key: "Em", chords: ["Em", "Em", "G", "E"], tempo: 124 },
+    { name: "Viva la Vida - Coldplay", key: "Ab", chords: ["Ab", "Eb", "Fm", "Db"], tempo: 138 },
+    
+    // 2010s
+    { name: "Rolling in the Deep - Adele", key: "Cm", chords: ["Cm", "Bb", "Gm", "Ab", "Bb"], tempo: 105 },
+    { name: "Someone Like You - Adele", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 68 },
+    { name: "Happy - Pharrell Williams", key: "F", chords: ["F", "Fm", "Db", "C"], tempo: 160 },
+    { name: "Uptown Funk - Bruno Mars", key: "Dm", chords: ["Dm", "Dm", "G", "G"], tempo: 115 },
+    { name: "Shape of You - Ed Sheeran", key: "C#m", chords: ["C#m", "F#m", "A", "B"], tempo: 96 },
+    { name: "Despacito - Luis Fonsi", key: "Bm", chords: ["Bm", "G", "D", "A"], tempo: 89 },
+    { name: "Thinking Out Loud - Ed Sheeran", key: "D", chords: ["D", "D/F#", "G", "A"], tempo: 79 },
+    { name: "All of Me - John Legend", key: "Ab", chords: ["Ab", "Fm", "Db", "Eb"], tempo: 63 },
+    { name: "Blank Space - Taylor Swift", key: "F", chords: ["F", "Dm", "Bb", "C"], tempo: 96 },
+    { name: "Shake It Off - Taylor Swift", key: "G", chords: ["G", "Am", "C", "D"], tempo: 160 },
+    { name: "Havana - Camila Cabello", key: "Gm", chords: ["Gm", "Eb", "D", "Gm"], tempo: 105 },
+    { name: "Closer - The Chainsmokers", key: "C", chords: ["C", "D", "Em", "G"], tempo: 95 },
+    { name: "Can't Stop the Feeling - Justin Timberlake", key: "C", chords: ["C", "Am", "F", "Am"], tempo: 113 },
+    { name: "Shallow - Lady Gaga", key: "G", chords: ["G", "D", "Em", "C"], tempo: 96 },
+    
+    // 2020s
+    { name: "Blinding Lights - The Weeknd", key: "Fm", chords: ["Fm", "Cm", "Ab", "Eb"], tempo: 171 },
+    { name: "Watermelon Sugar - Harry Styles", key: "Dm", chords: ["Dm", "Am", "C", "G"], tempo: 95 },
+    { name: "Levitating - Dua Lipa", key: "Bm", chords: ["Bm", "F#m", "G", "A"], tempo: 103 },
+    { name: "Stay - Kid Laroi & Justin Bieber", key: "C", chords: ["C", "G", "Am", "F"], tempo: 170 },
+    { name: "As It Was - Harry Styles", key: "F#m", chords: ["F#m", "D", "E", "A"], tempo: 174 },
+    { name: "Anti-Hero - Taylor Swift", key: "E", chords: ["E", "C#m", "B", "A"], tempo: 97 },
+    { name: "Flowers - Miley Cyrus", key: "Am", chords: ["Am", "G", "F", "Em"], tempo: 118 },
+    { name: "Kill Bill - SZA", key: "Am", chords: ["Am", "Em", "F", "G"], tempo: 89 },
+  ],
+  
+  // ========== ROCK ==========
+  rock: [
+    // Classic Rock
+    { name: "Smoke on the Water - Deep Purple", key: "Gm", chords: ["Gm", "Bb", "C", "Gm"], tempo: 112 },
+    { name: "Back in Black - AC/DC", key: "E", chords: ["E", "D", "A", "E"], tempo: 92 },
+    { name: "Stairway to Heaven - Led Zeppelin", key: "Am", chords: ["Am", "C", "D", "F", "G", "Am"], tempo: 82 },
+    { name: "Bohemian Rhapsody - Queen", key: "Bb", chords: ["Bb", "Gm", "Cm", "F7"], tempo: 72 },
+    { name: "We Will Rock You - Queen", key: "E", chords: ["E", "A", "E", "E"], tempo: 81 },
+    { name: "We Are the Champions - Queen", key: "Cm", chords: ["Cm", "Bb", "Ab", "Bb", "Cm"], tempo: 65 },
+    { name: "Free Bird - Lynyrd Skynyrd", key: "G", chords: ["G", "D", "Em", "F", "C", "D"], tempo: 60 },
+    { name: "Highway to Hell - AC/DC", key: "A", chords: ["A", "D", "G", "D", "A"], tempo: 116 },
+    { name: "Paranoid - Black Sabbath", key: "E", chords: ["E", "D", "G", "D", "E"], tempo: 164 },
+    { name: "Iron Man - Black Sabbath", key: "E", chords: ["E", "G", "F#", "G", "F#", "E"], tempo: 76 },
+    { name: "Purple Haze - Jimi Hendrix", key: "E", chords: ["E", "G", "A", "E"], tempo: 109 },
+    { name: "Johnny B. Goode - Chuck Berry", key: "Bb", chords: ["Bb", "Eb", "F", "Bb"], tempo: 168 },
+    { name: "Born to Be Wild - Steppenwolf", key: "E", chords: ["E", "E", "G", "A"], tempo: 146 },
+    
+    // 80s-90s Rock
+    { name: "Welcome to the Jungle - GNR", key: "E", chords: ["E", "D", "C", "A"], tempo: 124 },
+    { name: "Enter Sandman - Metallica", key: "Em", chords: ["Em", "G", "Em", "D"], tempo: 123 },
+    { name: "Nothing Else Matters - Metallica", key: "Em", chords: ["Em", "D", "C", "G", "B7"], tempo: 69 },
+    { name: "Under the Bridge - Red Hot Chili Peppers", key: "E", chords: ["E", "B", "C#m", "G#m", "A"], tempo: 84 },
+    { name: "Californication - Red Hot Chili Peppers", key: "Am", chords: ["Am", "F", "C", "G"], tempo: 96 },
+    { name: "Black Hole Sun - Soundgarden", key: "G", chords: ["G", "Bb", "F", "Em"], tempo: 87 },
+    { name: "Alive - Pearl Jam", key: "A", chords: ["A", "G", "F", "G"], tempo: 76 },
+    { name: "Jeremy - Pearl Jam", key: "A", chords: ["A", "A/G#", "A/G", "A/F#"], tempo: 100 },
+    { name: "Basket Case - Green Day", key: "Eb", chords: ["Eb", "Bb", "Cm", "G"], tempo: 171 },
+    { name: "American Idiot - Green Day", key: "Ab", chords: ["Ab", "Db", "Eb", "Ab"], tempo: 189 },
+    { name: "Boulevard of Broken Dreams - Green Day", key: "Fm", chords: ["Fm", "Ab", "Eb", "Bb"], tempo: 86 },
+    
+    // 2000s Rock
+    { name: "In the End - Linkin Park", key: "C#m", chords: ["C#m", "E", "A", "B"], tempo: 105 },
+    { name: "Numb - Linkin Park", key: "F#m", chords: ["F#m", "D", "A", "E"], tempo: 110 },
+    { name: "Chop Suey! - System of a Down", key: "Gm", chords: ["Gm", "F", "Eb", "D"], tempo: 128 },
+    { name: "The Reason - Hoobastank", key: "E", chords: ["E", "B", "C#m", "A"], tempo: 82 },
+    { name: "How You Remind Me - Nickelback", key: "C", chords: ["C", "F", "Bb", "Eb"], tempo: 86 },
+    { name: "Bring Me to Life - Evanescence", key: "Em", chords: ["Em", "C", "D", "G"], tempo: 95 },
+    { name: "Rockstar - Nickelback", key: "G", chords: ["G", "C", "F", "Am"], tempo: 80 },
+    { name: "Use Somebody - Kings of Leon", key: "C", chords: ["C", "Em", "F", "Am"], tempo: 135 },
+    
+    // Modern Rock
+    { name: "Radioactive - Imagine Dragons", key: "Bm", chords: ["Bm", "D", "A", "E"], tempo: 136 },
+    { name: "Believer - Imagine Dragons", key: "Am", chords: ["Am", "F", "E", "Am"], tempo: 125 },
+    { name: "Thunder - Imagine Dragons", key: "C", chords: ["C", "C", "Am", "F"], tempo: 168 },
+    { name: "Stressed Out - Twenty One Pilots", key: "F", chords: ["F", "Am", "C", "Dm"], tempo: 85 },
+    { name: "Heathens - Twenty One Pilots", key: "Am", chords: ["Am", "C", "G", "Em"], tempo: 90 },
+    { name: "Feel Good Inc - Gorillaz", key: "Em", chords: ["Em", "G", "Am", "Em"], tempo: 139 },
+    { name: "Do I Wanna Know? - Arctic Monkeys", key: "Gm", chords: ["Gm", "Bb", "F", "Eb"], tempo: 85 },
+    { name: "The Pretender - Foo Fighters", key: "Am", chords: ["Am", "C", "D", "E"], tempo: 173 },
+    { name: "Best of You - Foo Fighters", key: "D", chords: ["D", "G", "Bm", "A"], tempo: 129 },
+    { name: "Everlong - Foo Fighters", key: "D", chords: ["Dmaj7", "Bsus4", "Gsus2", "Bsus4"], tempo: 79 },
+  ],
+  
+  // ========== JAZZ ==========
+  jazz: [
+    // Jazz Standards
+    { name: "Autumn Leaves", key: "Am", chords: ["Am7", "D7", "Gmaj7", "Cmaj7", "F#m7b5", "B7", "Em", "Em"], tempo: 130 },
+    { name: "All of Me - Jazz Standard", key: "C", chords: ["Cmaj7", "E7", "A7", "Dm7", "E7", "Am7", "D7", "G7"], tempo: 130 },
+    { name: "Fly Me to the Moon", key: "Am", chords: ["Am7", "Dm7", "G7", "Cmaj7", "F", "Bm7b5", "E7", "Am7"], tempo: 120 },
+    { name: "Take Five - Dave Brubeck", key: "Ebm", chords: ["Ebm", "Bbm", "Ebm", "Bbm"], tempo: 174 },
+    { name: "So What - Miles Davis", key: "Dm", chords: ["Dm7", "Dm7", "Dm7", "Dm7", "Ebm7", "Ebm7", "Dm7", "Dm7"], tempo: 136 },
+    { name: "Blue Bossa - Kenny Dorham", key: "Cm", chords: ["Cm7", "Fm7", "Dm7b5", "G7", "Cm7", "Ebm7", "Ab7", "Dbmaj7"], tempo: 140 },
+    { name: "Girl from Ipanema", key: "F", chords: ["Fmaj7", "G7", "Gm7", "Gb7", "Fmaj7", "Gb7", "Fmaj7", "Fmaj7"], tempo: 140 },
+    { name: "Summertime - Gershwin", key: "Am", chords: ["Am7", "E7", "Am7", "E7", "Am7", "Dm7", "F", "E7"], tempo: 84 },
+    { name: "Misty - Erroll Garner", key: "Eb", chords: ["Ebmaj7", "Bbm7", "Eb7", "Abmaj7", "Abm7", "Db7", "Ebmaj7", "Cm7"], tempo: 68 },
+    { name: "My Funny Valentine", key: "Cm", chords: ["Cm", "Cm/B", "Cm/Bb", "A7", "Abmaj7", "Dm7b5", "G7", "Cm"], tempo: 66 },
+    { name: "Body and Soul", key: "Db", chords: ["Ebm7", "Bb7", "Ebm7", "Ab7", "Dbmaj7", "Gb7", "Fm7", "E7"], tempo: 72 },
+    { name: "In a Sentimental Mood - Duke Ellington", key: "F", chords: ["Dm", "Dm/C#", "Dm/C", "Dm/B", "Gm", "A7", "Dm", "D7"], tempo: 75 },
+    { name: "Round Midnight - Thelonious Monk", key: "Ebm", chords: ["Ebm7", "Ab7", "Dbmaj7", "Gbmaj7", "Cm7b5", "F7", "Bbm7", "Eb7"], tempo: 60 },
+    { name: "A Night in Tunisia - Dizzy Gillespie", key: "Dm", chords: ["Eb7", "Dm", "Eb7", "Dm", "Em7b5", "A7", "Dm", "Dm"], tempo: 180 },
+    { name: "Cantaloupe Island - Herbie Hancock", key: "Fm", chords: ["Fm7", "Fm7", "Db7", "Db7", "Dm7", "Dm7", "Fm7", "Fm7"], tempo: 114 },
+    { name: "Watermelon Man - Herbie Hancock", key: "F", chords: ["F7", "F7", "Bb7", "F7", "C7", "Bb7", "F7", "F7"], tempo: 112 },
+    { name: "Stella by Starlight", key: "Bb", chords: ["Em7b5", "A7", "Cm7", "F7", "Fm7", "Bb7", "Ebmaj7", "Ab7"], tempo: 152 },
+    { name: "Blue in Green - Bill Evans", key: "Dm", chords: ["Bbmaj7", "A7", "Dm7", "Db7", "Cmaj7", "A7", "Dm7", "E7"], tempo: 58 },
+    { name: "Giant Steps - John Coltrane", key: "B", chords: ["Bmaj7", "D7", "Gmaj7", "Bb7", "Ebmaj7", "Am7", "D7", "Gmaj7"], tempo: 286 },
+    { name: "Satin Doll - Duke Ellington", key: "C", chords: ["Dm7", "G7", "Dm7", "G7", "Em7", "A7", "Em7", "A7"], tempo: 118 },
+    { name: "What Is This Thing Called Love", key: "C", chords: ["Gm7", "C7", "Fm", "Fm", "Dm7b5", "G7", "Cm", "Cm"], tempo: 200 },
+    { name: "Spain - Chick Corea", key: "Bm", chords: ["Gmaj7", "F#7", "Em7", "A7", "Dmaj7", "Gmaj7", "C#7", "F#7"], tempo: 150 },
+  ],
+  
+  // ========== BLUES ==========
+  blues: [
+    { name: "The Thrill Is Gone - B.B. King", key: "Bm", chords: ["Bm", "Em", "Bm", "Bm", "Em", "Em", "Bm", "Bm", "F#7", "Em", "Bm", "F#7"], tempo: 88 },
+    { name: "Sweet Home Chicago - Robert Johnson", key: "E", chords: ["E", "E", "E", "E", "A", "A", "E", "E", "B7", "A", "E", "B7"], tempo: 130 },
+    { name: "Crossroads - Robert Johnson", key: "A", chords: ["A", "A", "A", "A", "D", "D", "A", "A", "E", "D", "A", "E"], tempo: 130 },
+    { name: "Red House - Jimi Hendrix", key: "B", chords: ["B", "B", "B", "B", "E", "E", "B", "B", "F#", "E", "B", "F#"], tempo: 66 },
+    { name: "Pride and Joy - Stevie Ray Vaughan", key: "E", chords: ["E", "E", "E", "E", "A", "A", "E", "E", "B", "A", "E", "B"], tempo: 126 },
+    { name: "Born Under a Bad Sign - Albert King", key: "C#m", chords: ["C#m", "C#m", "C#m", "C#m", "F#m", "F#m", "C#m", "C#m", "G#", "F#m", "C#m", "G#"], tempo: 92 },
+    { name: "Stormy Monday - T-Bone Walker", key: "G", chords: ["G7", "C7", "G7", "G7", "C7", "C7", "G7", "G7", "D7", "C7", "G7", "D7"], tempo: 72 },
+    { name: "Hoochie Coochie Man - Muddy Waters", key: "A", chords: ["A", "A", "A", "A", "D", "D", "A", "A", "E", "D", "A", "E"], tempo: 70 },
+    { name: "I Can't Quit You Baby - Led Zeppelin", key: "A", chords: ["A", "A", "A", "A", "D", "D", "A", "A", "E", "D", "A", "E"], tempo: 52 },
+    { name: "Killing Floor - Howlin' Wolf", key: "E", chords: ["E", "E", "E", "E", "A", "A", "E", "E", "B", "A", "E", "B"], tempo: 148 },
+    { name: "Boom Boom - John Lee Hooker", key: "E", chords: ["E", "E", "E", "E", "A", "A", "E", "E", "B", "A", "E", "E"], tempo: 140 },
+    { name: "Every Day I Have the Blues - B.B. King", key: "Bb", chords: ["Bb", "Bb", "Bb", "Bb", "Eb", "Eb", "Bb", "Bb", "F", "Eb", "Bb", "F"], tempo: 130 },
+    { name: "Hide Away - Freddie King", key: "E", chords: ["E", "E", "E", "E", "A", "A", "E", "E", "B", "A", "E", "B"], tempo: 134 },
+    { name: "Texas Flood - Stevie Ray Vaughan", key: "G", chords: ["G", "G", "G", "G", "C", "C", "G", "G", "D", "C", "G", "D"], tempo: 60 },
+    { name: "Still Got the Blues - Gary Moore", key: "Am", chords: ["Am", "Am", "Dm", "Am", "Am", "E", "Am", "Am"], tempo: 54 },
+    { name: "Before You Accuse Me - Eric Clapton", key: "E", chords: ["E", "E", "E", "E", "A", "A", "E", "E", "B", "A", "E", "B"], tempo: 120 },
+  ],
+  
+  // ========== BALLAD ==========
+  ballad: [
+    { name: "Yesterday - The Beatles", key: "F", chords: ["F", "Em", "A7", "Dm", "Bb", "C", "F", "F"], tempo: 98 },
+    { name: "Imagine - John Lennon", key: "C", chords: ["C", "Cmaj7", "F", "F", "C", "Cmaj7", "F", "F"], tempo: 76 },
+    { name: "Hallelujah - Leonard Cohen", key: "C", chords: ["C", "Am", "C", "Am", "F", "G", "C", "G"], tempo: 64 },
+    { name: "Tears in Heaven - Eric Clapton", key: "A", chords: ["A", "E", "F#m", "A/E", "D", "A", "E", "A"], tempo: 80 },
+    { name: "Nothing Compares 2 U - Sinéad O'Connor", key: "F", chords: ["F", "C", "Dm", "A", "Bb", "F", "C", "C"], tempo: 60 },
+    { name: "Hello - Adele", key: "Fm", chords: ["Fm", "Ab", "Eb", "Db"], tempo: 79 },
+    { name: "Fix You - Coldplay", key: "Eb", chords: ["Eb", "Gm", "Cm", "Ab"], tempo: 69 },
+    { name: "Say Something - A Great Big World", key: "Bm", chords: ["Bm", "G", "D", "A"], tempo: 69 },
+    { name: "Mad World - Gary Jules", key: "Em", chords: ["Em", "A", "Em", "A"], tempo: 88 },
+    { name: "The Scientist - Coldplay", key: "Dm", chords: ["Dm", "Bb", "F", "C"], tempo: 75 },
+    { name: "Hurt - Johnny Cash", key: "Am", chords: ["Am", "C", "D", "Am"], tempo: 69 },
+    { name: "Skinny Love - Bon Iver", key: "Am", chords: ["Am", "C", "C", "Am"], tempo: 75 },
+    { name: "When I Was Your Man - Bruno Mars", key: "C", chords: ["C", "G", "Am", "Em", "F", "G", "C", "C"], tempo: 74 },
+    { name: "Chasing Cars - Snow Patrol", key: "A", chords: ["A", "E", "D", "A"], tempo: 104 },
+    { name: "Yellow - Coldplay", key: "B", chords: ["B", "F#", "E", "B"], tempo: 86 },
+    { name: "A Thousand Years - Christina Perri", key: "Bb", chords: ["Bb", "F", "Gm", "Eb"], tempo: 90 },
+    { name: "Perfect - Ed Sheeran", key: "G", chords: ["G", "Em", "C", "D"], tempo: 63 },
+    { name: "Unchained Melody - Righteous Brothers", key: "C", chords: ["C", "Am", "F", "G", "C", "Am", "G", "G"], tempo: 66 },
+    { name: "Angels - Robbie Williams", key: "E", chords: ["E", "A", "C#m", "B"], tempo: 76 },
+    { name: "I Don't Want to Miss a Thing - Aerosmith", key: "D", chords: ["D", "A", "Em", "G"], tempo: 62 },
+  ],
+  
+  // ========== EDM ==========
+  edm: [
+    { name: "Levels - Avicii", key: "Db", chords: ["Db", "Ab", "Eb", "Fm"], tempo: 126 },
+    { name: "Titanium - David Guetta ft. Sia", key: "Eb", chords: ["Eb", "Bb", "Cm", "Ab"], tempo: 126 },
+    { name: "Wake Me Up - Avicii", key: "Bm", chords: ["Bm", "G", "D", "A"], tempo: 124 },
+    { name: "Don't You Worry Child - Swedish House Mafia", key: "G", chords: ["G", "D", "Em", "C"], tempo: 128 },
+    { name: "Clarity - Zedd", key: "F#m", chords: ["F#m", "D", "E", "C#"], tempo: 128 },
+    { name: "Animals - Martin Garrix", key: "F#m", chords: ["F#m", "D", "A", "E"], tempo: 128 },
+    { name: "Lean On - Major Lazer", key: "Gm", chords: ["Gm", "Bb", "F", "Cm"], tempo: 98 },
+    { name: "This Is What It Feels Like - Armin van Buuren", key: "Am", chords: ["Am", "F", "C", "G"], tempo: 130 },
+    { name: "Faded - Alan Walker", key: "F#m", chords: ["F#m", "D", "A", "E"], tempo: 90 },
+    { name: "Alone - Marshmello", key: "Ab", chords: ["Ab", "Eb", "Fm", "Db"], tempo: 120 },
+    { name: "Something Just Like This - Chainsmokers", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 103 },
+    { name: "The Middle - Zedd", key: "Ab", chords: ["Ab", "Eb", "Fm", "Db"], tempo: 113 },
+    { name: "Scared to Be Lonely - Martin Garrix", key: "Ab", chords: ["Ab", "Cm", "Eb", "Bb"], tempo: 108 },
+    { name: "Take Me Home - Cash Cash", key: "Ab", chords: ["Ab", "Eb", "Fm", "Db"], tempo: 128 },
+    { name: "In the Name of Love - Martin Garrix", key: "Bm", chords: ["Bm", "G", "D", "A"], tempo: 138 },
+    { name: "Summer - Calvin Harris", key: "Db", chords: ["Db", "Ab", "Eb", "Fm"], tempo: 128 },
+    { name: "Where Are Ü Now - Skrillex & Diplo", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 136 },
+    { name: "Reload - Sebastian Ingrosso", key: "E", chords: ["E", "B", "C#m", "A"], tempo: 126 },
+    { name: "Under Control - Calvin Harris", key: "E", chords: ["E", "A", "B", "C#m"], tempo: 126 },
+    { name: "Sun Is Shining - Axwell Λ Ingrosso", key: "E", chords: ["E", "A", "C#m", "B"], tempo: 126 },
+  ],
+  
+  // ========== LATIN ==========
+  latin: [
+    { name: "Bésame Mucho", key: "Dm", chords: ["Dm", "A7", "Dm", "Dm", "Gm", "A7", "Dm", "D7"], tempo: 110 },
+    { name: "La Bamba - Ritchie Valens", key: "C", chords: ["C", "F", "G", "G"], tempo: 142 },
+    { name: "Oye Como Va - Santana", key: "Am", chords: ["Am", "D", "Am", "D"], tempo: 126 },
+    { name: "Smooth - Santana", key: "Am", chords: ["Am", "F", "E", "Am"], tempo: 114 },
+    { name: "Maria Maria - Santana", key: "Am", chords: ["Am", "Dm", "E", "Am"], tempo: 96 },
+    { name: "Livin' La Vida Loca - Ricky Martin", key: "C#m", chords: ["C#m", "B", "A", "G#"], tempo: 178 },
+    { name: "Bailando - Enrique Iglesias", key: "Am", chords: ["Am", "F", "C", "G"], tempo: 124 },
+    { name: "Conga - Gloria Estefan", key: "Am", chords: ["Am", "Dm", "E", "Am"], tempo: 126 },
+    { name: "Hips Don't Lie - Shakira", key: "Am", chords: ["Am", "Dm", "G", "C"], tempo: 100 },
+    { name: "Whenever, Wherever - Shakira", key: "Bm", chords: ["Bm", "G", "A", "F#m"], tempo: 100 },
+    { name: "Gasolina - Daddy Yankee", key: "Dm", chords: ["Dm", "Bb", "C", "Am"], tempo: 96 },
+    { name: "Danza Kuduro - Don Omar", key: "Am", chords: ["Am", "F", "C", "G"], tempo: 130 },
+    { name: "Suavemente - Elvis Crespo", key: "Am", chords: ["Am", "Dm", "E", "Am"], tempo: 180 },
+    { name: "Entre Dos Aguas - Paco de Lucía", key: "Am", chords: ["Am", "G", "F", "E"], tempo: 90 },
+    { name: "Bamboleo - Gipsy Kings", key: "Am", chords: ["Am", "G", "C", "E"], tempo: 120 },
+    { name: "Volare - Gipsy Kings", key: "C", chords: ["C", "Am", "Dm", "G"], tempo: 132 },
+    { name: "El Perdón - Nicky Jam & Enrique Iglesias", key: "Am", chords: ["Am", "F", "C", "G"], tempo: 92 },
+    { name: "Vivir Mi Vida - Marc Anthony", key: "Gm", chords: ["Gm", "Eb", "Bb", "F"], tempo: 92 },
+    { name: "Mi Gente - J Balvin", key: "Am", chords: ["Am", "Am", "Dm", "E"], tempo: 105 },
+    { name: "La Camisa Negra - Juanes", key: "Em", chords: ["Em", "Am", "B7", "Em"], tempo: 96 },
+  ],
+  
+  // ========== R&B / SOUL ==========
+  rnb: [
+    { name: "Let's Stay Together - Al Green", key: "F", chords: ["Fmaj7", "Em7", "Dm7", "Cmaj7"], tempo: 103 },
+    { name: "Ain't No Sunshine - Bill Withers", key: "Am", chords: ["Am", "Em", "G", "Am"], tempo: 78 },
+    { name: "Lean on Me - Bill Withers", key: "C", chords: ["C", "F", "C", "G", "Am", "Em", "G", "C"], tempo: 78 },
+    { name: "What's Going On - Marvin Gaye", key: "E", chords: ["Emaj7", "C#m7", "F#m7", "B7"], tempo: 98 },
+    { name: "Sexual Healing - Marvin Gaye", key: "Eb", chords: ["Ebmaj7", "Cm7", "Fm7", "Bb7"], tempo: 94 },
+    { name: "I Heard It Through the Grapevine - Marvin Gaye", key: "Dm", chords: ["Dm", "A7", "Dm", "A7"], tempo: 116 },
+    { name: "Superstition - Stevie Wonder", key: "Ebm", chords: ["Ebm", "Ebm", "Bb7", "Ebm"], tempo: 101 },
+    { name: "Isn't She Lovely - Stevie Wonder", key: "E", chords: ["E", "C#m", "F#m", "B"], tempo: 125 },
+    { name: "No Diggity - Blackstreet", key: "Cm", chords: ["Cm", "Bb", "Ab", "G"], tempo: 85 },
+    { name: "Waterfalls - TLC", key: "Eb", chords: ["Ebmaj7", "Abmaj7", "Bb", "Cm7"], tempo: 86 },
+    { name: "End of the Road - Boyz II Men", key: "Ab", chords: ["Ab", "Fm", "Db", "Eb"], tempo: 60 },
+    { name: "I'll Make Love to You - Boyz II Men", key: "D", chords: ["D", "Bm", "G", "A"], tempo: 52 },
+    { name: "Kiss from a Rose - Seal", key: "Eb", chords: ["Eb", "Bb", "Cm", "Fm"], tempo: 56 },
+    { name: "Ordinary People - John Legend", key: "F", chords: ["Fmaj7", "Em7b5", "A7", "Dm7", "Gm7", "C7"], tempo: 76 },
+    { name: "Empire State of Mind - Alicia Keys", key: "F#", chords: ["F#", "D#m", "B", "C#"], tempo: 84 },
+    { name: "If I Ain't Got You - Alicia Keys", key: "G", chords: ["Gmaj7", "Cmaj7", "Am7", "D7"], tempo: 64 },
+    { name: "Crazy in Love - Beyoncé", key: "Dm", chords: ["Dm", "Gm", "Bb", "A"], tempo: 99 },
+    { name: "Single Ladies - Beyoncé", key: "E", chords: ["E", "G#m", "A", "E"], tempo: 96 },
+    { name: "No Scrubs - TLC", key: "Db", chords: ["Db", "Ab", "Bbm", "Gb"], tempo: 87 },
+    { name: "I Wanna Dance with Somebody - Whitney Houston", key: "G", chords: ["G", "D", "Em", "C"], tempo: 119 },
+  ],
+  
+  // ========== CLASSICAL / CINEMATIC ==========
+  classical: [
+    { name: "Canon in D - Pachelbel", key: "D", chords: ["D", "A", "Bm", "F#m", "G", "D", "G", "A"], tempo: 54 },
+    { name: "Für Elise - Beethoven", key: "Am", chords: ["Am", "E", "Am", "E", "Am", "C", "G", "Am"], tempo: 125 },
+    { name: "Moonlight Sonata - Beethoven", key: "C#m", chords: ["C#m", "G#7", "C#m", "A", "F#m", "C#m", "G#", "C#m"], tempo: 56 },
+    { name: "Clair de Lune - Debussy", key: "Db", chords: ["Dbmaj7", "Bbm7", "Gb", "Ab7"], tempo: 66 },
+    { name: "Requiem - Mozart", key: "Dm", chords: ["Dm", "Gm", "A", "Dm", "Bb", "A7", "Dm", "Dm"], tempo: 68 },
+    { name: "Ride of the Valkyries - Wagner", key: "B", chords: ["B", "E", "B", "F#", "B", "E", "F#", "B"], tempo: 96 },
+    { name: "The Four Seasons: Spring - Vivaldi", key: "E", chords: ["E", "B", "E", "A", "E", "B", "E", "E"], tempo: 76 },
+    { name: "Ode to Joy - Beethoven", key: "D", chords: ["D", "A", "D", "G", "D", "A", "D", "D"], tempo: 120 },
+    { name: "Toccata and Fugue - Bach", key: "Dm", chords: ["Dm", "A", "Dm", "Gm", "A", "Dm", "A", "Dm"], tempo: 80 },
+    { name: "Gymnopedie No.1 - Satie", key: "D", chords: ["Dmaj7", "Gmaj7", "Dmaj7", "Gmaj7"], tempo: 66 },
+    // Film Scores
+    { name: "Main Theme - Star Wars", key: "Bb", chords: ["Bb", "Eb", "Bb", "F", "Gm", "Eb", "F", "Bb"], tempo: 108 },
+    { name: "Main Theme - Harry Potter", key: "Em", chords: ["Em", "G", "D", "Em", "Am", "D", "G", "Em"], tempo: 78 },
+    { name: "Main Theme - Jurassic Park", key: "Bb", chords: ["Bb", "Gm", "Eb", "F", "Bb", "Gm", "Eb", "F"], tempo: 84 },
+    { name: "The Godfather Theme", key: "Dm", chords: ["Dm", "Gm", "Dm", "A7", "Dm", "Gm", "A7", "Dm"], tempo: 56 },
+    { name: "Main Theme - Pirates of the Caribbean", key: "Dm", chords: ["Dm", "Bb", "C", "Dm", "F", "C", "Dm", "Dm"], tempo: 140 },
+    { name: "Time - Inception", key: "Am", chords: ["Am", "Em", "G", "D", "Am", "Em", "G", "D"], tempo: 100 },
+    { name: "Concerning Hobbits - LOTR", key: "C", chords: ["C", "G", "Am", "F", "C", "G", "F", "C"], tempo: 104 },
+    { name: "Main Theme - Schindler's List", key: "Am", chords: ["Am", "Dm", "E", "Am", "F", "Dm", "E", "Am"], tempo: 56 },
+    { name: "Hedwig's Theme - Harry Potter", key: "Em", chords: ["Em", "Am", "B7", "Em", "G", "D", "B7", "Em"], tempo: 76 },
+    { name: "Main Theme - Game of Thrones", key: "Cm", chords: ["Cm", "Ab", "Eb", "Bb", "Cm", "Ab", "Eb", "Bb"], tempo: 85 },
+  ],
+  
+  // ========== FUNK ==========
+  funk: [
+    { name: "Superstition - Stevie Wonder", key: "Ebm", chords: ["Ebm", "Ebm", "Bb7", "Ebm"], tempo: 101 },
+    { name: "Get Up (I Feel Like Being a) Sex Machine - James Brown", key: "E", chords: ["E", "E", "A", "E"], tempo: 112 },
+    { name: "Give Up the Funk - Parliament", key: "E", chords: ["E", "E", "A", "A"], tempo: 108 },
+    { name: "Play That Funky Music - Wild Cherry", key: "E", chords: ["E", "E", "A", "B"], tempo: 110 },
+    { name: "Brick House - Commodores", key: "Am", chords: ["Am", "Am", "Dm", "Am"], tempo: 106 },
+    { name: "Le Freak - Chic", key: "Am", chords: ["Am", "G", "Am", "G"], tempo: 120 },
+    { name: "Good Times - Chic", key: "Em", chords: ["Em", "A", "Em", "A"], tempo: 110 },
+    { name: "September - Earth, Wind & Fire", key: "Ab", chords: ["Ab", "Cm", "Bbm", "Ab"], tempo: 126 },
+    { name: "Let's Groove - Earth, Wind & Fire", key: "Em", chords: ["Em", "A", "Em", "A"], tempo: 123 },
+    { name: "Boogie Wonderland - Earth, Wind & Fire", key: "Cm", chords: ["Cm", "Ab", "Bb", "Cm"], tempo: 130 },
+    { name: "Sir Duke - Stevie Wonder", key: "B", chords: ["B", "G#m", "E", "F#"], tempo: 108 },
+    { name: "Kiss - Prince", key: "A", chords: ["A", "E", "A", "E"], tempo: 112 },
+    { name: "1999 - Prince", key: "Dm", chords: ["Dm", "C", "Dm", "C"], tempo: 120 },
+    { name: "Forget Me Nots - Patrice Rushen", key: "Em", chords: ["Em7", "Fmaj7", "Em7", "Fmaj7"], tempo: 108 },
+    { name: "Chameleon - Herbie Hancock", key: "Bbm", chords: ["Bbm7", "Eb9", "Bbm7", "Eb9"], tempo: 96 },
+    { name: "Pick Up the Pieces - Average White Band", key: "F#m", chords: ["F#m7", "B7", "F#m7", "B7"], tempo: 106 },
+    { name: "Got to Give It Up - Marvin Gaye", key: "A", chords: ["A", "Bm", "A", "Bm"], tempo: 122 },
+    { name: "Jungle Boogie - Kool & the Gang", key: "E", chords: ["E7", "A", "E7", "A"], tempo: 110 },
+    { name: "Word Up - Cameo", key: "Em", chords: ["Em", "Am", "Em", "Am"], tempo: 106 },
+    { name: "Uptown Funk - Bruno Mars", key: "Dm", chords: ["Dm", "Dm", "G", "G"], tempo: 115 },
+  ],
+  
+  // ========== COUNTRY ==========
+  country: [
+    { name: "Take Me Home, Country Roads - John Denver", key: "A", chords: ["A", "F#m", "E", "D"], tempo: 82 },
+    { name: "Jolene - Dolly Parton", key: "Am", chords: ["Am", "C", "G", "Am"], tempo: 112 },
+    { name: "Ring of Fire - Johnny Cash", key: "G", chords: ["G", "C", "G", "D"], tempo: 108 },
+    { name: "I Walk the Line - Johnny Cash", key: "A", chords: ["A", "D", "A", "E"], tempo: 106 },
+    { name: "Folsom Prison Blues - Johnny Cash", key: "E", chords: ["E", "E", "A", "E", "B7", "E"], tempo: 110 },
+    { name: "Friends in Low Places - Garth Brooks", key: "A", chords: ["A", "Bm", "E", "A"], tempo: 84 },
+    { name: "The Dance - Garth Brooks", key: "G", chords: ["G", "C", "D", "G"], tempo: 72 },
+    { name: "Amazed - Lonestar", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 76 },
+    { name: "I Hope You Dance - Lee Ann Womack", key: "G", chords: ["G", "D", "Em", "C"], tempo: 86 },
+    { name: "Before He Cheats - Carrie Underwood", key: "F#m", chords: ["F#m", "E", "D", "E"], tempo: 132 },
+    { name: "Need You Now - Lady A", key: "A", chords: ["A", "C#m", "E", "F#m", "D"], tempo: 107 },
+    { name: "Wagon Wheel - Darius Rucker", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 79 },
+    { name: "Cruise - Florida Georgia Line", key: "Bb", chords: ["Bb", "Gm", "F", "Eb"], tempo: 80 },
+    { name: "Die a Happy Man - Thomas Rhett", key: "Bb", chords: ["Bb", "Gm", "Eb", "F"], tempo: 78 },
+    { name: "Tennessee Whiskey - Chris Stapleton", key: "A", chords: ["A", "Bm", "D", "A"], tempo: 96 },
+    { name: "Body Like a Back Road - Sam Hunt", key: "G", chords: ["G", "D", "C", "G"], tempo: 100 },
+    { name: "Meant to Be - Bebe Rexha ft. FGL", key: "Ab", chords: ["Ab", "Eb", "Fm", "Db"], tempo: 81 },
+    { name: "Speechless - Dan + Shay", key: "D", chords: ["D", "A", "Bm", "G"], tempo: 78 },
+    { name: "Tequila - Dan + Shay", key: "G", chords: ["G", "D", "Em", "C"], tempo: 98 },
+    { name: "Old Town Road - Lil Nas X", key: "G", chords: ["G", "Em", "C", "D"], tempo: 136 },
+  ],
+  
+  // ========== GOSPEL ==========
+  gospel: [
+    { name: "Amazing Grace", key: "G", chords: ["G", "G", "C", "G", "G", "D", "G", "G"], tempo: 72 },
+    { name: "Oh Happy Day", key: "F", chords: ["F", "Bb", "F", "C", "F", "Bb", "C", "F"], tempo: 108 },
+    { name: "How Great Is Our God - Chris Tomlin", key: "G", chords: ["G", "Em", "C", "D"], tempo: 80 },
+    { name: "Shout to the Lord", key: "Bb", chords: ["Bb", "Eb", "F", "Gm", "Eb", "F", "Bb", "Bb"], tempo: 72 },
+    { name: "10,000 Reasons - Matt Redman", key: "G", chords: ["G", "D", "Em", "C"], tempo: 73 },
+    { name: "Oceans - Hillsong United", key: "D", chords: ["D", "A", "Bm", "G"], tempo: 66 },
+    { name: "What a Beautiful Name - Hillsong", key: "D", chords: ["D", "G", "Bm", "A"], tempo: 68 },
+    { name: "Way Maker", key: "E", chords: ["E", "B", "C#m", "A"], tempo: 68 },
+    { name: "Reckless Love - Cory Asbury", key: "C", chords: ["C", "G", "Am", "F"], tempo: 86 },
+    { name: "Good Good Father - Chris Tomlin", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 68 },
+    { name: "In Christ Alone", key: "D", chords: ["D", "A", "G", "D"], tempo: 68 },
+    { name: "Blessed Assurance", key: "D", chords: ["D", "G", "D", "A", "D", "G", "A", "D"], tempo: 84 },
+    { name: "Great Is Thy Faithfulness", key: "D", chords: ["D", "G", "D", "A", "D", "G", "Em", "A"], tempo: 76 },
+    { name: "Holy Spirit - Francesca Battistelli", key: "D", chords: ["D", "A", "Em", "G"], tempo: 72 },
+    { name: "I Can Only Imagine - MercyMe", key: "E", chords: ["E", "B", "C#m", "A"], tempo: 80 },
+    { name: "Revelation Song", key: "D", chords: ["D", "Am", "C", "G"], tempo: 66 },
+    { name: "Lord I Need You - Matt Maher", key: "G", chords: ["G", "D", "Em", "C"], tempo: 74 },
+    { name: "Build My Life", key: "G", chords: ["G", "D", "Em", "C"], tempo: 68 },
+    { name: "Cornerstone - Hillsong", key: "C", chords: ["C", "F", "Am", "G"], tempo: 68 },
+    { name: "O Come to the Altar - Elevation", key: "A", chords: ["A", "E", "F#m", "D"], tempo: 72 },
+  ],
+  
+  // ========== WORLD ==========
+  world: [
+    { name: "Waka Waka - Shakira", key: "G", chords: ["G", "D", "Em", "C"], tempo: 127 },
+    { name: "Ai Se Eu Te Pego - Michel Teló", key: "G", chords: ["G", "C", "D", "G"], tempo: 102 },
+    { name: "Dragostea Din Tei - O-Zone", key: "Am", chords: ["Am", "Dm", "E", "Am"], tempo: 135 },
+    { name: "Macarena - Los del Río", key: "Bb", chords: ["Bb", "F", "Bb", "F"], tempo: 103 },
+    { name: "Lambada", key: "Am", chords: ["Am", "G", "F", "E"], tempo: 135 },
+    { name: "Mas Que Nada - Sergio Mendes", key: "Am", chords: ["Am", "D", "Am", "E"], tempo: 105 },
+    { name: "Guantanamera", key: "D", chords: ["D", "G", "A", "D"], tempo: 90 },
+    { name: "Chan Chan - Buena Vista Social Club", key: "E", chords: ["E", "A", "B", "E"], tempo: 82 },
+    { name: "Tequila Sunrise - Eagles", key: "G", chords: ["G", "D", "Am", "D"], tempo: 102 },
+    { name: "La Vie en Rose - Édith Piaf", key: "C", chords: ["C", "Dm", "G", "C"], tempo: 68 },
+    { name: "Bella Ciao", key: "Am", chords: ["Am", "Dm", "E", "Am"], tempo: 116 },
+    { name: "O Sole Mio", key: "G", chords: ["G", "D", "C", "G"], tempo: 72 },
+    { name: "Hava Nagila", key: "Am", chords: ["Am", "E", "Dm", "Am"], tempo: 160 },
+    { name: "Kalinka", key: "Am", chords: ["Am", "E", "Am", "E"], tempo: 120 },
+    { name: "Sukiyaki - Kyu Sakamoto", key: "G", chords: ["G", "C", "D", "G"], tempo: 77 },
+    { name: "Gangnam Style - PSY", key: "B", chords: ["B", "F#", "G#m", "E"], tempo: 132 },
+    { name: "Ievan Polkka", key: "Am", chords: ["Am", "G", "F", "E"], tempo: 132 },
+    { name: "Korobeiniki (Tetris Theme)", key: "Am", chords: ["Am", "E", "F", "C", "Dm", "Am", "E", "Am"], tempo: 140 },
+    { name: "Misirlou - Dick Dale", key: "E", chords: ["E", "F", "E", "F"], tempo: 180 },
+    { name: "Zorba the Greek", key: "Am", chords: ["Am", "G", "Am", "E"], tempo: 140 },
+  ]
+};
+
+// Şu anda seçili şarkı
+let currentSong = null;
+let currentStyle = "pop";
 
 // === GLOBAL DURUM ===
 let audioCtx = null;
@@ -1703,6 +2755,7 @@ let playbackInterval = null;
 let metronomeInterval = null;
 let currentBeat = 0;
 let beatsPerMeasure = 4;
+let currentSubdivision = 0;
 
 // Quiz ve Training
 let quizCorrectAnswer = null;
@@ -2008,25 +3061,129 @@ async function playChord(chordName, duration = 1.0) {
 }
 
 // Metronom click
-async function playMetronomeClick(isAccent) {
+// Perküsyon sesi çal
+async function playDrumSound(type, velocity = 1.0) {
   if (!audioInitialized) await initAudio();
   if (!audioCtx) return;
   if (audioCtx.state === "suspended") await audioCtx.resume();
+  if (!type || velocity <= 0) return;
   
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
+  const now = audioCtx.currentTime;
   
-  osc.type = "sine";
-  osc.frequency.value = isAccent ? 1200 : 900;
-  
-  gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-  
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.05);
+  if (type === 'kick') {
+    // Kick drum
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
+    gain.gain.setValueAtTime(velocity * 0.6, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+  else if (type === 'snare') {
+    // Snare drum
+    const noise = audioCtx.createBufferSource();
+    const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.1, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    noise.buffer = noiseBuffer;
+    
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(velocity * 0.3, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    
+    const osc = audioCtx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.value = 180;
+    const oscGain = audioCtx.createGain();
+    oscGain.gain.setValueAtTime(velocity * 0.4, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    
+    noise.connect(noiseGain);
+    osc.connect(oscGain);
+    noiseGain.connect(audioCtx.destination);
+    oscGain.connect(audioCtx.destination);
+    noise.start(now);
+    osc.start(now);
+    osc.stop(now + 0.1);
+  }
+  else if (type === 'hihat') {
+    // Hi-hat
+    const noise = audioCtx.createBufferSource();
+    const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    noise.buffer = noiseBuffer;
+    
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 7000;
+    
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(velocity * 0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    noise.start(now);
+  }
+  else if (type === 'ride') {
+    // Ride cymbal
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    osc1.type = 'triangle';
+    osc2.type = 'sine';
+    osc1.frequency.value = 400;
+    osc2.frequency.value = 800;
+    
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(velocity * 0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.3);
+    osc2.stop(now + 0.3);
+  }
+  else if (type === 'clave') {
+    // Clave
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = 2500;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(velocity * 0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.03);
+  }
+  else if (type === 'click') {
+    // Simple click/metronome
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = velocity > 0.8 ? 1200 : 900;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(velocity * 0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.05);
+  }
+}
+
+// Eski playMetronomeClick - geriye uyumluluk için
+async function playMetronomeClick(isAccent) {
+  await playDrumSound('click', isAccent ? 1.0 : 0.6);
 }
 
 // === AKOR VE GAM FONKSİYONLARI ===
@@ -2146,8 +3303,9 @@ function buildScaleChords(key, scaleType, chordTypeOption = "triads") {
       quality = "maj"; suffix = "";
     }
     
-    // 7li ekleme
-    if (chordTypeOption === "sevenths" || (chordTypeOption === "mixed" && Math.random() > 0.5)) {
+    // Akor tipi seçenekleri
+    if (chordTypeOption === "sevenths") {
+      // 7'li akorlar
       if (quality === "maj") {
         if (degree === 0 || degree === 3) {
           suffix = "maj7"; quality = "maj7";
@@ -2158,6 +3316,80 @@ function buildScaleChords(key, scaleType, chordTypeOption = "triads") {
         suffix = "m7"; quality = "min7";
       } else if (quality === "dim") {
         suffix = "ø7"; quality = "hdim7";
+      }
+    } else if (chordTypeOption === "extended") {
+      // Genişletilmiş akorlar (9, 11, 13)
+      const extTypes = ["9", "11", "13"];
+      const ext = extTypes[Math.floor(Math.random() * extTypes.length)];
+      if (quality === "maj") {
+        if (degree === 0 || degree === 3) {
+          suffix = "maj" + ext; quality = "maj" + ext;
+        } else {
+          suffix = ext; quality = "dom" + ext;
+        }
+      } else if (quality === "min") {
+        suffix = "m" + ext; quality = "min" + ext;
+      }
+    } else if (chordTypeOption === "color") {
+      // Renkli akorlar (sus, add, 6)
+      const colorTypes = ["sus2", "sus4", "add9", "6"];
+      const color = colorTypes[Math.floor(Math.random() * colorTypes.length)];
+      if (quality === "maj") {
+        suffix = color; quality = color;
+      } else if (quality === "min") {
+        if (color === "6") {
+          suffix = "m6"; quality = "min6";
+        } else if (color === "add9") {
+          suffix = "m(add9)"; quality = "minadd9";
+        } else {
+          suffix = "m"; // sus akorlar minör için mantıklı değil
+        }
+      }
+    } else if (chordTypeOption === "jazz") {
+      // Jazz akorları (altered, extended voicings)
+      const jazzChance = Math.random();
+      if (quality === "maj") {
+        if (degree === 0 || degree === 3) {
+          const opts = ["maj9", "maj13", "6/9"];
+          suffix = opts[Math.floor(Math.random() * opts.length)];
+          quality = suffix;
+        } else if (degree === 4) { // V derece
+          const opts = ["9", "13", "7#11", "7b9", "7#9", "7alt"];
+          suffix = opts[Math.floor(Math.random() * opts.length)];
+          quality = "dom" + suffix.replace("7", "");
+        } else {
+          suffix = "7"; quality = "dom7";
+        }
+      } else if (quality === "min") {
+        const opts = ["m9", "m11", "m7"];
+        suffix = opts[Math.floor(Math.random() * opts.length)];
+        quality = suffix.replace("m", "min");
+      } else if (quality === "dim") {
+        suffix = "ø7"; quality = "hdim7";
+      }
+    } else if (chordTypeOption === "mixed") {
+      // Karışık - rastgele seçim
+      const roll = Math.random();
+      if (roll < 0.4) {
+        // Triad olarak bırak
+      } else if (roll < 0.7) {
+        // 7'li
+        if (quality === "maj") {
+          if (degree === 0 || degree === 3) {
+            suffix = "maj7"; quality = "maj7";
+          } else {
+            suffix = "7"; quality = "dom7";
+          }
+        } else if (quality === "min") {
+          suffix = "m7"; quality = "min7";
+        }
+      } else {
+        // Renkli
+        const colorOpts = ["sus4", "add9", "6"];
+        const color = colorOpts[Math.floor(Math.random() * colorOpts.length)];
+        if (quality === "maj") {
+          suffix = color; quality = color;
+        }
       }
     }
     
@@ -2310,30 +3542,53 @@ function getSidebarHTML(prefix) {
         <div class="control-group">
           <label class="control-label">Tür</label>
           <select class="sync-control" data-sync="styleSelect" id="${idPrefix}styleSelect">
-            <option value="pop">Pop</option>
-            <option value="rock">Rock</option>
-            <option value="jazz">Jazz</option>
-            <option value="blues">Blues</option>
-            <option value="ballad">Ballad</option>
-            <option value="edm">EDM</option>
-            <option value="latin">Latin</option>
-            <option value="random">Rastgele</option>
+            <option value="pop">🎤 Pop</option>
+            <option value="rock">🎸 Rock</option>
+            <option value="jazz">🎷 Jazz</option>
+            <option value="blues">🎺 Blues</option>
+            <option value="ballad">💝 Ballad</option>
+            <option value="edm">🎧 EDM</option>
+            <option value="latin">💃 Latin</option>
+            <option value="rnb">🎙️ R&B/Soul</option>
+            <option value="classical">🎻 Classical</option>
+            <option value="funk">🕺 Funk</option>
+            <option value="country">🤠 Country</option>
+            <option value="gospel">⛪ Gospel</option>
+            <option value="world">🌍 World</option>
+            <option value="random">🎲 Rastgele</option>
           </select>
         </div>
         <div class="control-group">
           <label class="control-label">Akor Sayısı</label>
           <select class="sync-control" data-sync="lengthSelect" id="${idPrefix}lengthSelect">
-            <option value="4">4</option>
-            <option value="8" selected>8</option>
-            <option value="12">12</option>
+            <option value="4">4 Akor</option>
+            <option value="8" selected>8 Akor</option>
+            <option value="12">12 Akor</option>
+            <option value="16">16 Akor</option>
           </select>
         </div>
         <div class="control-group full-width">
           <label class="control-label">Akor Tipi</label>
           <select class="sync-control" data-sync="chordTypeSelect" id="${idPrefix}chordTypeSelect">
-            <option value="triads">Üçlüler</option>
+            <option value="triads">Üçlüler (Triad)</option>
             <option value="sevenths">7'li Akorlar</option>
+            <option value="extended">Genişletilmiş (9, 11, 13)</option>
+            <option value="color">Renkli (sus, add, 6)</option>
+            <option value="jazz">Jazz Voicings</option>
             <option value="mixed">Karışık</option>
+          </select>
+        </div>
+        <div class="control-group full-width">
+          <label class="control-label">Üretim Algoritması</label>
+          <select class="sync-control" data-sync="algorithmSelect" id="${idPrefix}algorithmSelect">
+            <option value="pattern">📚 Stil Kütüphanesi</option>
+            <option value="functional">🎯 Fonksiyonel Harmoni (T-S-D-T)</option>
+            <option value="fifths">⭕ Circle of Fifths</option>
+            <option value="jazz251">🎷 Jazz ii-V-I</option>
+            <option value="modal">🌈 Modal Interchange</option>
+            <option value="secondary">🔥 Secondary Dominants</option>
+            <option value="cadence">🎬 Kadans Odaklı</option>
+            <option value="random">🎲 Tam Rastgele</option>
           </select>
         </div>
       </div>
@@ -2403,6 +3658,34 @@ function getSidebarHTML(prefix) {
         <button class="preset-chip" data-preset="sad1">Sad</button>
       </div>
     </div>
+
+    <!-- Şarkı Kütüphanesi -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🎵</div>
+        <div class="panel-title">Şarkı Kütüphanesi</div>
+      </div>
+      <div class="song-library">
+        <select class="song-genre-select" id="${idPrefix}songGenreSelect">
+          <option value="pop">🎤 Pop (${FAMOUS_SONGS.pop?.length || 0})</option>
+          <option value="rock">🎸 Rock (${FAMOUS_SONGS.rock?.length || 0})</option>
+          <option value="jazz">🎷 Jazz (${FAMOUS_SONGS.jazz?.length || 0})</option>
+          <option value="blues">🎺 Blues (${FAMOUS_SONGS.blues?.length || 0})</option>
+          <option value="ballad">💝 Ballad (${FAMOUS_SONGS.ballad?.length || 0})</option>
+          <option value="edm">🎧 EDM (${FAMOUS_SONGS.edm?.length || 0})</option>
+          <option value="latin">💃 Latin (${FAMOUS_SONGS.latin?.length || 0})</option>
+          <option value="rnb">🎙️ R&B/Soul (${FAMOUS_SONGS.rnb?.length || 0})</option>
+          <option value="classical">🎻 Classical (${FAMOUS_SONGS.classical?.length || 0})</option>
+          <option value="funk">🕺 Funk (${FAMOUS_SONGS.funk?.length || 0})</option>
+          <option value="country">🤠 Country (${FAMOUS_SONGS.country?.length || 0})</option>
+          <option value="gospel">⛪ Gospel (${FAMOUS_SONGS.gospel?.length || 0})</option>
+          <option value="world">🌍 World (${FAMOUS_SONGS.world?.length || 0})</option>
+        </select>
+        <div class="song-list" id="${idPrefix}songList">
+          <!-- Şarkılar buraya dinamik olarak yüklenecek -->
+        </div>
+      </div>
+    </div>
   `;
 }
 
@@ -2416,6 +3699,20 @@ function renderContentArea() {
         <button class="transport-btn play-btn" id="playBtn" title="Çal">▶</button>
         <button class="transport-btn" id="loopBtn" title="Döngü">🔁</button>
         <button class="transport-btn" id="metronomeBtn" title="Metronom">🥁</button>
+        
+        <!-- Ritim Seçici -->
+        <div class="rhythm-selector">
+          <button class="rhythm-nav-btn" id="prevRhythmBtn" title="Önceki Ritim">◀</button>
+          <div class="rhythm-name" id="rhythmName">Standard Pop</div>
+          <button class="rhythm-nav-btn" id="nextRhythmBtn" title="Sonraki Ritim">▶</button>
+        </div>
+        
+        <!-- Comping Pattern Seçici -->
+        <div class="comping-selector">
+          <button class="rhythm-nav-btn" id="prevCompingBtn" title="Önceki Pattern">◀</button>
+          <div class="comping-name" id="compingName">Straight</div>
+          <button class="rhythm-nav-btn" id="nextCompingBtn" title="Sonraki Pattern">▶</button>
+        </div>
       </div>
       
       <div class="tempo-section">
@@ -2699,12 +3996,62 @@ function updatePianoOctave() {
 
 // === AKOR DİZİSİ OLUŞTURMA ===
 
+// Fonksiyonel Harmoni - Akor fonksiyonları
+const CHORD_FUNCTIONS = {
+  // Major scale
+  major: {
+    tonic: [1, 6, 3],      // I, vi, iii - Dinlenme
+    subdominant: [4, 2],   // IV, ii - Hareket
+    dominant: [5, 7]       // V, vii° - Gerilim
+  },
+  // Minor scale
+  minor: {
+    tonic: [1, 6, 3],
+    subdominant: [4, 2],
+    dominant: [5, 7]
+  }
+};
+
+// Circle of Fifths sırası (derece olarak)
+const CIRCLE_OF_FIFTHS_DEGREES = [4, 7, 3, 6, 2, 5, 1]; // IV-vii-iii-vi-ii-V-I
+
+// Jazz ii-V-I pattern'leri
+const JAZZ_251_PATTERNS = [
+  [2, 5, 1],           // Klasik ii-V-I
+  [2, 5, 1, 1],        // ii-V-I uzatılmış
+  [2, 5, 1, 6],        // ii-V-I-vi
+  [2, 5, 3, 6],        // ii-V-iii-vi
+  [6, 2, 5, 1],        // vi-ii-V-I (full turnaround)
+  [3, 6, 2, 5],        // iii-vi-ii-V
+  [1, 6, 2, 5],        // I-vi-ii-V (rhythm changes)
+];
+
+// Modal Interchange - Major'dan borrowed chords
+const MODAL_INTERCHANGE = {
+  major: {
+    fromMinor: ['bVII', 'bVI', 'bIII', 'iv'],  // Paralel minor'dan
+    fromDorian: ['IV7', 'bVII'],
+    fromLydian: ['#IV°', 'II'],
+    fromMixolydian: ['bVII', 'v']
+  }
+};
+
+// Kadans tipleri
+const CADENCE_TYPES = {
+  authentic: [5, 1],      // V-I (güçlü bitiş)
+  plagal: [4, 1],         // IV-I (amen)
+  half: [1, 5],           // I-V (yarım kadans)
+  deceptive: [5, 6],      // V-vi (aldatıcı)
+  backdoor: [4, 'bVII', 1] // IV-bVII-I (backdoor)
+};
+
 function generateChordProgression() {
   const key = document.getElementById("keySelect").value;
   const scaleType = document.getElementById("scaleSelect").value;
   const style = document.getElementById("styleSelect").value;
-  const length = parseInt(document.getElementById("lengthSelect").value, 10);
+  const length = parseInt(document.getElementById("lengthSelect").value);
   const chordTypeOption = document.getElementById("chordTypeSelect").value;
+  const algorithm = document.getElementById("algorithmSelect")?.value || "pattern";
   
   const scaleChords = buildScaleChords(key, scaleType, chordTypeOption);
   if (!scaleChords.length) {
@@ -2713,37 +4060,63 @@ function generateChordProgression() {
   }
   
   let degreeSequence = [];
+  let patternName = "";
   
-  if (style === "random") {
-    let lastDegree = null;
-    for (let i = 0; i < length; i++) {
-      let d;
-      do {
-        d = Math.floor(Math.random() * scaleChords.length) + 1;
-      } while (d === lastDegree && scaleChords.length > 1);
-      degreeSequence.push(d);
-      lastDegree = d;
-    }
-  } else {
-    const patterns = PROGRESSION_PATTERNS[style];
-    if (patterns && patterns.length > 0) {
-      const pattern = pickRandom(patterns);
-      while (degreeSequence.length < length) {
-        degreeSequence = degreeSequence.concat(pattern.degrees);
+  // Algoritmaya göre üret
+  switch (algorithm) {
+    case "functional":
+      ({ degrees: degreeSequence, name: patternName } = generateFunctionalHarmony(length, scaleType));
+      break;
+      
+    case "fifths":
+      ({ degrees: degreeSequence, name: patternName } = generateCircleOfFifths(length));
+      break;
+      
+    case "jazz251":
+      ({ degrees: degreeSequence, name: patternName } = generateJazz251(length));
+      break;
+      
+    case "modal":
+      ({ degrees: degreeSequence, name: patternName } = generateModalInterchange(length, key, scaleType, scaleChords));
+      break;
+      
+    case "secondary":
+      ({ degrees: degreeSequence, name: patternName } = generateSecondaryDominants(length, scaleChords));
+      break;
+      
+    case "cadence":
+      ({ degrees: degreeSequence, name: patternName } = generateCadenceFocused(length));
+      break;
+      
+    case "random":
+      // Tam rastgele
+      for (let i = 0; i < length; i++) {
+        degreeSequence.push(Math.floor(Math.random() * 7) + 1);
       }
-      degreeSequence = degreeSequence.slice(0, length);
-    } else {
-      degreeSequence = [1, 4, 5, 1];
-    }
+      patternName = "Tam Rastgele";
+      break;
+      
+    case "pattern":
+    default:
+      // Mevcut stil kütüphanesi sistemi
+      ({ degrees: degreeSequence, name: patternName } = generateFromPatternLibrary(style, length, scaleChords));
+      break;
   }
   
+  // Dereceleri akorlara çevir
   currentChords = degreeSequence.map(degree => {
+    // Özel akorlar (bVII, bVI vs) için kontrol
+    if (typeof degree === 'string') {
+      return createBorrowedChord(degree, key, scaleType);
+    }
     const adjustedDegree = ((degree - 1) % scaleChords.length) + 1;
     return { ...scaleChords[adjustedDegree - 1], degree: adjustedDegree };
   });
   
+  currentPatternName = patternName;
+  
   updateChordDisplay();
-  updateTags(key, scaleType, style);
+  updateTags(key, scaleType, style, patternName);
   
   if (currentChords.length > 0) {
     selectChord(0);
@@ -2752,6 +4125,295 @@ function generateChordProgression() {
   stopPlayback();
   startPlayback();
 }
+
+// === ALGORİTMA FONKSİYONLARI ===
+
+// 1. Fonksiyonel Harmoni (T-S-D-T)
+function generateFunctionalHarmony(length, scaleType) {
+  const isMinor = scaleType.includes('Minor') || scaleType === 'dorian' || scaleType === 'phrygian';
+  const functions = CHORD_FUNCTIONS[isMinor ? 'minor' : 'major'];
+  
+  // T-S-D-T döngüsü
+  const functionSequence = ['tonic', 'subdominant', 'dominant', 'tonic'];
+  const degrees = [];
+  
+  for (let i = 0; i < length; i++) {
+    const func = functionSequence[i % functionSequence.length];
+    const options = functions[func];
+    // İlk ve son akor tonik olsun
+    if (i === 0 || i === length - 1) {
+      degrees.push(1);
+    } else {
+      degrees.push(pickRandom(options));
+    }
+  }
+  
+  return { degrees, name: "Fonksiyonel (T-S-D-T)" };
+}
+
+// 2. Circle of Fifths
+function generateCircleOfFifths(length) {
+  const degrees = [];
+  
+  // Beşliler çemberinde ilerle
+  // ... vi - ii - V - I - IV şeklinde
+  const fifthsSequence = [6, 2, 5, 1, 4, 7, 3]; // vi-ii-V-I-IV-vii-iii
+  
+  // Başlangıç noktası rastgele seç
+  let startIdx = Math.floor(Math.random() * 4); // İlk 4'ten başla
+  
+  for (let i = 0; i < length; i++) {
+    const idx = (startIdx + i) % fifthsSequence.length;
+    degrees.push(fifthsSequence[idx]);
+  }
+  
+  // Son akor tonik olsun
+  if (degrees[degrees.length - 1] !== 1) {
+    degrees[degrees.length - 1] = 1;
+  }
+  
+  return { degrees, name: "Circle of Fifths" };
+}
+
+// 3. Jazz ii-V-I
+function generateJazz251(length) {
+  const degrees = [];
+  
+  // Temel ii-V-I blokları ile doldur
+  while (degrees.length < length) {
+    const pattern = pickRandom(JAZZ_251_PATTERNS);
+    for (const d of pattern) {
+      if (degrees.length < length) {
+        degrees.push(d);
+      }
+    }
+  }
+  
+  return { degrees, name: "Jazz ii-V-I" };
+}
+
+// 4. Modal Interchange
+function generateModalInterchange(length, key, scaleType, scaleChords) {
+  const degrees = [];
+  const borrowedOptions = ['bVII', 'bVI', 'bIII', 'iv'];
+  
+  for (let i = 0; i < length; i++) {
+    // %30 şansla borrowed chord kullan
+    if (Math.random() < 0.3 && i !== 0 && i !== length - 1) {
+      degrees.push(pickRandom(borrowedOptions));
+    } else {
+      // Normal diatonic
+      if (i === 0 || i === length - 1) {
+        degrees.push(1); // Tonik
+      } else if (i === length - 2) {
+        degrees.push(5); // Dominant
+      } else {
+        degrees.push(pickRandom([1, 2, 4, 5, 6]));
+      }
+    }
+  }
+  
+  return { degrees, name: "Modal Interchange" };
+}
+
+// 5. Secondary Dominants
+function generateSecondaryDominants(length, scaleChords) {
+  const degrees = [];
+  
+  // Secondary dominant hedefleri: ii, iii, IV, V, vi
+  const targets = [2, 3, 4, 5, 6];
+  
+  for (let i = 0; i < length; i++) {
+    if (i === 0) {
+      degrees.push(1);
+    } else if (i === length - 1) {
+      degrees.push(1);
+    } else if (i === length - 2) {
+      degrees.push(5);
+    } else {
+      // %40 şansla secondary dominant + target
+      if (Math.random() < 0.4 && i < length - 3) {
+        const target = pickRandom(targets);
+        degrees.push('V/' + target); // Secondary dominant
+        i++;
+        if (i < length) {
+          degrees.push(target);
+        }
+      } else {
+        degrees.push(pickRandom([1, 2, 4, 5, 6]));
+      }
+    }
+  }
+  
+  // Uzunluğu düzelt
+  while (degrees.length > length) degrees.pop();
+  while (degrees.length < length) degrees.push(pickRandom([1, 4, 5]));
+  
+  return { degrees, name: "Secondary Dominants" };
+}
+
+// 6. Kadans Odaklı
+function generateCadenceFocused(length) {
+  const degrees = [];
+  const cadenceTypes = Object.keys(CADENCE_TYPES);
+  
+  // Her 4 akorda bir kadans yerleştir
+  const blockSize = 4;
+  const numBlocks = Math.ceil(length / blockSize);
+  
+  for (let block = 0; block < numBlocks; block++) {
+    const isLast = (block === numBlocks - 1);
+    const remainingLength = length - degrees.length;
+    const blockLength = Math.min(blockSize, remainingLength);
+    
+    if (blockLength <= 0) break;
+    
+    // Kadans tipi seç
+    let cadenceType;
+    if (isLast) {
+      cadenceType = 'authentic'; // Son blok her zaman authentic
+    } else {
+      cadenceType = pickRandom(['authentic', 'half', 'deceptive', 'plagal']);
+    }
+    
+    const cadence = CADENCE_TYPES[cadenceType];
+    
+    // Blok doldur
+    if (blockLength >= 4) {
+      // Tam blok: I - X - kadans
+      degrees.push(1);
+      degrees.push(pickRandom([2, 4, 6]));
+      degrees.push(cadence[0]);
+      degrees.push(typeof cadence[1] === 'number' ? cadence[1] : 1);
+    } else if (blockLength >= 2) {
+      // Kısa blok: sadece kadans
+      degrees.push(cadence[0]);
+      degrees.push(typeof cadence[1] === 'number' ? cadence[1] : 1);
+    } else {
+      degrees.push(1);
+    }
+  }
+  
+  // Uzunluğu düzelt
+  while (degrees.length > length) degrees.pop();
+  
+  return { degrees, name: "Kadans Odaklı" };
+}
+
+// Mevcut stil kütüphanesi (pattern)
+function generateFromPatternLibrary(style, length, scaleChords) {
+  let degreeSequence = [];
+  let patternName = "";
+  
+  if (style === "random") {
+    let lastDegree = null;
+    for (let i = 0; i < length; i++) {
+      let d;
+      let attempts = 0;
+      do {
+        d = Math.floor(Math.random() * scaleChords.length) + 1;
+        attempts++;
+      } while (d === lastDegree && scaleChords.length > 1 && attempts < 10);
+      degreeSequence.push(d);
+      lastDegree = d;
+    }
+    patternName = "Rastgele";
+  } else {
+    const stylePatterns = PROGRESSION_PATTERNS[style];
+    
+    if (stylePatterns && stylePatterns[length] && stylePatterns[length].length > 0) {
+      const pattern = pickRandom(stylePatterns[length]);
+      degreeSequence = [...pattern.degrees];
+      patternName = pattern.name;
+    } else if (stylePatterns) {
+      const availableLengths = Object.keys(stylePatterns).filter(l => stylePatterns[l].length > 0);
+      
+      if (availableLengths.length > 0) {
+        const targetLen = length;
+        let closestLen = availableLengths[0];
+        let minDiff = Math.abs(parseInt(closestLen) - targetLen);
+        
+        availableLengths.forEach(l => {
+          const diff = Math.abs(parseInt(l) - targetLen);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestLen = l;
+          }
+        });
+        
+        const pattern = pickRandom(stylePatterns[closestLen]);
+        const baseSequence = [...pattern.degrees];
+        patternName = pattern.name;
+        
+        if (baseSequence.length < targetLen) {
+          while (degreeSequence.length < targetLen) {
+            degreeSequence = degreeSequence.concat(baseSequence);
+          }
+          degreeSequence = degreeSequence.slice(0, targetLen);
+        } else {
+          degreeSequence = baseSequence.slice(0, targetLen);
+        }
+      } else {
+        degreeSequence = [1, 4, 5, 1];
+        patternName = "Temel";
+      }
+    } else {
+      degreeSequence = [1, 4, 5, 1];
+      patternName = "Temel";
+    }
+  }
+  
+  return { degrees: degreeSequence, name: patternName };
+}
+
+// Borrowed (ödünç) akor oluştur
+function createBorrowedChord(chordSymbol, key, scaleType) {
+  const rootIndex = NOTES_SHARP.indexOf(key);
+  
+  // Borrowed chord mapping
+  const borrowedIntervals = {
+    'bVII': { interval: 10, quality: 'maj', suffix: '' },    // b7
+    'bVI': { interval: 8, quality: 'maj', suffix: '' },      // b6
+    'bIII': { interval: 3, quality: 'maj', suffix: '' },     // b3
+    'iv': { interval: 5, quality: 'min', suffix: 'm' },      // 4 minor
+    'bII': { interval: 1, quality: 'maj', suffix: '' },      // Neapolitan
+  };
+  
+  // Secondary dominant (V/X formatı)
+  if (chordSymbol.startsWith('V/')) {
+    const target = parseInt(chordSymbol.split('/')[1]);
+    // V/ii = VI dominant, V/iii = VII dominant, etc.
+    const targetRoot = NOTES_SHARP[(rootIndex + [0, 0, 2, 4, 5, 7, 9, 11][target]) % 12];
+    const dominantRoot = NOTES_SHARP[(NOTES_SHARP.indexOf(targetRoot) + 7) % 12];
+    return {
+      degree: chordSymbol,
+      name: dominantRoot + '7',
+      root: dominantRoot,
+      quality: 'dom7',
+      suffix: '7',
+      borrowed: true
+    };
+  }
+  
+  const borrowed = borrowedIntervals[chordSymbol];
+  if (borrowed) {
+    const chordRoot = NOTES_SHARP[(rootIndex + borrowed.interval) % 12];
+    return {
+      degree: chordSymbol,
+      name: chordRoot + borrowed.suffix,
+      root: chordRoot,
+      quality: borrowed.quality,
+      suffix: borrowed.suffix,
+      borrowed: true
+    };
+  }
+  
+  // Fallback
+  return { degree: 1, name: key, root: key, quality: 'maj', suffix: '' };
+}
+
+// Pattern adı için global değişken
+let currentPatternName = "";
 
 function updateChordDisplay() {
   const container = document.getElementById("chordsContainer");
@@ -2806,12 +4468,15 @@ function highlightPlayingChord(index) {
   if (chips[index]) chips[index].classList.add("playing");
 }
 
-function updateTags(key, scaleType, style) {
+function updateTags(key, scaleType, style, patternName = "") {
   document.getElementById("tagKey").textContent = key;
   const scaleNames = { major: "Major", naturalMinor: "Minor", harmonicMinor: "Harm.Min", dorian: "Dorian", phrygian: "Phrygian", lydian: "Lydian", mixolydian: "Mixo", pentatonicMajor: "Penta", blues: "Blues" };
   document.getElementById("tagScale").textContent = scaleNames[scaleType] || scaleType;
-  const styleNames = { pop: "Pop", rock: "Rock", jazz: "Jazz", blues: "Blues", ballad: "Ballad", edm: "EDM", latin: "Latin", random: "Random" };
-  document.getElementById("tagStyle").textContent = styleNames[style] || style;
+  const styleNames = { pop: "Pop", rock: "Rock", jazz: "Jazz", blues: "Blues", ballad: "Ballad", edm: "EDM", latin: "Latin", rnb: "R&B", classical: "Classical", funk: "Funk", country: "Country", gospel: "Gospel", world: "World", random: "Random" };
+  
+  // Stil + Pattern adı
+  const styleName = styleNames[style] || style;
+  document.getElementById("tagStyle").textContent = patternName ? `${styleName}: ${patternName}` : styleName;
 }
 
 function updateCurrentChordInfo(chordName) {
@@ -2841,51 +4506,237 @@ function clearPianoHighlight() {
 
 // === PLAYBACK ===
 
+// Master timing system - tek clock ile her şeyi kontrol
+let masterInterval = null;
+let tickCount = 0;
+let ticksPerBeat = 4; // Her beat'te 4 tick (16'lık notalar için)
+
+// Ritmik figürler (Comping Patterns) - her akorun beat cinsinden süresi
+// Toplam her zaman 4 veya 8 beat (1 veya 2 ölçü) olmalı
+const COMPING_PATTERNS = {
+  straight: {
+    name: "Straight",
+    // Her akor 4 beat
+    pattern: [4, 4, 4, 4, 4, 4, 4, 4]
+  },
+  half: {
+    name: "Half Notes",
+    // Her akor 2 beat
+    pattern: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+  },
+  charleston: {
+    name: "Charleston",
+    // 3+1 pattern (dotted quarter + eighth)
+    pattern: [3, 1, 3, 1, 3, 1, 3, 1]
+  },
+  anticipation: {
+    name: "Anticipation",
+    // Akor bir beat erken girer
+    pattern: [3.5, 4, 4, 4.5]
+  },
+  syncopated: {
+    name: "Syncopated",
+    // Offbeat vurgulu
+    pattern: [1.5, 2.5, 1.5, 2.5, 1.5, 2.5, 1.5, 2.5]
+  },
+  bossaNova: {
+    name: "Bossa Nova",
+    // Klasik bossa pattern
+    pattern: [3, 3, 2, 3, 3, 2]
+  },
+  shuffle: {
+    name: "Shuffle",
+    // Üçleme hissi (2.67 + 1.33)
+    pattern: [2.67, 1.33, 2.67, 1.33, 2.67, 1.33]
+  },
+  reggae: {
+    name: "Reggae/Ska",
+    // Offbeat vurgulu
+    pattern: [0.5, 1.5, 0.5, 1.5, 0.5, 1.5, 0.5, 1.5]
+  },
+  waltz: {
+    name: "Waltz (3/4)",
+    // 3 beat pattern
+    pattern: [3, 3, 3, 3, 3, 3, 3, 3]
+  },
+  latin: {
+    name: "Latin Montuno",
+    // Clave-based
+    pattern: [1.5, 1, 1.5, 1.5, 1, 1.5]
+  },
+  ballad: {
+    name: "Ballad",
+    // Uzun + kısa
+    pattern: [6, 2, 6, 2]
+  },
+  funk: {
+    name: "Funk",
+    // Kesik kesik
+    pattern: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1]
+  },
+  rockPower: {
+    name: "Rock Power",
+    // Güçlü downbeat
+    pattern: [1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2]
+  },
+  jazzSwing: {
+    name: "Jazz Swing",
+    // Swing comping
+    pattern: [2, 2, 1, 3, 2, 2, 1, 3]
+  }
+};
+
+// Mevcut comping pattern
+let currentCompingPattern = "straight";
+let compingIndex = 0;
+let ticksUntilNextChord = 0;
+let rhythmEnabled = true; // Ritim açık/kapalı
+
+function getMsPerTick() {
+  return (60000 / tempo) / ticksPerBeat;
+}
+
+function getCompingPattern() {
+  return COMPING_PATTERNS[currentCompingPattern] || COMPING_PATTERNS.straight;
+}
+
 function startPlayback() {
-  if (currentChords.length === 0 || isPlaying) return;
+  if (currentChords.length === 0) return;
+  if (isPlaying) {
+    stopPlayback();
+    return;
+  }
   
   isPlaying = true;
+  tickCount = 0;
   currentChordIndex = 0;
+  currentSubdivision = -1; // -1 ile başla ki ilk tick'te 0'a geçsin
+  compingIndex = 0;
   updatePlayButton();
   
-  const chordDuration = getChordDuration();
+  // Ritim pattern'ini al
+  currentRhythmPattern = getCurrentRhythm();
+  updateRhythmDisplay();
   
-  // İlk akoru çal
+  // Metronom butonunu aktif yap (eğer ritim açıksa)
+  if (rhythmEnabled) {
+    metronomeOn = true;
+    document.getElementById("metronomeBtn").classList.add("active");
+  }
+  
+  // İlk akorun süresini hesapla - COMPING PATTERN'DEN
+  const compPattern = getCompingPattern();
+  const firstDuration = compPattern.pattern[0]; // Beat cinsinden süre
+  ticksUntilNextChord = Math.round(firstDuration * ticksPerBeat);
+  
+  console.log("Comping pattern:", currentCompingPattern, "İlk süre:", firstDuration, "beat =", ticksUntilNextChord, "tick");
+  
+  // İlk akoru hemen çal
   const firstChord = currentChords[0];
-  playChord(firstChord.name, chordDuration / 1000 * 0.9);
+  const durationMs = (firstDuration * 60000 / tempo) * 0.85;
+  playChord(firstChord.name, durationMs / 1000);
   selectChord(0);
   highlightPlayingChord(0);
-  currentChordIndex = 1;
+  updateProgress();
   
-  playbackInterval = setInterval(() => {
-    if (currentChordIndex >= currentChords.length) {
-      if (isLooping) {
-        currentChordIndex = 0;
-      } else {
-        stopPlayback();
-        return;
-      }
+  // İlk ritim vuruşunu çal (eğer açıksa)
+  if (rhythmEnabled) {
+    playRhythmAtTick(0);
+  }
+  
+  // Master tick başlat
+  const msPerTick = getMsPerTick();
+  tickCount = 1;
+  
+  masterInterval = setInterval(() => {
+    // Ritim vuruşu (eğer açıksa)
+    if (rhythmEnabled) {
+      playRhythmAtTick(tickCount);
     }
     
-    const chord = currentChords[currentChordIndex];
-    playChord(chord.name, chordDuration / 1000 * 0.9);
-    selectChord(currentChordIndex);
-    highlightPlayingChord(currentChordIndex);
-    updateProgress();
-    currentChordIndex++;
-  }, chordDuration);
+    // Akor değişimi kontrolü
+    ticksUntilNextChord--;
+    
+    if (ticksUntilNextChord <= 0) {
+      currentChordIndex++;
+      compingIndex++;
+      
+      // Comping pattern'i döngüye al
+      const compPattern = getCompingPattern();
+      if (compingIndex >= compPattern.pattern.length) {
+        compingIndex = 0;
+      }
+      
+      if (currentChordIndex >= currentChords.length) {
+        if (isLooping) {
+          currentChordIndex = 0;
+          compingIndex = 0;
+        } else {
+          stopPlayback();
+          return;
+        }
+      }
+      
+      // Sonraki akorun süresini COMPING PATTERN'DEN al
+      const nextDuration = compPattern.pattern[compingIndex];
+      ticksUntilNextChord = Math.round(nextDuration * ticksPerBeat);
+      
+      const chord = currentChords[currentChordIndex];
+      const durationMs = (nextDuration * 60000 / tempo) * 0.85;
+      playChord(chord.name, durationMs / 1000);
+      selectChord(currentChordIndex);
+      highlightPlayingChord(currentChordIndex);
+      updateProgress();
+    }
+    
+    tickCount++;
+  }, msPerTick);
+}
+
+function playRhythmAtTick(tick) {
+  if (!currentRhythmPattern) return;
+  
+  const subdivisions = currentRhythmPattern.subdivisions;
+  // Her ölçü 16 tick (4 beat * 4 tick/beat)
+  const ticksPerMeasure = 16;
+  const tickInMeasure = tick % ticksPerMeasure;
+  
+  // Subdivision index hesapla
+  const subdivisionIndex = Math.floor(tickInMeasure * subdivisions / ticksPerMeasure);
+  
+  // Sadece subdivision değiştiğinde ses çal
+  if (subdivisionIndex !== currentSubdivision || tick === 0) {
+    currentSubdivision = subdivisionIndex;
+    
+    const velocity = currentRhythmPattern.pattern[subdivisionIndex];
+    const sound = currentRhythmPattern.sounds[subdivisionIndex];
+    
+    if (velocity > 0 && sound) {
+      playDrumSound(sound, velocity);
+    }
+    
+    updateMetronomeVisualAdvanced(subdivisionIndex, subdivisions);
+  }
 }
 
 function stopPlayback() {
   isPlaying = false;
-  if (playbackInterval) {
-    clearInterval(playbackInterval);
-    playbackInterval = null;
+  metronomeOn = false;
+  
+  if (masterInterval) {
+    clearInterval(masterInterval);
+    masterInterval = null;
   }
+  
+  tickCount = 0;
   currentChordIndex = 0;
+  currentSubdivision = 0;
+  
   updatePlayButton();
   updateProgress();
+  document.getElementById("metronomeBtn").classList.remove("active");
   document.querySelectorAll(".chord-chip").forEach(c => c.classList.remove("playing"));
+  document.querySelectorAll(".beat-dot").forEach(d => d.classList.remove("active", "accent"));
 }
 
 function togglePlayback() {
@@ -2894,9 +4745,11 @@ function togglePlayback() {
   } else {
     if (currentChords.length === 0) {
       generateChordProgression();
-    } else {
-      startPlayback();
     }
+    // Metronom butonunu aktif yap (Play ile birlikte çalacak)
+    metronomeOn = true;
+    document.getElementById("metronomeBtn").classList.add("active");
+    startPlayback();
   }
 }
 
@@ -2938,37 +4791,305 @@ function updateProgress() {
 
 // === METRONOM ===
 
+// Her stil için birden fazla ritim
+const STYLE_RHYTHMS = {
+  pop: [
+    { name: "Standard Pop", subdivisions: 8, pattern: [1.0, 0.3, 0.7, 0.3, 0.8, 0.3, 0.7, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Pop Ballad", subdivisions: 8, pattern: [0.8, 0.2, 0.6, 0.2, 0.7, 0.2, 0.6, 0.3], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Disco Pop", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 1.0, 0.5, 0.9, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Synth Pop", subdivisions: 16, pattern: [1.0, 0.2, 0.4, 0.2, 0.8, 0.2, 0.4, 0.3, 0.9, 0.2, 0.4, 0.2, 0.8, 0.2, 0.4, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Teen Pop", subdivisions: 8, pattern: [1.0, 0.3, 0.8, 0.3, 1.0, 0.3, 0.8, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Dance Pop", subdivisions: 16, pattern: [1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.8, 0.3, 1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.9, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Power Pop", subdivisions: 8, pattern: [1.0, 0.5, 1.0, 0.5, 1.0, 0.5, 1.0, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Motown", subdivisions: 8, pattern: [0.9, 0.4, 0.8, 0.4, 0.9, 0.4, 0.8, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Acoustic", subdivisions: 8, pattern: [0.7, 0.3, 0.5, 0.3, 0.6, 0.3, 0.5, 0.3], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  rock: [
+    { name: "Standard Rock", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 0.8, 0.6, 1.0, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'kick', 'snare', 'hihat'] },
+    { name: "Hard Rock", subdivisions: 8, pattern: [1.0, 0.6, 1.0, 0.6, 1.0, 0.6, 1.0, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Punk", subdivisions: 8, pattern: [1.0, 0.7, 1.0, 0.7, 1.0, 0.7, 1.0, 0.7], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Metal", subdivisions: 16, pattern: [1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 1.0, 0.5, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 1.0, 0.6], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "Classic Rock", subdivisions: 8, pattern: [1.0, 0.4, 0.8, 0.4, 0.9, 0.4, 0.8, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Alternative", subdivisions: 8, pattern: [0.9, 0.3, 0.8, 0.3, 0.7, 0.4, 0.8, 0.3], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Grunge", subdivisions: 8, pattern: [1.0, 0.3, 0.9, 0.3, 0.8, 0.3, 0.9, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'kick', 'snare', 'hihat'] },
+    { name: "Arena Rock", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 1.0, 0.5, 0.9, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Indie", subdivisions: 8, pattern: [0.8, 0.4, 0.7, 0.4, 0.8, 0.4, 0.7, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  jazz: [
+    { name: "Swing", subdivisions: 12, pattern: [0.8, 0, 0.4, 0.6, 0, 0.5, 0.7, 0, 0.4, 0.6, 0, 0.6], sounds: ['ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'hihat'] },
+    { name: "Bebop", subdivisions: 12, pattern: [0.9, 0, 0.5, 0.7, 0, 0.5, 0.8, 0, 0.5, 0.7, 0, 0.6], sounds: ['ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'hihat'] },
+    { name: "Cool Jazz", subdivisions: 12, pattern: [0.6, 0, 0.3, 0.5, 0, 0.3, 0.5, 0, 0.3, 0.5, 0, 0.4], sounds: ['ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'ride', 'ride', null, 'hihat'] },
+    { name: "Bossa Nova", subdivisions: 8, pattern: [0.8, 0, 0.5, 0.6, 0, 0.5, 0.7, 0], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null] },
+    { name: "Latin Jazz", subdivisions: 8, pattern: [1.0, 0, 0.8, 0, 0.7, 0.8, 0, 0.7], sounds: ['clave', null, 'clave', null, 'clave', 'clave', null, 'clave'] },
+    { name: "Jazz Waltz", subdivisions: 6, pattern: [0.9, 0.4, 0.5, 0.7, 0.4, 0.5], sounds: ['ride', 'hihat', 'hihat', 'ride', 'hihat', 'hihat'] },
+    { name: "Straight Ahead", subdivisions: 8, pattern: [0.8, 0.3, 0.6, 0.3, 0.7, 0.3, 0.6, 0.4], sounds: ['ride', 'hihat', 'ride', 'hihat', 'ride', 'hihat', 'ride', 'hihat'] },
+    { name: "Ballad", subdivisions: 8, pattern: [0.5, 0.2, 0.4, 0.2, 0.5, 0.2, 0.4, 0.3], sounds: ['ride', 'hihat', 'ride', 'hihat', 'ride', 'hihat', 'ride', 'hihat'] },
+    { name: "Fusion", subdivisions: 16, pattern: [0.9, 0.3, 0.5, 0.3, 0.8, 0.3, 0.5, 0.4, 0.8, 0.3, 0.5, 0.3, 0.7, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  blues: [
+    { name: "Shuffle", subdivisions: 12, pattern: [1.0, 0, 0.4, 0.7, 0, 0.4, 0.6, 0, 0.4, 0.9, 0, 0.5], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null, 'hihat', 'snare', null, 'hihat'] },
+    { name: "Slow Blues", subdivisions: 12, pattern: [0.8, 0, 0.3, 0.6, 0, 0.3, 0.5, 0, 0.3, 0.7, 0, 0.4], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null, 'hihat', 'snare', null, 'hihat'] },
+    { name: "Chicago", subdivisions: 12, pattern: [1.0, 0, 0.5, 0.8, 0, 0.5, 0.7, 0, 0.5, 0.9, 0, 0.6], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null, 'hihat', 'snare', null, 'hihat'] },
+    { name: "Texas", subdivisions: 8, pattern: [1.0, 0.4, 0.8, 0.4, 0.9, 0.4, 0.8, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Delta", subdivisions: 8, pattern: [0.7, 0.3, 0.5, 0.3, 0.6, 0.3, 0.5, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Jump Blues", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 1.0, 0.5, 0.9, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Boogie", subdivisions: 8, pattern: [1.0, 0.6, 0.8, 0.6, 1.0, 0.6, 0.8, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Funky Blues", subdivisions: 16, pattern: [1.0, 0.3, 0.4, 0.3, 0.8, 0.4, 0.5, 0.3, 0.9, 0.3, 0.4, 0.4, 0.8, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Blues Rock", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 0.8, 0.6, 0.9, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'kick', 'snare', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  ballad: [
+    { name: "Slow Ballad", subdivisions: 8, pattern: [0.6, 0, 0.4, 0.2, 0.5, 0.2, 0.4, 0], sounds: ['kick', null, 'snare', 'hihat', 'kick', 'hihat', 'snare', null] },
+    { name: "Power Ballad", subdivisions: 8, pattern: [0.8, 0.3, 0.7, 0.3, 0.7, 0.3, 0.7, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Acoustic", subdivisions: 8, pattern: [0.5, 0.2, 0.4, 0.2, 0.5, 0.2, 0.4, 0.2], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Pop Ballad", subdivisions: 8, pattern: [0.7, 0.2, 0.5, 0.2, 0.6, 0.2, 0.5, 0.3], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "R&B Ballad", subdivisions: 16, pattern: [0.6, 0.2, 0.3, 0.2, 0.5, 0.2, 0.3, 0.2, 0.5, 0.2, 0.3, 0.2, 0.5, 0.2, 0.4, 0.2], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Soul Ballad", subdivisions: 8, pattern: [0.7, 0.3, 0.6, 0.3, 0.7, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Jazz Ballad", subdivisions: 8, pattern: [0.4, 0.2, 0.3, 0.2, 0.4, 0.2, 0.3, 0.2], sounds: ['ride', 'hihat', 'ride', 'hihat', 'ride', 'hihat', 'ride', 'hihat'] },
+    { name: "6/8 Ballad", subdivisions: 6, pattern: [0.7, 0.3, 0.4, 0.6, 0.3, 0.4], sounds: ['kick', 'hihat', 'hihat', 'snare', 'hihat', 'hihat'] },
+    { name: "Country Ballad", subdivisions: 8, pattern: [0.6, 0.3, 0.5, 0.3, 0.6, 0.3, 0.5, 0.3], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  edm: [
+    { name: "Four-on-Floor", subdivisions: 16, pattern: [1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.9, 0.3, 1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 1.0, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "House", subdivisions: 16, pattern: [1.0, 0.2, 0.4, 0.2, 1.0, 0.2, 0.4, 0.3, 1.0, 0.2, 0.4, 0.2, 1.0, 0.2, 0.4, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat'] },
+    { name: "Trance", subdivisions: 16, pattern: [1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.8, 0.3, 1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.9, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Dubstep", subdivisions: 16, pattern: [1.0, 0.2, 0.3, 0.2, 0, 0.2, 1.0, 0.3, 0.5, 0.2, 0.3, 0.2, 0.8, 0.2, 0.9, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', null, 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Techno", subdivisions: 16, pattern: [1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.5, 0.3, 1.0, 0.3, 0.5, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat'] },
+    { name: "Progressive", subdivisions: 16, pattern: [1.0, 0.2, 0.4, 0.2, 1.0, 0.2, 0.7, 0.2, 1.0, 0.2, 0.4, 0.2, 1.0, 0.2, 0.8, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Trap", subdivisions: 16, pattern: [1.0, 0.2, 0.3, 0.2, 0, 0.3, 0.9, 0.2, 0.5, 0.3, 0.4, 0.3, 0.8, 0.3, 0.5, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', null, 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat'] },
+    { name: "Big Room", subdivisions: 16, pattern: [1.0, 0.4, 0.5, 0.4, 1.0, 0.4, 1.0, 0.4, 1.0, 0.4, 0.5, 0.4, 1.0, 0.4, 1.0, 0.5], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Future Bass", subdivisions: 16, pattern: [1.0, 0.2, 0.3, 0.2, 0.8, 0.3, 0.9, 0.2, 0.7, 0.2, 0.3, 0.3, 0.8, 0.2, 1.0, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  latin: [
+    { name: "Son Clave 3-2", subdivisions: 8, pattern: [1.0, 0, 0.8, 0, 0.7, 0.8, 0, 0.7], sounds: ['clave', null, 'clave', null, 'clave', 'clave', null, 'clave'] },
+    { name: "Son Clave 2-3", subdivisions: 8, pattern: [0.8, 0, 0.7, 1.0, 0, 0.8, 0, 0.7], sounds: ['clave', null, 'clave', 'clave', null, 'clave', null, 'clave'] },
+    { name: "Rumba", subdivisions: 8, pattern: [1.0, 0, 0.7, 0, 0.8, 0, 0.7, 0.8], sounds: ['clave', null, 'clave', null, 'clave', null, 'clave', 'clave'] },
+    { name: "Bossa Nova", subdivisions: 8, pattern: [0.8, 0, 0.5, 0.6, 0, 0.5, 0.7, 0], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null] },
+    { name: "Samba", subdivisions: 8, pattern: [0.9, 0.5, 0.7, 0.5, 0.8, 0.5, 0.7, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Salsa", subdivisions: 8, pattern: [1.0, 0.4, 0.7, 0.4, 0.8, 0.5, 0.7, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Reggaeton", subdivisions: 8, pattern: [1.0, 0.3, 0, 0.9, 0.5, 0.3, 0, 0.8], sounds: ['kick', 'hihat', null, 'snare', 'kick', 'hihat', null, 'snare'] },
+    { name: "Cumbia", subdivisions: 8, pattern: [0.8, 0.4, 0.6, 0.4, 0.8, 0.4, 0.6, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Flamenco", subdivisions: 12, pattern: [1.0, 0, 0.6, 0.8, 0, 0.5, 0.7, 0, 0.6, 0.9, 0, 0.7], sounds: ['clave', null, 'clave', 'clave', null, 'clave', 'clave', null, 'clave', 'clave', null, 'clave'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  rnb: [
+    { name: "Classic R&B", subdivisions: 16, pattern: [0.9, 0.2, 0.4, 0.2, 0.7, 0.3, 0.8, 0.2, 0.6, 0.2, 0.4, 0.3, 0.7, 0.2, 0.9, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "Neo Soul", subdivisions: 16, pattern: [0.7, 0.2, 0.3, 0.2, 0.6, 0.2, 0.4, 0.2, 0.5, 0.2, 0.3, 0.2, 0.6, 0.2, 0.5, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Modern R&B", subdivisions: 16, pattern: [1.0, 0.2, 0.3, 0.2, 0, 0.3, 0.9, 0.2, 0.5, 0.2, 0.3, 0.3, 0.8, 0.2, 0.5, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', null, 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Slow Jam", subdivisions: 16, pattern: [0.6, 0.2, 0.3, 0.2, 0.5, 0.2, 0.4, 0.2, 0.5, 0.2, 0.3, 0.2, 0.5, 0.2, 0.4, 0.2], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Motown", subdivisions: 8, pattern: [0.9, 0.4, 0.8, 0.4, 0.9, 0.4, 0.8, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Soul", subdivisions: 8, pattern: [0.8, 0.3, 0.7, 0.3, 0.8, 0.3, 0.7, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Funk R&B", subdivisions: 16, pattern: [1.0, 0.3, 0.5, 0.3, 0.8, 0.4, 0.6, 0.3, 0.7, 0.3, 0.5, 0.4, 0.9, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Gospel R&B", subdivisions: 8, pattern: [0.9, 0.4, 0.7, 0.4, 0.8, 0.4, 0.7, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "90s R&B", subdivisions: 16, pattern: [0.9, 0.3, 0.4, 0.3, 0.8, 0.3, 0.5, 0.3, 0.8, 0.3, 0.4, 0.3, 0.8, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  classical: [
+    { name: "4/4 Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] },
+    { name: "3/4 Waltz", subdivisions: 3, pattern: [1.0, 0.5, 0.5], sounds: ['click', 'click', 'click'] },
+    { name: "6/8 Time", subdivisions: 6, pattern: [1.0, 0.4, 0.5, 0.7, 0.4, 0.5], sounds: ['click', 'click', 'click', 'click', 'click', 'click'] },
+    { name: "2/4 March", subdivisions: 4, pattern: [1.0, 0.5, 0.8, 0.5], sounds: ['click', 'click', 'click', 'click'] },
+    { name: "Cut Time", subdivisions: 2, pattern: [1.0, 0.7], sounds: ['click', 'click'] },
+    { name: "5/4 Time", subdivisions: 5, pattern: [1.0, 0.5, 0.7, 0.5, 0.6], sounds: ['click', 'click', 'click', 'click', 'click'] },
+    { name: "7/8 Time", subdivisions: 7, pattern: [1.0, 0.5, 0.6, 0.8, 0.5, 0.6, 0.5], sounds: ['click', 'click', 'click', 'click', 'click', 'click', 'click'] },
+    { name: "12/8 Compound", subdivisions: 12, pattern: [1.0, 0.3, 0.4, 0.7, 0.3, 0.4, 0.8, 0.3, 0.4, 0.7, 0.3, 0.5], sounds: ['click', 'click', 'click', 'click', 'click', 'click', 'click', 'click', 'click', 'click', 'click', 'click'] },
+    { name: "Orchestral", subdivisions: 8, pattern: [1.0, 0.3, 0.5, 0.3, 0.7, 0.3, 0.5, 0.4], sounds: ['click', 'click', 'click', 'click', 'click', 'click', 'click', 'click'] },
+    { name: "Rubato", subdivisions: 4, pattern: [0.6, 0.4, 0.5, 0.4], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  funk: [
+    { name: "Classic Funk", subdivisions: 16, pattern: [1.0, 0.3, 0.6, 0.3, 0.8, 0.4, 0.7, 0.3, 0.5, 0.3, 0.6, 0.4, 0.9, 0.3, 0.7, 0.5], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "James Brown", subdivisions: 16, pattern: [1.0, 0.4, 0.5, 0.4, 0.9, 0.4, 0.6, 0.4, 0.8, 0.4, 0.5, 0.4, 1.0, 0.4, 0.7, 0.5], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "P-Funk", subdivisions: 16, pattern: [1.0, 0.3, 0.4, 0.3, 0.7, 0.4, 0.8, 0.3, 0.6, 0.3, 0.4, 0.4, 0.8, 0.3, 0.9, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "Disco", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 1.0, 0.5, 0.9, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Slap Funk", subdivisions: 16, pattern: [1.0, 0.2, 0.5, 0.3, 0.8, 0.3, 0.6, 0.2, 0.7, 0.2, 0.5, 0.3, 0.9, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "New Orleans", subdivisions: 16, pattern: [0.9, 0.4, 0.5, 0.4, 0.8, 0.5, 0.6, 0.4, 0.7, 0.4, 0.5, 0.5, 0.8, 0.4, 0.7, 0.5], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "Funky Drummer", subdivisions: 16, pattern: [1.0, 0.3, 0.4, 0.4, 0.8, 0.3, 0.5, 0.4, 0.7, 0.3, 0.4, 0.5, 0.9, 0.3, 0.6, 0.5], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat'] },
+    { name: "Breakbeat", subdivisions: 16, pattern: [1.0, 0.3, 0.4, 0.3, 0, 0.3, 0.9, 0.3, 0.6, 0.4, 0.5, 0.3, 0.8, 0.3, 0.5, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', null, 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Modern Funk", subdivisions: 16, pattern: [1.0, 0.2, 0.4, 0.2, 0.8, 0.3, 0.5, 0.2, 0.7, 0.2, 0.4, 0.3, 0.9, 0.2, 0.6, 0.3], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  country: [
+    { name: "Two Step", subdivisions: 8, pattern: [1.0, 0.4, 0.8, 0.4, 0.9, 0.4, 0.8, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Train Beat", subdivisions: 16, pattern: [0.9, 0.4, 0.5, 0.4, 0.8, 0.4, 0.5, 0.4, 0.9, 0.4, 0.5, 0.4, 0.8, 0.4, 0.5, 0.5], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Honky Tonk", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 1.0, 0.5, 0.9, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Country Waltz", subdivisions: 6, pattern: [1.0, 0.4, 0.5, 0.8, 0.4, 0.5], sounds: ['kick', 'hihat', 'hihat', 'snare', 'hihat', 'hihat'] },
+    { name: "Country Rock", subdivisions: 8, pattern: [1.0, 0.5, 0.9, 0.5, 0.8, 0.6, 0.9, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'kick', 'snare', 'hihat'] },
+    { name: "Bluegrass", subdivisions: 8, pattern: [0.8, 0.5, 0.7, 0.5, 0.8, 0.5, 0.7, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Shuffle", subdivisions: 12, pattern: [0.9, 0, 0.4, 0.7, 0, 0.4, 0.8, 0, 0.4, 0.7, 0, 0.5], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null, 'hihat', 'snare', null, 'hihat'] },
+    { name: "Boom Chick", subdivisions: 4, pattern: [1.0, 0.7, 0.9, 0.7], sounds: ['kick', 'snare', 'kick', 'snare'] },
+    { name: "Country Pop", subdivisions: 8, pattern: [0.9, 0.3, 0.7, 0.3, 0.8, 0.3, 0.7, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  gospel: [
+    { name: "Traditional", subdivisions: 8, pattern: [1.0, 0.4, 0.8, 0.4, 0.9, 0.4, 0.8, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Shuffle", subdivisions: 12, pattern: [0.9, 0, 0.4, 0.8, 0, 0.4, 0.7, 0, 0.4, 0.9, 0, 0.5], sounds: ['kick', null, 'hihat', 'snare', null, 'hihat', 'kick', null, 'hihat', 'snare', null, 'hihat'] },
+    { name: "Contemporary", subdivisions: 16, pattern: [1.0, 0.3, 0.4, 0.3, 0.8, 0.3, 0.5, 0.3, 0.9, 0.3, 0.4, 0.3, 0.8, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Gospel Waltz", subdivisions: 6, pattern: [0.9, 0.4, 0.5, 0.8, 0.4, 0.5], sounds: ['kick', 'hihat', 'hihat', 'snare', 'hihat', 'hihat'] },
+    { name: "Praise", subdivisions: 8, pattern: [0.8, 0.3, 0.6, 0.3, 0.7, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Southern", subdivisions: 8, pattern: [0.9, 0.5, 0.8, 0.5, 0.9, 0.5, 0.8, 0.6], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Shout", subdivisions: 8, pattern: [1.0, 0.6, 1.0, 0.6, 1.0, 0.6, 1.0, 0.7], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Ballad", subdivisions: 8, pattern: [0.6, 0.2, 0.5, 0.2, 0.6, 0.2, 0.5, 0.3], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "CCM", subdivisions: 8, pattern: [0.8, 0.3, 0.7, 0.3, 0.8, 0.3, 0.7, 0.4], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  world: [
+    { name: "Afrobeat", subdivisions: 16, pattern: [1.0, 0.3, 0.5, 0.3, 0.7, 0.4, 0.6, 0.3, 0.8, 0.3, 0.5, 0.4, 0.7, 0.3, 0.6, 0.4], sounds: ['kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'kick', 'hihat', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Reggae", subdivisions: 8, pattern: [0, 0.4, 0.8, 0.4, 0, 0.4, 0.8, 0.5], sounds: [null, 'hihat', 'snare', 'hihat', null, 'hihat', 'snare', 'hihat'] },
+    { name: "Ska", subdivisions: 8, pattern: [0, 0.7, 0.9, 0.7, 0, 0.7, 0.9, 0.8], sounds: [null, 'hihat', 'snare', 'hihat', null, 'hihat', 'snare', 'hihat'] },
+    { name: "Middle Eastern", subdivisions: 8, pattern: [1.0, 0, 0.7, 0, 0.5, 0.8, 0, 0.6], sounds: ['kick', null, 'clave', null, 'kick', 'clave', null, 'clave'] },
+    { name: "Indian", subdivisions: 8, pattern: [1.0, 0.4, 0.6, 0.4, 0.8, 0.4, 0.6, 0.5], sounds: ['kick', 'clave', 'clave', 'clave', 'kick', 'clave', 'clave', 'clave'] },
+    { name: "African 6/8", subdivisions: 6, pattern: [1.0, 0.4, 0.6, 0.8, 0.4, 0.6], sounds: ['kick', 'hihat', 'hihat', 'snare', 'hihat', 'hihat'] },
+    { name: "Celtic", subdivisions: 8, pattern: [0.9, 0.4, 0.7, 0.4, 0.8, 0.4, 0.7, 0.5], sounds: ['kick', 'hihat', 'snare', 'hihat', 'kick', 'hihat', 'snare', 'hihat'] },
+    { name: "Balkan", subdivisions: 7, pattern: [1.0, 0.5, 0.7, 0.9, 0.5, 0.7, 0.6], sounds: ['kick', 'hihat', 'hihat', 'snare', 'hihat', 'hihat', 'hihat'] },
+    { name: "Japanese", subdivisions: 8, pattern: [1.0, 0, 0.6, 0.4, 0.7, 0, 0.6, 0.5], sounds: ['kick', null, 'clave', 'hihat', 'kick', null, 'clave', 'hihat'] },
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ],
+  random: [
+    { name: "Metronom", subdivisions: 4, pattern: [1.0, 0.5, 0.7, 0.5], sounds: ['click', 'click', 'click', 'click'] }
+  ]
+};
+
+// Her stil için mevcut ritim index'i
+let styleRhythmIndex = {};
+Object.keys(STYLE_RHYTHMS).forEach(style => {
+  styleRhythmIndex[style] = 0;
+});
+
+// Mevcut ritim bilgisini sakla
+let currentRhythmPattern = null;
+
+function getCurrentRhythm() {
+  const style = document.getElementById("styleSelect")?.value || "pop";
+  const rhythms = STYLE_RHYTHMS[style] || STYLE_RHYTHMS.pop;
+  const index = styleRhythmIndex[style] || 0;
+  return rhythms[index];
+}
+
+function updateRhythmDisplay() {
+  const rhythm = getCurrentRhythm();
+  const rhythmNameEl = document.getElementById("rhythmName");
+  if (rhythmNameEl && rhythm) {
+    rhythmNameEl.textContent = rhythm.name;
+  }
+}
+
+function nextRhythm() {
+  const style = document.getElementById("styleSelect")?.value || "pop";
+  const rhythms = STYLE_RHYTHMS[style] || STYLE_RHYTHMS.pop;
+  styleRhythmIndex[style] = (styleRhythmIndex[style] + 1) % rhythms.length;
+  updateRhythmDisplay();
+  
+  // Pattern'i güncelle (çalma devam ediyorsa yeni ritim hemen uygulanır)
+  currentRhythmPattern = getCurrentRhythm();
+}
+
+function prevRhythm() {
+  const style = document.getElementById("styleSelect")?.value || "pop";
+  const rhythms = STYLE_RHYTHMS[style] || STYLE_RHYTHMS.pop;
+  styleRhythmIndex[style] = (styleRhythmIndex[style] - 1 + rhythms.length) % rhythms.length;
+  updateRhythmDisplay();
+  
+  // Pattern'i güncelle (çalma devam ediyorsa yeni ritim hemen uygulanır)
+  currentRhythmPattern = getCurrentRhythm();
+}
+
+// Comping pattern fonksiyonları
+const compingPatternNames = Object.keys(COMPING_PATTERNS);
+let currentCompingIndex = 0;
+
+function updateCompingDisplay() {
+  const pattern = COMPING_PATTERNS[currentCompingPattern];
+  const compingNameEl = document.getElementById("compingName");
+  if (compingNameEl && pattern) {
+    compingNameEl.textContent = pattern.name;
+  }
+}
+
+function nextComping() {
+  currentCompingIndex = (currentCompingIndex + 1) % compingPatternNames.length;
+  currentCompingPattern = compingPatternNames[currentCompingIndex];
+  updateCompingDisplay();
+}
+
+function prevComping() {
+  currentCompingIndex = (currentCompingIndex - 1 + compingPatternNames.length) % compingPatternNames.length;
+  currentCompingPattern = compingPatternNames[currentCompingIndex];
+  updateCompingDisplay();
+}
+
+// Ritim (metronom) açma/kapama - playback'i durdurmadan
+function toggleRhythm() {
+  rhythmEnabled = !rhythmEnabled;
+  metronomeOn = rhythmEnabled;
+  
+  if (rhythmEnabled) {
+    document.getElementById("metronomeBtn").classList.add("active");
+  } else {
+    document.getElementById("metronomeBtn").classList.remove("active");
+    // Beat dot'ları temizle
+    document.querySelectorAll(".beat-dot").forEach(d => d.classList.remove("active", "accent"));
+  }
+}
+
+// Metronom butonu - ritmi aç/kapa
+function toggleMetronome() {
+  toggleRhythm();
+}
+
+// Eski fonksiyonlar (uyumluluk için)
 function startMetronome() {
-  if (metronomeInterval) return;
+  rhythmEnabled = true;
   metronomeOn = true;
-  currentBeat = 0;
   document.getElementById("metronomeBtn").classList.add("active");
   
-  const beatDuration = getMillisecondsPerBeat();
-  
-  playMetronomeClick(true);
-  updateMetronomeVisual(0);
-  currentBeat = 1;
-  
-  metronomeInterval = setInterval(() => {
-    playMetronomeClick(currentBeat === 0);
-    updateMetronomeVisual(currentBeat);
-    currentBeat = (currentBeat + 1) % beatsPerMeasure;
-  }, beatDuration);
+  if (!isPlaying) {
+    if (currentChords.length === 0) {
+      currentChords = [
+        { name: "C", quality: "maj", degree: 1 },
+        { name: "G", quality: "maj", degree: 5 },
+        { name: "Am", quality: "min", degree: 6 },
+        { name: "F", quality: "maj", degree: 4 }
+      ];
+      updateChordDisplay();
+    }
+    startPlayback();
+  }
 }
 
 function stopMetronome() {
+  rhythmEnabled = false;
   metronomeOn = false;
   document.getElementById("metronomeBtn").classList.remove("active");
-  if (metronomeInterval) {
-    clearInterval(metronomeInterval);
-    metronomeInterval = null;
-  }
   document.querySelectorAll(".beat-dot").forEach(d => d.classList.remove("active", "accent"));
 }
 
-function toggleMetronome() {
-  metronomeOn ? stopMetronome() : startMetronome();
+function playRhythmHit(rhythmPattern, subdivision) {
+  if (!rhythmPattern || !rhythmPattern.pattern || !rhythmPattern.sounds) return;
+  
+  const velocity = rhythmPattern.pattern[subdivision];
+  const sound = rhythmPattern.sounds[subdivision];
+  
+  if (velocity > 0 && sound) {
+    playDrumSound(sound, velocity);
+  }
+}
+
+function updateMetronomeVisualAdvanced(subdivision, totalSubdivisions) {
+  // 4 beat dot için subdivision'ı beat'e çevir
+  const beatIndex = Math.floor(subdivision / (totalSubdivisions / 4));
+  
+  document.querySelectorAll(".beat-dot").forEach((d, i) => {
+    d.classList.remove("active", "accent");
+    if (i === beatIndex) {
+      d.classList.add("active");
+      if (beatIndex === 0) d.classList.add("accent");
+    }
+  });
 }
 
 function updateMetronomeVisual(beat) {
@@ -2985,8 +5106,59 @@ function changeTempo(delta) {
   tempo = Math.max(40, Math.min(240, tempo + delta));
   document.getElementById("tempoDisplay").textContent = tempo;
   
-  if (metronomeOn) { stopMetronome(); startMetronome(); }
-  if (isPlaying) { stopPlayback(); startPlayback(); }
+  // Playback çalıyorsa yeni tempoyla yeniden başlat
+  if (isPlaying) {
+    // Durdur
+    if (masterInterval) {
+      clearInterval(masterInterval);
+      masterInterval = null;
+    }
+    
+    // Yeni tempo ile devam et
+    const msPerTick = getMsPerTick();
+    
+    masterInterval = setInterval(() => {
+      // Ritim vuruşu (eğer açıksa)
+      if (rhythmEnabled) {
+        playRhythmAtTick(tickCount);
+      }
+      
+      // Akor değişimi kontrolü
+      ticksUntilNextChord--;
+      
+      if (ticksUntilNextChord <= 0) {
+        currentChordIndex++;
+        compingIndex++;
+        
+        const compPattern = getCompingPattern();
+        if (compingIndex >= compPattern.pattern.length) {
+          compingIndex = 0;
+        }
+        
+        if (currentChordIndex >= currentChords.length) {
+          if (isLooping) {
+            currentChordIndex = 0;
+            compingIndex = 0;
+          } else {
+            stopPlayback();
+            return;
+          }
+        }
+        
+        const nextDuration = compPattern.pattern[compingIndex];
+        ticksUntilNextChord = Math.round(nextDuration * ticksPerBeat);
+        
+        const chord = currentChords[currentChordIndex];
+        const durationMs = (nextDuration * 60000 / tempo) * 0.85;
+        playChord(chord.name, durationMs / 1000);
+        selectChord(currentChordIndex);
+        highlightPlayingChord(currentChordIndex);
+        updateProgress();
+      }
+      
+      tickCount++;
+    }, msPerTick);
+  }
 }
 
 // === PRESET ===
@@ -3010,6 +5182,204 @@ function applyPreset(presetId) {
   document.getElementById("tagStyle").textContent = preset.name;
   
   if (currentChords.length > 0) selectChord(0);
+}
+
+// === ŞARKI KÜTÜPHANESİ FONKSİYONLARI ===
+
+function loadSongList(genre) {
+  const songs = FAMOUS_SONGS[genre] || [];
+  const songListContainer = document.getElementById("songList");
+  const mobileSongList = document.getElementById("mobile_songList");
+  
+  const html = songs.map((song, index) => `
+    <div class="song-item" data-genre="${genre}" data-index="${index}">
+      <div class="song-item-name">${song.name}</div>
+      <div class="song-item-info">
+        <span class="song-item-key">🎹 ${song.key}</span>
+        <span class="song-item-tempo">♩ ${song.tempo} BPM</span>
+        <span class="song-item-chords">${song.chords.slice(0, 4).join(" - ")}${song.chords.length > 4 ? '...' : ''}</span>
+      </div>
+    </div>
+  `).join('');
+  
+  if (songListContainer) songListContainer.innerHTML = html;
+  if (mobileSongList) mobileSongList.innerHTML = html;
+  
+  // Event listener'ları ekle
+  document.querySelectorAll('.song-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const genre = item.dataset.genre;
+      const index = parseInt(item.dataset.index);
+      selectSong(genre, index);
+    });
+  });
+}
+
+function selectSong(genre, index) {
+  const song = FAMOUS_SONGS[genre]?.[index];
+  if (!song) return;
+  
+  currentSong = song;
+  currentStyle = genre;
+  
+  // Aktif şarkıyı işaretle
+  document.querySelectorAll('.song-item').forEach(item => item.classList.remove('active'));
+  document.querySelectorAll(`.song-item[data-genre="${genre}"][data-index="${index}"]`).forEach(item => {
+    item.classList.add('active');
+  });
+  
+  // Şarkı akorlarını genişlet (tipik şarkı yapısı: verse-verse-chorus-verse-chorus)
+  // Temel akorları 3 kez tekrar et = tam bir şarkı yapısı
+  const baseChords = song.chords;
+  let expandedChords = [];
+  
+  // Şarkı uzunluğuna göre tekrar sayısı
+  const repeatCount = baseChords.length <= 4 ? 4 : (baseChords.length <= 8 ? 2 : 1);
+  
+  for (let i = 0; i < repeatCount; i++) {
+    expandedChords = expandedChords.concat(baseChords);
+  }
+  
+  // Akorları yükle
+  currentChords = expandedChords.map((chordName, idx) => {
+    return {
+      name: chordName,
+      root: parseChordName(chordName)?.root || chordName[0],
+      quality: getChordQuality(chordName),
+      degree: idx + 1,
+      section: getSectionName(idx, baseChords.length, repeatCount)
+    };
+  });
+  
+  // Tempo'yu ayarla
+  tempo = song.tempo;
+  document.getElementById("tempoDisplay").textContent = tempo;
+  
+  // Stil seçicisini güncelle
+  const styleSelect = document.getElementById("styleSelect");
+  if (styleSelect) styleSelect.value = genre;
+  const mobileStyleSelect = document.getElementById("mobile_styleSelect");
+  if (mobileStyleSelect) mobileStyleSelect.value = genre;
+  
+  // Ritim display'ini güncelle
+  updateRhythmDisplay();
+  
+  // Akor display'ini güncelle
+  updateSongChordDisplay();
+  
+  // Tag'leri güncelle
+  document.getElementById("tagKey").textContent = song.key;
+  document.getElementById("tagScale").textContent = `${currentChords.length} akor`;
+  document.getElementById("tagStyle").textContent = song.name.split(" - ")[0]; // Sadece şarkı adı
+  
+  // İlk akoru seç
+  if (currentChords.length > 0) {
+    selectChord(0);
+  }
+  
+  // Önceki çalmayı durdur
+  if (isPlaying) {
+    stopPlayback();
+  }
+  
+  // Kısa bir gecikme sonra otomatik başlat
+  setTimeout(() => {
+    startPlayback();
+  }, 100);
+}
+
+// Bölüm adını hesapla
+function getSectionName(index, baseLength, repeatCount) {
+  const sectionIndex = Math.floor(index / baseLength);
+  const sections = ['Verse 1', 'Verse 2', 'Chorus', 'Bridge'];
+  return sections[sectionIndex % sections.length] || `Bölüm ${sectionIndex + 1}`;
+}
+
+function getChordQuality(chordName) {
+  const name = chordName.toLowerCase();
+  if (name.includes('dim') || name.includes('°')) return 'dim';
+  if (name.includes('aug') || name.includes('+')) return 'aug';
+  if (name.includes('m7') || name.includes('min7')) return 'min7';
+  if (name.includes('maj7') || name.includes('M7')) return 'maj7';
+  if (name.includes('7')) return 'dom7';
+  if (name.includes('m') || name.includes('min')) return 'min';
+  return 'maj';
+}
+
+function updateSongChordDisplay() {
+  const container = document.getElementById("chordsContainer");
+  
+  if (currentChords.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎹</div><p>Şarkı seçin veya akor dizisi üretin</p></div>`;
+    return;
+  }
+  
+  // Bölümlere göre grupla
+  let lastSection = null;
+  let html = '';
+  
+  currentChords.forEach((chord, idx) => {
+    // Yeni bölüm başlığı
+    if (chord.section && chord.section !== lastSection) {
+      if (lastSection !== null) {
+        html += '</div>'; // Önceki bölümü kapat
+      }
+      html += `<div class="chord-section"><div class="chord-section-label">${chord.section}</div>`;
+      lastSection = chord.section;
+    }
+    
+    html += `
+      <div class="chord-chip" data-index="${idx}" data-quality="${chord.quality}">
+        <span class="chord-index">${idx + 1}</span>
+        <span class="chord-name">${chord.name}</span>
+      </div>
+    `;
+  });
+  
+  if (lastSection !== null) {
+    html += '</div>'; // Son bölümü kapat
+  }
+  
+  container.innerHTML = html;
+  
+  // Roma rakamları (şarkı için basit numara)
+  const uniqueChords = [...new Set(currentChords.map(c => c.name))];
+  document.getElementById("romanLine").textContent = uniqueChords.join("  —  ");
+  
+  // Event listeners
+  container.querySelectorAll(".chord-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const idx = parseInt(chip.dataset.index);
+      selectChord(idx);
+      playChord(currentChords[idx].name, 1.0);
+    });
+  });
+}
+
+function setupSongLibraryListeners() {
+  // Genre select değiştiğinde şarkı listesini güncelle
+  const genreSelect = document.getElementById("songGenreSelect");
+  if (genreSelect) {
+    genreSelect.addEventListener("change", (e) => {
+      loadSongList(e.target.value);
+      // Mobile'ı da senkronize et
+      const mobileGenre = document.getElementById("mobile_songGenreSelect");
+      if (mobileGenre) mobileGenre.value = e.target.value;
+    });
+  }
+  
+  const mobileGenreSelect = document.getElementById("mobile_songGenreSelect");
+  if (mobileGenreSelect) {
+    mobileGenreSelect.addEventListener("change", (e) => {
+      loadSongList(e.target.value);
+      // Desktop'ı da senkronize et
+      const desktopGenre = document.getElementById("songGenreSelect");
+      if (desktopGenre) desktopGenre.value = e.target.value;
+    });
+  }
+  
+  // İlk yükleme
+  loadSongList("pop");
 }
 
 // === MOD DEĞİŞTİRME ===
@@ -3380,6 +5750,18 @@ function setupEventListeners() {
   document.getElementById("tempoUp").addEventListener("click", () => changeTempo(5));
   document.getElementById("tempoDown").addEventListener("click", () => changeTempo(-5));
   
+  // Ritim seçici butonları
+  document.getElementById("prevRhythmBtn").addEventListener("click", prevRhythm);
+  document.getElementById("nextRhythmBtn").addEventListener("click", nextRhythm);
+  
+  // Comping pattern seçici butonları
+  document.getElementById("prevCompingBtn").addEventListener("click", prevComping);
+  document.getElementById("nextCompingBtn").addEventListener("click", nextComping);
+  
+  // İlk ritim ve comping adını göster
+  updateRhythmDisplay();
+  updateCompingDisplay();
+  
   // Modlar
   document.querySelectorAll(".mode-tab").forEach(tab => {
     tab.addEventListener("click", () => setMode(tab.dataset.mode));
@@ -3430,6 +5812,9 @@ function setupEventListeners() {
   
   // === SENKRONIZE KONTROLLER (Hem Desktop hem Mobile) ===
   setupSyncedControls();
+  
+  // === ŞARKI KÜTÜPHANESİ ===
+  setupSongLibraryListeners();
 }
 
 function setupSyncedControls() {
@@ -3520,7 +5905,7 @@ function setupSyncedControls() {
   }
   
   // Diğer select'ler için senkronizasyon
-  ['keySelect', 'scaleSelect', 'styleSelect', 'lengthSelect', 'chordTypeSelect'].forEach(controlName => {
+  ['keySelect', 'scaleSelect', 'styleSelect', 'lengthSelect', 'chordTypeSelect', 'algorithmSelect'].forEach(controlName => {
     const desktop = document.getElementById(controlName);
     const mobile = document.getElementById('mobile_' + controlName);
     
