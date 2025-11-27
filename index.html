@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Pro Chord Studio - Profesyonel Akor Üretici & Antrenman</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0a0a0f" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -24,20 +27,25 @@
       --accent-yellow: #ffcc00;
       --glow-green: rgba(0, 255, 136, 0.3);
       --glow-blue: rgba(0, 170, 255, 0.3);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    body {
+    html, body {
       font-family: 'Outfit', sans-serif;
       background: var(--bg-dark);
       color: var(--text-primary);
       min-height: 100vh;
+      min-height: -webkit-fill-available;
       overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Animated Background */
@@ -50,48 +58,67 @@
       z-index: -1;
       background: 
         radial-gradient(ellipse at 20% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(0, 170, 255, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(170, 85, 255, 0.03) 0%, transparent 60%);
+        radial-gradient(ellipse at 80% 80%, rgba(0, 170, 255, 0.05) 0%, transparent 50%);
+      pointer-events: none;
     }
 
-    /* Header */
+    /* Header - Mobile Optimized */
     .header {
-      padding: 20px 30px;
+      padding: 12px 16px;
+      padding-top: calc(12px + var(--safe-top));
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border-subtle);
-      background: rgba(10, 10, 15, 0.8);
+      background: rgba(10, 10, 15, 0.95);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 100;
+      gap: 12px;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .logo-icon {
-      width: 42px;
-      height: 42px;
+      width: 36px;
+      height: 36px;
       background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 18px;
     }
 
     .logo-text {
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       font-weight: 700;
       background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+    }
+
+    /* Mode Tabs - Scrollable on Mobile */
+    .mode-tabs-wrapper {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .mode-tabs-wrapper::-webkit-scrollbar {
+      display: none;
     }
 
     .mode-tabs {
@@ -101,19 +128,23 @@
       padding: 4px;
       border-radius: 12px;
       border: 1px solid var(--border-subtle);
+      width: max-content;
+      min-width: 100%;
     }
 
     .mode-tab {
-      padding: 10px 20px;
+      padding: 8px 12px;
       border: none;
       background: transparent;
       color: var(--text-secondary);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 500;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .mode-tab:hover {
@@ -126,40 +157,31 @@
       color: var(--bg-dark);
     }
 
-    /* Main Container */
+    /* Main Container - Mobile First */
     .main-container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 24px;
-    }
-
-    /* Sidebar */
-    .sidebar {
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
+      padding-bottom: calc(12px + var(--safe-bottom));
     }
 
+    /* Panel */
     .panel {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 20px;
+      padding: 16px;
       transition: border-color 0.2s ease;
-    }
-
-    .panel:hover {
-      border-color: var(--border-active);
     }
 
     .panel-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .panel-icon {
@@ -171,6 +193,7 @@
       align-items: center;
       justify-content: center;
       font-size: 16px;
+      flex-shrink: 0;
     }
 
     .panel-title {
@@ -179,35 +202,42 @@
       color: var(--text-primary);
     }
 
-    /* Form Controls */
-    .control-group {
-      margin-bottom: 14px;
+    /* Controls Grid - Mobile */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
-    .control-group:last-child {
-      margin-bottom: 0;
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-group.full-width {
+      grid-column: 1 / -1;
     }
 
     .control-label {
-      display: block;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
-      margin-bottom: 6px;
       font-weight: 500;
     }
 
-    select, input[type="number"] {
+    select, input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 10px 14px;
+      padding: 12px 14px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 16px; /* Prevents zoom on iOS */
       cursor: pointer;
       transition: all 0.2s ease;
       appearance: none;
+      -webkit-appearance: none;
     }
 
     select {
@@ -217,64 +247,19 @@
       padding-right: 36px;
     }
 
-    select:hover, input[type="number"]:hover {
-      border-color: var(--border-active);
-    }
-
-    select:focus, input[type="number"]:focus {
+    select:focus, input:focus {
       outline: none;
       border-color: var(--accent-green);
       box-shadow: 0 0 0 3px var(--glow-green);
     }
 
-    /* Range Slider */
-    .slider-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .slider-value {
-      min-width: 60px;
-      padding: 6px 10px;
-      background: var(--bg-elevated);
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      text-align: center;
-      color: var(--accent-green);
-    }
-
-    input[type="range"] {
-      flex: 1;
-      height: 6px;
-      background: var(--bg-elevated);
-      border-radius: 3px;
-      appearance: none;
-      cursor: pointer;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      background: var(--accent-green);
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.1s ease;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-    }
-
-    /* Buttons */
+    /* Buttons - Touch Optimized */
     .btn {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 20px;
+      padding: 14px 20px;
       border: none;
       border-radius: 12px;
       font-family: inherit;
@@ -282,6 +267,8 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
+      min-height: 48px; /* Touch target */
+      touch-action: manipulation;
     }
 
     .btn-primary {
@@ -290,13 +277,9 @@
       box-shadow: 0 4px 20px var(--glow-green);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--glow-green);
-    }
-
     .btn-primary:active {
-      transform: translateY(0);
+      transform: scale(0.98);
+      box-shadow: 0 2px 10px var(--glow-green);
     }
 
     .btn-secondary {
@@ -305,17 +288,12 @@
       border: 1px solid var(--border-subtle);
     }
 
-    .btn-secondary:hover {
+    .btn-secondary:active {
       background: var(--border-subtle);
-      border-color: var(--border-active);
     }
 
-    .btn-icon {
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border-radius: 12px;
-      font-size: 1.2rem;
+    .btn-full {
+      width: 100%;
     }
 
     .btn-group {
@@ -323,8 +301,12 @@
       gap: 8px;
     }
 
-    .btn-full {
-      width: 100%;
+    .btn-icon {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border-radius: 12px;
+      font-size: 1.2rem;
     }
 
     /* Toggle Button */
@@ -337,6 +319,7 @@
       border-radius: 14px;
       cursor: pointer;
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
 
     .toggle-btn::after {
@@ -366,6 +349,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 0;
+      gap: 12px;
     }
 
     .toggle-label {
@@ -373,28 +357,23 @@
       color: var(--text-secondary);
     }
 
-    /* Main Content Area */
-    .content-area {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Transport Controls */
+    /* Transport Bar - Mobile Optimized */
     .transport-bar {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 16px 24px;
+      padding: 12px;
       display: flex;
-      align-items: center;
-      gap: 20px;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .transport-controls {
+    .transport-row {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .transport-btn {
@@ -404,17 +383,17 @@
       border-radius: 50%;
       background: var(--bg-elevated);
       color: var(--text-primary);
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       cursor: pointer;
       transition: all 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      touch-action: manipulation;
     }
 
-    .transport-btn:hover {
-      background: var(--border-subtle);
-      transform: scale(1.05);
+    .transport-btn:active {
+      transform: scale(0.95);
     }
 
     .transport-btn.play-btn {
@@ -422,10 +401,6 @@
       height: 56px;
       background: var(--accent-green);
       color: var(--bg-dark);
-    }
-
-    .transport-btn.play-btn:hover {
-      box-shadow: 0 0 25px var(--glow-green);
     }
 
     .transport-btn.play-btn.playing {
@@ -437,60 +412,56 @@
       color: var(--bg-dark);
     }
 
-    .tempo-display {
+    /* Tempo Display */
+    .tempo-section {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding: 0 20px;
-      border-left: 1px solid var(--border-subtle);
-      border-right: 1px solid var(--border-subtle);
+      justify-content: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
     }
 
     .tempo-value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--accent-green);
-      line-height: 1;
+      min-width: 50px;
+      text-align: center;
     }
 
     .tempo-label {
       font-size: 0.7rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .tempo-controls {
-      display: flex;
-      gap: 4px;
-      margin-top: 6px;
     }
 
     .tempo-btn {
-      width: 28px;
-      height: 24px;
+      width: 36px;
+      height: 36px;
       border: none;
-      border-radius: 6px;
-      background: var(--bg-elevated);
+      border-radius: 8px;
+      background: var(--bg-card);
       color: var(--text-secondary);
-      font-size: 0.8rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .tempo-btn:hover {
+    .tempo-btn:active {
       background: var(--border-subtle);
-      color: var(--text-primary);
     }
 
-    /* Metronome */
+    /* Metronome Visual */
     .metronome-section {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding-left: 20px;
-      border-left: 1px solid var(--border-subtle);
+      justify-content: center;
+      gap: 12px;
     }
 
     .metronome-visual {
@@ -499,8 +470,8 @@
     }
 
     .beat-dot {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       background: var(--bg-elevated);
       border: 2px solid var(--border-subtle);
       border-radius: 50%;
@@ -516,29 +487,11 @@
     .beat-dot.accent {
       background: var(--accent-orange);
       border-color: var(--accent-orange);
-      box-shadow: 0 0 10px rgba(255, 136, 68, 0.5);
     }
 
-    /* Time Signature */
-    .time-sig {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .time-sig-top, .time-sig-bottom {
-      font-size: 1.1rem;
-    }
-
-    /* Progress */
+    /* Progress Bar */
     .progress-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      width: 100%;
     }
 
     .progress-info {
@@ -546,54 +499,56 @@
       justify-content: space-between;
       font-size: 0.75rem;
       color: var(--text-muted);
+      margin-bottom: 6px;
     }
 
     .progress-bar {
-      height: 8px;
+      height: 6px;
       background: var(--bg-elevated);
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
     }
 
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-      border-radius: 4px;
+      border-radius: 3px;
       width: 0%;
       transition: width 0.1s linear;
     }
 
-    /* Chord Display Area */
+    /* Chord Display */
     .chord-display {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 24px;
+      padding: 16px;
     }
 
     .chord-display-header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .chord-display-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
     }
 
     .chord-info-tags {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     .info-tag {
-      padding: 4px 12px;
+      padding: 4px 10px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
     }
 
@@ -602,17 +557,17 @@
       font-weight: 600;
     }
 
-    /* Chord Chips Grid */
+    /* Chord Chips - Touch Optimized */
     .chords-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 16px;
     }
 
     .chord-chip {
       position: relative;
-      padding: 14px 20px;
+      padding: 12px 16px;
       background: var(--bg-elevated);
       border: 2px solid var(--border-subtle);
       border-radius: 12px;
@@ -621,18 +576,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 80px;
+      min-width: 70px;
+      touch-action: manipulation;
     }
 
-    .chord-chip:hover {
-      border-color: var(--border-active);
-      transform: translateY(-2px);
+    .chord-chip:active {
+      transform: scale(0.97);
     }
 
     .chord-chip.active {
       border-color: var(--accent-green);
       background: rgba(0, 255, 136, 0.1);
-      box-shadow: 0 0 20px var(--glow-green);
+      box-shadow: 0 0 15px var(--glow-green);
     }
 
     .chord-chip.playing {
@@ -643,20 +598,20 @@
 
     @keyframes pulse {
       0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.03); }
       100% { transform: scale(1); }
     }
 
     .chord-index {
       position: absolute;
-      top: -8px;
-      left: -8px;
-      width: 22px;
-      height: 22px;
+      top: -6px;
+      left: -6px;
+      width: 20px;
+      height: 20px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 50%;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -665,34 +620,35 @@
     }
 
     .chord-name {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--text-primary);
       font-family: 'JetBrains Mono', monospace;
     }
 
     .chord-roman {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
       margin-top: 2px;
     }
 
     .chord-notes-mini {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
-    /* Roman Numerals Line */
+    /* Roman Numerals */
     .roman-line {
-      padding: 12px 16px;
+      padding: 10px 14px;
       background: var(--bg-elevated);
       border-radius: 10px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: var(--text-secondary);
       text-align: center;
-      letter-spacing: 2px;
+      overflow-x: auto;
+      white-space: nowrap;
     }
 
     /* Piano Section */
@@ -700,18 +656,19 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 24px;
+      padding: 16px;
+      overflow: hidden;
     }
 
     .piano-header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .piano-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
     }
 
@@ -719,48 +676,51 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     .current-chord-name {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--accent-green);
     }
 
     .current-chord-notes {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-secondary);
     }
 
-    /* SVG Piano */
+    /* Piano Wrapper - Scrollable on Mobile */
     .piano-wrapper {
       background: linear-gradient(180deg, #1a1a25 0%, #0f0f18 100%);
       border-radius: 12px;
-      padding: 20px;
+      padding: 12px;
       border: 1px solid var(--border-subtle);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .piano-svg {
-      width: 100%;
-      max-width: 100%;
       display: block;
+      min-width: 700px;
+      height: auto;
     }
 
     .piano-key {
       transition: fill 0.08s ease, filter 0.08s ease;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
     .white-key {
-      fill: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%);
       fill: #f8f8f8;
       stroke: #d0d0d0;
       stroke-width: 1;
     }
 
-    .white-key:hover {
-      fill: #e8e8e8;
+    .white-key:active {
+      fill: #e0e0e0;
     }
 
     .black-key {
@@ -769,8 +729,8 @@
       stroke-width: 1;
     }
 
-    .black-key:hover {
-      fill: #2a2a2a;
+    .black-key:active {
+      fill: #333;
     }
 
     .piano-key.active.white-key {
@@ -786,60 +746,49 @@
       filter: drop-shadow(0 0 8px var(--glow-green));
     }
 
-    /* Staff Notation */
+    /* Staff Section */
     .staff-section {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 24px;
-    }
-
-    .staff-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .staff-title {
-      font-size: 1.1rem;
-      font-weight: 600;
+      padding: 16px;
     }
 
     .staff-wrapper {
       background: #fffff8;
       border-radius: 10px;
-      padding: 20px;
+      padding: 16px;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .staff-svg {
       display: block;
-      min-width: 600px;
+      min-width: 500px;
     }
 
-    /* Articulation Selector */
+    /* Articulation Panel */
     .articulation-panel {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
     .articulation-btn {
-      padding: 10px 8px;
+      padding: 10px 6px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
       color: var(--text-secondary);
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       cursor: pointer;
       transition: all 0.15s ease;
       text-align: center;
+      touch-action: manipulation;
     }
 
-    .articulation-btn:hover {
-      border-color: var(--border-active);
-      color: var(--text-primary);
+    .articulation-btn:active {
+      transform: scale(0.97);
     }
 
     .articulation-btn.active {
@@ -849,165 +798,336 @@
     }
 
     .articulation-icon {
-      font-size: 1.2rem;
+      font-size: 1rem;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
-    /* Training Mode */
-    .training-panel {
-      background: linear-gradient(135deg, rgba(170, 85, 255, 0.1), rgba(0, 170, 255, 0.1));
-      border: 1px solid var(--accent-purple);
-    }
-
+    /* Training Stats */
     .training-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 16px;
+      gap: 10px;
     }
 
     .stat-box {
       background: var(--bg-elevated);
       border-radius: 10px;
-      padding: 12px;
+      padding: 12px 8px;
       text-align: center;
     }
 
     .stat-value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--accent-green);
     }
 
     .stat-label {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    /* Quiz Mode */
-    .quiz-options {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+    /* Note Finder Styles */
+    .note-finder-modes {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .note-finder-modes .btn {
+      flex: 1;
+    }
+
+    .target-note-display {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+      padding: 24px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .target-note-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .target-note-octave {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    .note-finder-feedback {
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-weight: 600;
+      min-height: 44px;
+    }
+
+    .note-finder-feedback.correct {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--accent-green);
+    }
+
+    .note-finder-feedback.wrong {
+      background: rgba(255, 68, 102, 0.2);
+      color: var(--accent-red);
+    }
+
+    .note-finder-stats, .chord-recog-stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
       margin-top: 16px;
     }
 
-    .quiz-option {
-      padding: 16px;
+    .stat-mini {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-mini-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .stat-mini-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Chord Recognition Styles */
+    .root-note-options,
+    .chord-type-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .note-option,
+    .type-option {
+      padding: 10px 14px;
       background: var(--bg-elevated);
       border: 2px solid var(--border-subtle);
-      border-radius: 12px;
-      text-align: center;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.15s ease;
-      font-size: 1.1rem;
+      touch-action: manipulation;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .note-option:active,
+    .type-option:active {
+      transform: scale(0.97);
+    }
+
+    .note-option.selected,
+    .type-option.selected {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: var(--bg-dark);
+    }
+
+    .chord-recog-result {
+      text-align: center;
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chord-recog-result.correct {
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .chord-recog-result.wrong {
+      background: rgba(255, 68, 102, 0.15);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    /* Key Detection Styles */
+    .key-result-primary {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 170, 255, 0.1));
+      border: 1px solid var(--accent-green);
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .key-result-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .key-result-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .key-result-confidence {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .confidence-bar {
+      flex: 1;
+      min-width: 100px;
+      height: 8px;
+      background: var(--bg-elevated);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .confidence-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent-green);
+    }
+
+    .alternative-keys {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .alt-key-chip {
+      padding: 6px 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .alt-key-chip .confidence {
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      margin-left: 4px;
+    }
+
+    .analysis-section {
+      margin-bottom: 16px;
+    }
+
+    .analysis-title {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .note-distribution {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .note-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 24px;
+    }
+
+    .note-bar-fill {
+      width: 18px;
+      background: var(--accent-blue);
+      border-radius: 3px 3px 0 0;
+      min-height: 2px;
+    }
+
+    .note-bar-label {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .functional-analysis {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .function-chip {
+      padding: 6px 10px;
+      background: var(--bg-elevated);
+      border-radius: 6px;
+      font-size: 0.75rem;
+    }
+
+    .function-chip .chord-name {
+      font-size: 0.8rem;
+    }
+
+    .function-chip .function-name {
+      color: var(--accent-purple);
+      margin-left: 4px;
+    }
+
+    .modal-character {
+      padding: 12px;
+      background: var(--bg-elevated);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .modal-character .highlight {
+      color: var(--accent-orange);
       font-weight: 600;
     }
 
-    .quiz-option:hover {
-      border-color: var(--accent-blue);
-      background: rgba(0, 170, 255, 0.1);
-    }
-
-    .quiz-option.correct {
-      border-color: var(--accent-green);
-      background: rgba(0, 255, 136, 0.2);
-    }
-
-    .quiz-option.wrong {
-      border-color: var(--accent-red);
-      background: rgba(255, 68, 102, 0.2);
-    }
-
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .main-container {
-        grid-template-columns: 280px 1fr;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .main-container {
-        grid-template-columns: 1fr;
-      }
-      
-      .sidebar {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .transport-bar {
-        flex-wrap: wrap;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .header {
-        flex-direction: column;
-        gap: 12px;
-        padding: 16px;
-      }
-      
-      .sidebar {
-        grid-template-columns: 1fr;
-      }
-      
-      .main-container {
-        padding: 12px;
-      }
-      
-      .transport-bar {
-        padding: 12px;
-      }
-      
-      .metronome-section {
-        width: 100%;
-        justify-content: center;
-        padding: 12px 0;
-        border-left: none;
-        border-top: 1px solid var(--border-subtle);
-      }
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-    }
-
-    .empty-state-icon {
-      font-size: 3rem;
-      margin-bottom: 16px;
-      opacity: 0.5;
-    }
-
-    /* Loading animation */
-    .loading-spinner {
-      width: 24px;
-      height: 24px;
-      border: 3px solid var(--border-subtle);
-      border-top-color: var(--accent-green);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Chord Quality Colors */
-    .chord-chip[data-quality="maj"] { border-left: 4px solid var(--accent-green); }
-    .chord-chip[data-quality="min"] { border-left: 4px solid var(--accent-blue); }
-    .chord-chip[data-quality="dim"] { border-left: 4px solid var(--accent-purple); }
-    .chord-chip[data-quality="aug"] { border-left: 4px solid var(--accent-orange); }
-    .chord-chip[data-quality="dom7"] { border-left: 4px solid var(--accent-yellow); }
-
-    /* Preset chips */
+    /* Preset Chips */
     .preset-list {
       display: flex;
       flex-wrap: wrap;
@@ -1015,7 +1135,7 @@
     }
 
     .preset-chip {
-      padding: 6px 12px;
+      padding: 8px 12px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 20px;
@@ -1023,6 +1143,11 @@
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .preset-chip:active {
+      transform: scale(0.97);
     }
 
     .preset-chip:hover {
@@ -1030,1873 +1155,2396 @@
       color: var(--accent-green);
     }
 
-    /* Volume control */
-    .volume-section {
+    /* Slider */
+    .slider-container {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .volume-icon {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
+    .slider-value {
+      min-width: 50px;
+      padding: 6px 8px;
+      background: var(--bg-elevated);
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-align: center;
+      color: var(--accent-green);
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      background: var(--bg-elevated);
+      border-radius: 3px;
+      appearance: none;
+      -webkit-appearance: none;
       cursor: pointer;
     }
 
-    .volume-icon:hover {
-      color: var(--text-primary);
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 30px 16px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    /* Loading Indicator */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 15, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      cursor: pointer;
+    }
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .loading-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border-subtle);
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 16px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Collapsible Sections for Mobile */
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .collapsible-icon {
+      transition: transform 0.2s ease;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .collapsible-content {
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .collapsible-content.collapsed {
+      max-height: 0;
+    }
+
+    /* Piano Key Animations */
+    .piano-key.correct-hit {
+      fill: var(--accent-green) !important;
+      animation: correctFlash 0.3s ease;
+    }
+
+    .piano-key.wrong-hit {
+      fill: var(--accent-red) !important;
+      animation: wrongShake 0.3s ease;
+    }
+
+    .piano-key.hint {
+      animation: hintPulse 1s ease infinite;
+    }
+
+    @keyframes correctFlash {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      75% { transform: translateX(2px); }
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Desktop Enhancements */
+    @media (min-width: 768px) {
+      .header {
+        padding: 16px 24px;
+      }
+
+      .logo-text {
+        font-size: 1.3rem;
+      }
+
+      .mode-tab {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+      }
+
+      .main-container {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 20px;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .content-area {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+
+      .transport-bar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 16px 20px;
+      }
+
+      .transport-row {
+        flex-wrap: nowrap;
+      }
+
+      .chord-display-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .piano-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .articulation-panel {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .main-container {
+        grid-template-columns: 340px 1fr;
+      }
+    }
+
+    /* Mobile Specific */
+    @media (max-width: 767px) {
+      .sidebar {
+        display: none;
+      }
+
+      .sidebar.mobile-visible {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .mobile-settings-toggle {
+        display: flex;
+      }
+
+      .articulation-panel {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .training-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 400px) {
+      .articulation-panel {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chord-chip {
+        min-width: 60px;
+        padding: 10px 12px;
+      }
+
+      .chord-name {
+        font-size: 1rem;
+      }
+    }
+
+    /* Landscape Mobile */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .header {
+        padding: 8px 16px;
+      }
+
+      .logo-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+
+      .logo-text {
+        font-size: 1rem;
+      }
+
+      .panel {
+        padding: 12px;
+      }
+
+      .panel-header {
+        margin-bottom: 10px;
+      }
+    }
+
+    /* Mobile Settings Button */
+    .mobile-settings-btn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      color: var(--bg-dark);
+      border: none;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 20px var(--glow-green);
+      z-index: 99;
+      cursor: pointer;
+    }
+
+    @media (max-width: 767px) {
+      .mobile-settings-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    /* Bottom Sheet for Mobile Settings */
+    .mobile-bottom-sheet {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding: 20px;
+      padding-bottom: calc(20px + var(--safe-bottom));
+      z-index: 101;
+      max-height: 70vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-bottom-sheet.visible {
+      display: block;
+      transform: translateY(0);
+    }
+
+    .bottom-sheet-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--border-subtle);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    .mobile-overlay.visible {
+      display: block;
     }
   </style>
 </head>
 <body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Piyano sesleri yükleniyor...</div>
+  </div>
+
   <div class="bg-animation"></div>
-  
+
   <!-- Header -->
   <header class="header">
     <div class="logo">
       <div class="logo-icon">🎹</div>
-      <div class="logo-text">Pro Chord Studio</div>
+      <div class="logo-text">Pro Chord</div>
     </div>
     
-    <div class="mode-tabs">
-      <button class="mode-tab active" data-mode="create">Oluştur</button>
-      <button class="mode-tab" data-mode="practice">Antrenman</button>
-      <button class="mode-tab" data-mode="quiz">Quiz</button>
+    <div class="mode-tabs-wrapper">
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="create">Oluştur</button>
+        <button class="mode-tab" data-mode="practice">Antrenman</button>
+        <button class="mode-tab" data-mode="noteFinder">Nota Bul</button>
+        <button class="mode-tab" data-mode="chordRecog">Akor Tanı</button>
+        <button class="mode-tab" data-mode="keyDetect">Tonalite</button>
+      </div>
     </div>
   </header>
 
+  <!-- Mobile Settings Button -->
+  <button class="mobile-settings-btn" id="mobileSettingsBtn">⚙️</button>
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Mobile Bottom Sheet -->
+  <div class="mobile-bottom-sheet" id="mobileBottomSheet">
+    <div class="bottom-sheet-handle"></div>
+    <div id="mobileSettingsContent"></div>
+  </div>
+
   <div class="main-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <!-- Key & Scale Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">🎵</div>
-          <div class="panel-title">Ton & Gam</div>
-        </div>
-        
-        <div class="control-group">
-          <label class="control-label">Ton (Key)</label>
-          <select id="keySelect">
-            <option value="C">C</option>
-            <option value="C#">C# / Db</option>
-            <option value="D">D</option>
-            <option value="D#">D# / Eb</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="F#">F# / Gb</option>
-            <option value="G">G</option>
-            <option value="G#">G# / Ab</option>
-            <option value="A">A</option>
-            <option value="A#">A# / Bb</option>
-            <option value="B">B</option>
-          </select>
-        </div>
-        
-        <div class="control-group">
-          <label class="control-label">Gam / Mod</label>
-          <select id="scaleSelect">
-            <option value="major">Major (Ionian)</option>
-            <option value="naturalMinor">Natural Minor (Aeolian)</option>
-            <option value="harmonicMinor">Harmonik Minör</option>
-            <option value="melodicMinor">Melodik Minör</option>
-            <option value="dorian">Dorian</option>
-            <option value="phrygian">Phrygian</option>
-            <option value="lydian">Lydian</option>
-            <option value="mixolydian">Mixolydian</option>
-            <option value="locrian">Locrian</option>
-            <option value="pentatonicMajor">Pentatonik Major</option>
-            <option value="pentatonicMinor">Pentatonik Minor</option>
-            <option value="blues">Blues</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Style Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">🎸</div>
-          <div class="panel-title">Müzik Türü</div>
-        </div>
-        
-        <div class="control-group">
-          <label class="control-label">Tür Seçimi</label>
-          <select id="styleSelect">
-            <option value="pop">Pop</option>
-            <option value="rock">Rock</option>
-            <option value="ballad">Ballad</option>
-            <option value="jazz">Jazz</option>
-            <option value="blues">Blues</option>
-            <option value="funk">Funk</option>
-            <option value="soul">Soul / R&B</option>
-            <option value="metal">Metal</option>
-            <option value="edm">EDM / Electronic</option>
-            <option value="lofi">Lo-Fi</option>
-            <option value="latin">Latin</option>
-            <option value="classical">Classical</option>
-            <option value="gospel">Gospel</option>
-            <option value="country">Country</option>
-            <option value="reggae">Reggae</option>
-            <option value="bossa">Bossa Nova</option>
-            <option value="random">Tam Rastgele</option>
-          </select>
-        </div>
-        
-        <div class="control-group">
-          <label class="control-label">Akor Sayısı</label>
-          <select id="lengthSelect">
-            <option value="4">4 Akor</option>
-            <option value="8" selected>8 Akor</option>
-            <option value="12">12 Akor</option>
-            <option value="16">16 Akor</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label class="control-label">Akor Türleri</label>
-          <select id="chordTypeSelect">
-            <option value="triads">Üçlüler (Triads)</option>
-            <option value="sevenths">7li Akorlar</option>
-            <option value="extended">Genişletilmiş (9, 11, 13)</option>
-            <option value="mixed">Karışık</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Articulation Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">🎼</div>
-          <div class="panel-title">Artikülasyon</div>
-        </div>
-        
-        <div class="articulation-panel">
-          <button class="articulation-btn active" data-articulation="normal">
-            <span class="articulation-icon">—</span>
-            Normal
-          </button>
-          <button class="articulation-btn" data-articulation="staccato">
-            <span class="articulation-icon">•</span>
-            Staccato
-          </button>
-          <button class="articulation-btn" data-articulation="legato">
-            <span class="articulation-icon">⌒</span>
-            Legato
-          </button>
-          <button class="articulation-btn" data-articulation="accent">
-            <span class="articulation-icon">></span>
-            Accent
-          </button>
-          <button class="articulation-btn" data-articulation="tenuto">
-            <span class="articulation-icon">_</span>
-            Tenuto
-          </button>
-          <button class="articulation-btn" data-articulation="marcato">
-            <span class="articulation-icon">^</span>
-            Marcato
-          </button>
-          <button class="articulation-btn" data-articulation="sforzando">
-            <span class="articulation-icon">sfz</span>
-            Sforzando
-          </button>
-          <button class="articulation-btn" data-articulation="arpeggio">
-            <span class="articulation-icon">⟿</span>
-            Arpeggio
-          </button>
-        </div>
-      </div>
-
-      <!-- Sound Settings -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">🔊</div>
-          <div class="panel-title">Ses Ayarları</div>
-        </div>
-        
-        <div class="control-group">
-          <label class="control-label">Enstrüman</label>
-          <select id="instrumentSelect">
-            <option value="piano">Piyano</option>
-            <option value="epiano">Elektrik Piyano</option>
-            <option value="organ">Organ</option>
-            <option value="strings">Yaylılar</option>
-            <option value="synth">Synth Pad</option>
-            <option value="guitar">Gitar</option>
-          </select>
-        </div>
-        
-        <div class="control-group">
-          <label class="control-label">Oktav</label>
-          <select id="octaveSelect">
-            <option value="3">3 (Düşük)</option>
-            <option value="4" selected>4 (Orta)</option>
-            <option value="5">5 (Yüksek)</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label class="control-label">Ses Seviyesi</label>
-          <div class="slider-container">
-            <input type="range" id="volumeSlider" min="0" max="100" value="70">
-            <div class="slider-value" id="volumeValue">70%</div>
-          </div>
-        </div>
-
-        <div class="toggle-row">
-          <span class="toggle-label">Reverb Efekti</span>
-          <button class="toggle-btn" id="reverbToggle"></button>
-        </div>
-      </div>
-
-      <!-- Quick Presets -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-icon">⚡</div>
-          <div class="panel-title">Hızlı Presetler</div>
-        </div>
-        
-        <div class="preset-list">
-          <button class="preset-chip" data-preset="pop1">I-V-vi-IV</button>
-          <button class="preset-chip" data-preset="jazz1">ii-V-I</button>
-          <button class="preset-chip" data-preset="blues1">12-Bar Blues</button>
-          <button class="preset-chip" data-preset="rock1">I-IV-V</button>
-          <button class="preset-chip" data-preset="sad1">vi-IV-I-V</button>
-          <button class="preset-chip" data-preset="epic1">I-VII-vi-V</button>
-          <button class="preset-chip" data-preset="jazz2">I-vi-ii-V</button>
-          <button class="preset-chip" data-preset="andalusian">Andalusian</button>
-        </div>
-      </div>
+    <!-- Sidebar (Desktop) -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Settings panels will be here -->
     </aside>
 
     <!-- Main Content -->
-    <main class="content-area">
-      <!-- Transport Bar -->
-      <div class="transport-bar">
-        <div class="transport-controls">
-          <button class="transport-btn" id="stopBtn" title="Durdur">⏹</button>
-          <button class="transport-btn play-btn" id="playBtn" title="Çal / Duraklat">▶</button>
-          <button class="transport-btn" id="loopBtn" title="Döngü">🔁</button>
-        </div>
-        
-        <div class="tempo-display">
-          <div class="tempo-value" id="tempoDisplay">120</div>
-          <div class="tempo-label">BPM</div>
-          <div class="tempo-controls">
-            <button class="tempo-btn" id="tempoDown">−</button>
-            <button class="tempo-btn" id="tempoUp">+</button>
-          </div>
-        </div>
-        
-        <div class="metronome-section">
-          <button class="transport-btn btn-icon" id="metronomeBtn" title="Metronom">🥁</button>
-          <div class="time-sig">
-            <span class="time-sig-top" id="timeSigTop">4</span>
-            <span class="time-sig-bottom" id="timeSigBottom">4</span>
-          </div>
-          <div class="metronome-visual" id="metronomeVisual">
-            <div class="beat-dot"></div>
-            <div class="beat-dot"></div>
-            <div class="beat-dot"></div>
-            <div class="beat-dot"></div>
-          </div>
-        </div>
-        
-        <div class="progress-section">
-          <div class="progress-info">
-            <span id="currentChordNum">Akor 0/0</span>
-            <span id="currentTime">0:00</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-        </div>
-
-        <div class="volume-section">
-          <span class="volume-icon" id="volumeIcon">🔊</span>
-        </div>
-      </div>
-
-      <!-- Generate Button -->
-      <button class="btn btn-primary btn-full" id="generateBtn">
-        ✨ Yeni Akor Dizisi Üret
-      </button>
-
-      <!-- Chord Display -->
-      <div class="chord-display">
-        <div class="chord-display-header">
-          <div class="chord-display-title">Akor Dizisi</div>
-          <div class="chord-info-tags">
-            <div class="info-tag">Ton: <span id="tagKey">C</span></div>
-            <div class="info-tag">Gam: <span id="tagScale">Major</span></div>
-            <div class="info-tag">Tür: <span id="tagStyle">Pop</span></div>
-          </div>
-        </div>
-        
-        <div class="chords-container" id="chordsContainer">
-          <div class="empty-state">
-            <div class="empty-state-icon">🎹</div>
-            <p>Akor dizisi üretmek için yukarıdaki butona tıklayın</p>
-          </div>
-        </div>
-        
-        <div class="roman-line" id="romanLine">
-          Roma rakamları burada görünecek
-        </div>
-      </div>
-
-      <!-- Piano Display -->
-      <div class="piano-section">
-        <div class="piano-header">
-          <div class="piano-title">🎹 Piyano Görünümü</div>
-          <div class="current-chord-display">
-            <div class="current-chord-name" id="currentChordName">-</div>
-            <div class="current-chord-notes" id="currentChordNotes">Bir akor seçin</div>
-          </div>
-        </div>
-        
-        <div class="piano-wrapper">
-          <svg id="pianoSvg" class="piano-svg" viewBox="0 0 1050 150" preserveAspectRatio="xMidYMid meet">
-            <!-- 2 Oktav Piyano - Beyaz Tuşlar -->
-            <!-- Oktav 1 -->
-            <rect class="piano-key white-key" data-note="C" data-octave="4" x="0" y="0" width="75" height="150" rx="0" ry="0"/>
-            <rect class="piano-key white-key" data-note="D" data-octave="4" x="75" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="E" data-octave="4" x="150" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="F" data-octave="4" x="225" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="G" data-octave="4" x="300" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="A" data-octave="4" x="375" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="B" data-octave="4" x="450" y="0" width="75" height="150"/>
-            <!-- Oktav 2 -->
-            <rect class="piano-key white-key" data-note="C" data-octave="5" x="525" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="D" data-octave="5" x="600" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="E" data-octave="5" x="675" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="F" data-octave="5" x="750" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="G" data-octave="5" x="825" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="A" data-octave="5" x="900" y="0" width="75" height="150"/>
-            <rect class="piano-key white-key" data-note="B" data-octave="5" x="975" y="0" width="75" height="150"/>
-            
-            <!-- Siyah Tuşlar - Oktav 1 -->
-            <rect class="piano-key black-key" data-note="C#" data-octave="4" x="52" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="D#" data-octave="4" x="127" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="F#" data-octave="4" x="277" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="G#" data-octave="4" x="352" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="A#" data-octave="4" x="427" y="0" width="46" height="90" rx="0" ry="4"/>
-            <!-- Siyah Tuşlar - Oktav 2 -->
-            <rect class="piano-key black-key" data-note="C#" data-octave="5" x="577" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="D#" data-octave="5" x="652" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="F#" data-octave="5" x="802" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="G#" data-octave="5" x="877" y="0" width="46" height="90" rx="0" ry="4"/>
-            <rect class="piano-key black-key" data-note="A#" data-octave="5" x="952" y="0" width="46" height="90" rx="0" ry="4"/>
-            
-            <!-- Tuş İsimleri -->
-            <text x="37" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">C4</text>
-            <text x="112" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">D</text>
-            <text x="187" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">E</text>
-            <text x="262" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">F</text>
-            <text x="337" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">G</text>
-            <text x="412" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">A</text>
-            <text x="487" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">B</text>
-            <text x="562" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">C5</text>
-            <text x="637" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">D</text>
-            <text x="712" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">E</text>
-            <text x="787" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">F</text>
-            <text x="862" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">G</text>
-            <text x="937" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">A</text>
-            <text x="1012" y="140" text-anchor="middle" font-size="12" fill="#666" font-family="JetBrains Mono">B</text>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Staff Notation -->
-      <div class="staff-section">
-        <div class="staff-header">
-          <div class="staff-title">📝 Nota Yazımı</div>
-        </div>
-        
-        <div class="staff-wrapper">
-          <svg id="staffSvg" class="staff-svg" viewBox="0 0 900 200">
-            <!-- Porte Çizgileri -->
-            <line x1="50" y1="60" x2="850" y2="60" stroke="#333" stroke-width="1"/>
-            <line x1="50" y1="75" x2="850" y2="75" stroke="#333" stroke-width="1"/>
-            <line x1="50" y1="90" x2="850" y2="90" stroke="#333" stroke-width="1"/>
-            <line x1="50" y1="105" x2="850" y2="105" stroke="#333" stroke-width="1"/>
-            <line x1="50" y1="120" x2="850" y2="120" stroke="#333" stroke-width="1"/>
-            
-            <!-- Sol Anahtarı (Treble Clef) -->
-            <text x="60" y="105" font-size="55" fill="#333" font-family="serif">𝄞</text>
-            
-            <!-- Notalar burada dinamik olarak eklenecek -->
-            <g id="notesGroup"></g>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Training Stats (Hidden by default, shown in practice mode) -->
-      <div class="panel training-panel" id="trainingPanel" style="display: none;">
-        <div class="panel-header">
-          <div class="panel-icon">📊</div>
-          <div class="panel-title">Antrenman İstatistikleri</div>
-        </div>
-        
-        <div class="training-stats">
-          <div class="stat-box">
-            <div class="stat-value" id="statCorrect">0</div>
-            <div class="stat-label">Doğru</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value" id="statTotal">0</div>
-            <div class="stat-label">Toplam</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value" id="statAccuracy">0%</div>
-            <div class="stat-label">Başarı</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quiz Panel (Hidden by default) -->
-      <div class="panel" id="quizPanel" style="display: none;">
-        <div class="panel-header">
-          <div class="panel-icon">❓</div>
-          <div class="panel-title">Bu Hangi Akor?</div>
-        </div>
-        
-        <p style="color: var(--text-secondary); margin-bottom: 16px;">
-          Çalan akoru dinleyin ve doğru cevabı seçin.
-        </p>
-        
-        <button class="btn btn-secondary btn-full" id="playQuizChord">🔊 Akoru Tekrar Çal</button>
-        
-        <div class="quiz-options" id="quizOptions">
-          <!-- Quiz seçenekleri dinamik olarak eklenecek -->
-        </div>
-      </div>
+    <main class="content-area" id="contentArea">
+      <!-- Dynamic content -->
     </main>
   </div>
 
   <script>
-    // ============================================
-    // BÖLÜM 1 SONU - BÖLÜM 2'Yİ BURAYA YAPIŞTIRIN
-    // ============================================
 // ============================================
-    // BÖLÜM 2 BAŞLANGICI
-    // ============================================
+// BÖLÜM 1 SONU - BÖLÜM 2'Yİ BURAYA YAPIŞTIRIN
+// ============================================
+// ============================================
+// BÖLÜM 2 BAŞLANGICI - SES MOTORU VE VERİLER
+// ============================================
 
-    // === TEMEL NOTA VE FREKANS TANIMLARI ===
-    const NOTES_SHARP = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-    const NOTES_FLAT = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+// === TEMEL VERİLER ===
+const NOTES_SHARP = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const NOTES_FLAT = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
 
-    // Frekanslar (A4 = 440Hz baz alınarak)
-    const BASE_FREQS = {
-      "C": 261.63, "C#": 277.18, "Db": 277.18,
-      "D": 293.66, "D#": 311.13, "Eb": 311.13,
-      "E": 329.63,
-      "F": 349.23, "F#": 369.99, "Gb": 369.99,
-      "G": 392.00, "G#": 415.30, "Ab": 415.30,
-      "A": 440.00, "A#": 466.16, "Bb": 466.16,
-      "B": 493.88
-    };
+const NOTE_TO_MIDI = {
+  "C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4,
+  "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8, "Ab": 8,
+  "A": 9, "A#": 10, "Bb": 10, "B": 11
+};
 
-    // === GAM KALIPLARI (Yarım ton aralıkları) ===
-    const SCALE_PATTERNS = {
-      major: [0, 2, 4, 5, 7, 9, 11],
-      naturalMinor: [0, 2, 3, 5, 7, 8, 10],
-      harmonicMinor: [0, 2, 3, 5, 7, 8, 11],
-      melodicMinor: [0, 2, 3, 5, 7, 9, 11],
-      dorian: [0, 2, 3, 5, 7, 9, 10],
-      phrygian: [0, 1, 3, 5, 7, 8, 10],
-      lydian: [0, 2, 4, 6, 7, 9, 11],
-      mixolydian: [0, 2, 4, 5, 7, 9, 10],
-      locrian: [0, 1, 3, 5, 6, 8, 10],
-      pentatonicMajor: [0, 2, 4, 7, 9],
-      pentatonicMinor: [0, 3, 5, 7, 10],
-      blues: [0, 3, 5, 6, 7, 10]
-    };
+// === GAM KALIPLARI ===
+const SCALE_PATTERNS = {
+  major: [0, 2, 4, 5, 7, 9, 11],
+  naturalMinor: [0, 2, 3, 5, 7, 8, 10],
+  harmonicMinor: [0, 2, 3, 5, 7, 8, 11],
+  melodicMinor: [0, 2, 3, 5, 7, 9, 11],
+  dorian: [0, 2, 3, 5, 7, 9, 10],
+  phrygian: [0, 1, 3, 5, 7, 8, 10],
+  lydian: [0, 2, 4, 6, 7, 9, 11],
+  mixolydian: [0, 2, 4, 5, 7, 9, 10],
+  locrian: [0, 1, 3, 5, 6, 8, 10],
+  pentatonicMajor: [0, 2, 4, 7, 9],
+  pentatonicMinor: [0, 3, 5, 7, 10],
+  blues: [0, 3, 5, 6, 7, 10]
+};
 
-    // === AKOR TÜRLERİ (Interval yapıları) ===
-    const CHORD_TYPES = {
-      // Üçlüler (Triads)
-      maj: { intervals: [0, 4, 7], symbol: "", name: "Major" },
-      min: { intervals: [0, 3, 7], symbol: "m", name: "Minor" },
-      dim: { intervals: [0, 3, 6], symbol: "°", name: "Diminished" },
-      aug: { intervals: [0, 4, 8], symbol: "+", name: "Augmented" },
-      sus2: { intervals: [0, 2, 7], symbol: "sus2", name: "Suspended 2" },
-      sus4: { intervals: [0, 5, 7], symbol: "sus4", name: "Suspended 4" },
-      
-      // 7li Akorlar
-      maj7: { intervals: [0, 4, 7, 11], symbol: "maj7", name: "Major 7th" },
-      min7: { intervals: [0, 3, 7, 10], symbol: "m7", name: "Minor 7th" },
-      dom7: { intervals: [0, 4, 7, 10], symbol: "7", name: "Dominant 7th" },
-      dim7: { intervals: [0, 3, 6, 9], symbol: "°7", name: "Diminished 7th" },
-      hdim7: { intervals: [0, 3, 6, 10], symbol: "ø7", name: "Half-Diminished 7th" },
-      minMaj7: { intervals: [0, 3, 7, 11], symbol: "m(maj7)", name: "Minor-Major 7th" },
-      aug7: { intervals: [0, 4, 8, 10], symbol: "+7", name: "Augmented 7th" },
-      
-      // Genişletilmiş Akorlar
-      maj9: { intervals: [0, 4, 7, 11, 14], symbol: "maj9", name: "Major 9th" },
-      min9: { intervals: [0, 3, 7, 10, 14], symbol: "m9", name: "Minor 9th" },
-      dom9: { intervals: [0, 4, 7, 10, 14], symbol: "9", name: "Dominant 9th" },
-      add9: { intervals: [0, 4, 7, 14], symbol: "add9", name: "Add 9" },
-      dom11: { intervals: [0, 4, 7, 10, 14, 17], symbol: "11", name: "Dominant 11th" },
-      dom13: { intervals: [0, 4, 7, 10, 14, 21], symbol: "13", name: "Dominant 13th" },
-      
-      // Özel Akorlar
-      "6": { intervals: [0, 4, 7, 9], symbol: "6", name: "Major 6th" },
-      "m6": { intervals: [0, 3, 7, 9], symbol: "m6", name: "Minor 6th" },
-      "7sus4": { intervals: [0, 5, 7, 10], symbol: "7sus4", name: "7th Suspended 4" },
-      "7#9": { intervals: [0, 4, 7, 10, 15], symbol: "7#9", name: "7th Sharp 9 (Hendrix)" },
-      "7b9": { intervals: [0, 4, 7, 10, 13], symbol: "7b9", name: "7th Flat 9" }
-    };
+// === AKOR TİPLERİ ===
+const CHORD_TYPES = {
+  maj: { intervals: [0, 4, 7], symbol: "", name: "Major", short: "Maj" },
+  min: { intervals: [0, 3, 7], symbol: "m", name: "Minor", short: "m" },
+  dim: { intervals: [0, 3, 6], symbol: "°", name: "Diminished", short: "dim" },
+  aug: { intervals: [0, 4, 8], symbol: "+", name: "Augmented", short: "aug" },
+  sus2: { intervals: [0, 2, 7], symbol: "sus2", name: "Suspended 2", short: "sus2" },
+  sus4: { intervals: [0, 5, 7], symbol: "sus4", name: "Suspended 4", short: "sus4" },
+  maj7: { intervals: [0, 4, 7, 11], symbol: "maj7", name: "Major 7th", short: "M7" },
+  min7: { intervals: [0, 3, 7, 10], symbol: "m7", name: "Minor 7th", short: "m7" },
+  dom7: { intervals: [0, 4, 7, 10], symbol: "7", name: "Dominant 7th", short: "7" },
+  dim7: { intervals: [0, 3, 6, 9], symbol: "°7", name: "Diminished 7th", short: "°7" },
+  hdim7: { intervals: [0, 3, 6, 10], symbol: "ø7", name: "Half-Dim 7th", short: "ø7" },
+  aug7: { intervals: [0, 4, 8, 10], symbol: "+7", name: "Augmented 7th", short: "+7" },
+  dom9: { intervals: [0, 4, 7, 10, 14], symbol: "9", name: "Dominant 9th", short: "9" },
+  add9: { intervals: [0, 4, 7, 14], symbol: "add9", name: "Add 9", short: "add9" }
+};
 
-    // === MÜZİK TÜRÜ AKOR DİZİLİMLERİ ===
-    const PROGRESSION_PATTERNS = {
-      pop: [
-        { degrees: [1, 5, 6, 4], name: "Klasik Pop (Axis)" },
-        { degrees: [6, 4, 1, 5], name: "Sad Pop" },
-        { degrees: [1, 6, 4, 5], name: "50s Progression" },
-        { degrees: [1, 4, 5, 4], name: "Simple Pop" },
-        { degrees: [1, 5, 4, 5], name: "Uplifting Pop" },
-        { degrees: [1, 4, 6, 5], name: "Modern Pop" }
-      ],
-      rock: [
-        { degrees: [1, 4, 5, 4], name: "Classic Rock" },
-        { degrees: [1, 5, 4, 5], name: "Power Rock" },
-        { degrees: [1, 7, 4, 4], name: "Hard Rock" },
-        { degrees: [1, 3, 4, 5], name: "Blues Rock" },
-        { degrees: [1, 6, 3, 7], name: "Epic Rock" }
-      ],
-      ballad: [
-        { degrees: [1, 6, 2, 5], name: "Classic Ballad" },
-        { degrees: [1, 4, 2, 5], name: "Soft Ballad" },
-        { degrees: [1, 3, 6, 4], name: "Emotional Ballad" },
-        { degrees: [6, 4, 1, 5], name: "Sad Ballad" },
-        { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Canon Ballad" }
-      ],
-      jazz: [
-        { degrees: [2, 5, 1], name: "ii-V-I" },
-        { degrees: [2, 5, 1, 6], name: "ii-V-I-vi (Turnaround)" },
-        { degrees: [1, 6, 2, 5], name: "I-vi-ii-V (Rhythm Changes)" },
-        { degrees: [3, 6, 2, 5], name: "iii-VI-ii-V" },
-        { degrees: [1, 4, 3, 6, 2, 5, 1], name: "Extended Jazz" },
-        { degrees: [4, 7, 3, 6, 2, 5, 1], name: "Coltrane Changes" }
-      ],
-      blues: [
-        { degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Blues" },
-        { degrees: [1, 4, 1, 5], name: "Simple Blues" },
-        { degrees: [1, 4, 1, 1, 4, 4, 1, 1, 5, 5, 1, 1], name: "Slow Blues" }
-      ],
-      funk: [
-        { degrees: [1, 1, 4, 4], name: "Funky Groove" },
-        { degrees: [1, 4, 1, 5], name: "Classic Funk" },
-        { degrees: [2, 5, 1, 1], name: "Jazz Funk" },
-        { degrees: [1, 7, 4, 4], name: "Chromatic Funk" }
-      ],
-      soul: [
-        { degrees: [1, 4, 1, 5], name: "Classic Soul" },
-        { degrees: [1, 6, 4, 5], name: "Motown" },
-        { degrees: [2, 5, 1, 4], name: "Smooth Soul" },
-        { degrees: [1, 3, 4, 4], name: "Gospel Soul" }
-      ],
-      metal: [
-        { degrees: [1, 6, 7, 1], name: "Power Metal" },
-        { degrees: [1, 7, 6, 5], name: "Descending Metal" },
-        { degrees: [1, 2, 1, 7], name: "Phrygian Metal" },
-        { degrees: [1, 5, 6, 4], name: "Melodic Metal" }
-      ],
-      edm: [
-        { degrees: [1, 5, 6, 4], name: "EDM Anthem" },
-        { degrees: [6, 4, 1, 5], name: "Emotional EDM" },
-        { degrees: [1, 6, 4, 5], name: "Progressive House" },
-        { degrees: [6, 7, 1, 1], name: "Trance" }
-      ],
-      lofi: [
-        { degrees: [2, 5, 1, 6], name: "Jazzy Lo-Fi" },
-        { degrees: [1, 6, 2, 5], name: "Chill Lo-Fi" },
-        { degrees: [4, 5, 3, 6], name: "Dreamy Lo-Fi" },
-        { degrees: [1, 4, 6, 5], name: "Nostalgic Lo-Fi" }
-      ],
-      latin: [
-        { degrees: [1, 4, 5, 5], name: "Latin Basic" },
-        { degrees: [2, 5, 1, 1], name: "Salsa" },
-        { degrees: [1, 4, 5, 4], name: "Bossa Nova" },
-        { degrees: [6, 7, 1, 1], name: "Spanish" }
-      ],
-      classical: [
-        { degrees: [1, 4, 5, 1], name: "Classical Cadence" },
-        { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Pachelbel Canon" },
-        { degrees: [1, 6, 4, 5], name: "Romantic" },
-        { degrees: [1, 4, 1, 5, 1], name: "Baroque" }
-      ],
-      gospel: [
-        { degrees: [1, 4, 1, 5], name: "Traditional Gospel" },
-        { degrees: [1, 1, 4, 4, 1, 5, 1], name: "Gospel Hymn" },
-        { degrees: [4, 4, 1, 1, 5, 5, 1], name: "Soulful Gospel" },
-        { degrees: [1, 3, 4, 5], name: "Contemporary Gospel" }
-      ],
-      country: [
-        { degrees: [1, 4, 5, 1], name: "Classic Country" },
-        { degrees: [1, 5, 1, 4], name: "Country Waltz" },
-        { degrees: [1, 4, 1, 5, 4, 1], name: "Nashville" }
-      ],
-      reggae: [
-        { degrees: [1, 5, 6, 4], name: "Roots Reggae" },
-        { degrees: [1, 4, 1, 5], name: "One Drop" },
-        { degrees: [6, 5, 4, 5], name: "Dub" }
-      ],
-      bossa: [
-        { degrees: [1, 2, 5, 1], name: "Bossa Basic" },
-        { degrees: [1, 6, 2, 5], name: "Girl from Ipanema" },
-        { degrees: [1, 4, 3, 6, 2, 5, 1], name: "Advanced Bossa" }
-      ]
-    };
+// === AKOR DİZİLİM KALIPLARI ===
+const PROGRESSION_PATTERNS = {
+  pop: [
+    { degrees: [1, 5, 6, 4], name: "Pop Klasik" },
+    { degrees: [6, 4, 1, 5], name: "Sad Pop" },
+    { degrees: [1, 4, 5, 4], name: "Simple Pop" },
+    { degrees: [1, 6, 4, 5], name: "50s" }
+  ],
+  rock: [
+    { degrees: [1, 4, 5, 4], name: "Rock Klasik" },
+    { degrees: [1, 5, 4, 5], name: "Power Rock" },
+    { degrees: [1, 7, 4, 4], name: "Hard Rock" }
+  ],
+  jazz: [
+    { degrees: [2, 5, 1], name: "ii-V-I" },
+    { degrees: [2, 5, 1, 6], name: "Turnaround" },
+    { degrees: [1, 6, 2, 5], name: "Rhythm Changes" }
+  ],
+  blues: [
+    { degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Blues" },
+    { degrees: [1, 4, 1, 5], name: "Simple Blues" }
+  ],
+  ballad: [
+    { degrees: [1, 6, 2, 5], name: "Ballad Klasik" },
+    { degrees: [1, 5, 6, 3, 4, 1, 4, 5], name: "Canon" }
+  ],
+  edm: [
+    { degrees: [1, 5, 6, 4], name: "EDM Anthem" },
+    { degrees: [6, 4, 1, 5], name: "Emotional" }
+  ],
+  latin: [
+    { degrees: [2, 5, 1, 1], name: "Salsa" },
+    { degrees: [1, 4, 5, 4], name: "Bossa" }
+  ]
+};
 
-    // === PRESET AKOR DİZİLİMLERİ ===
-    const PRESETS = {
-      pop1: { key: "C", scale: "major", degrees: [1, 5, 6, 4], name: "I-V-vi-IV" },
-      jazz1: { key: "C", scale: "major", degrees: [2, 5, 1], name: "ii-V-I", chordType: "sevenths" },
-      blues1: { key: "A", scale: "blues", degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Blues" },
-      rock1: { key: "G", scale: "major", degrees: [1, 4, 5], name: "I-IV-V" },
-      sad1: { key: "A", scale: "naturalMinor", degrees: [6, 4, 1, 5], name: "vi-IV-I-V" },
-      epic1: { key: "C", scale: "major", degrees: [1, 7, 6, 5], name: "Epic" },
-      jazz2: { key: "F", scale: "major", degrees: [1, 6, 2, 5], name: "Rhythm Changes", chordType: "sevenths" },
-      andalusian: { key: "A", scale: "phrygian", degrees: [1, 7, 6, 5], name: "Andalusian Cadence" }
-    };
+// === PRESET'LER ===
+const PRESETS = {
+  pop1: { key: "C", scale: "major", degrees: [1, 5, 6, 4], name: "I-V-vi-IV" },
+  jazz1: { key: "C", scale: "major", degrees: [2, 5, 1], name: "ii-V-I", chordType: "sevenths" },
+  blues1: { key: "A", scale: "blues", degrees: [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5], name: "12-Bar Blues" },
+  rock1: { key: "G", scale: "major", degrees: [1, 4, 5], name: "I-IV-V" },
+  sad1: { key: "A", scale: "naturalMinor", degrees: [1, 6, 3, 7], name: "Sad Progression" }
+};
 
-    // === GLOBAL DURUM DEĞİŞKENLERİ ===
-    let currentChords = [];
-    let currentChordIndex = -1;
-    let isPlaying = false;
-    let isLooping = false;
-    let tempo = 120;
-    let metronomeOn = false;
-    let currentArticulation = "normal";
-    let currentMode = "create"; // create, practice, quiz
-    let volume = 0.7;
-    let reverbEnabled = false;
-    let currentOctave = 4;
-    let currentInstrument = "piano";
-    let playbackInterval = null;
-    let metronomeInterval = null;
-    let currentBeat = 0;
-    let beatsPerMeasure = 4;
+// === GLOBAL DURUM ===
+let audioCtx = null;
+let masterGain = null;
+let compressor = null;
+let convolver = null;
+let dryGain = null;
+let wetGain = null;
 
-    // Quiz değişkenleri
-    let quizCorrectAnswer = null;
-    let quizStats = { correct: 0, total: 0 };
+let pianoSamples = {};
+let samplesLoaded = false;
+let audioInitialized = false;
 
-    // === WEB AUDIO API KURULUMU ===
-    let audioCtx = null;
-    let masterGain = null;
-    let reverbNode = null;
+let currentChords = [];
+let currentChordIndex = -1;
+let isPlaying = false;
+let isLooping = false;
+let tempo = 120;
+let metronomeOn = false;
+let currentArticulation = "normal";
+let currentMode = "create";
+let volume = 0.7;
+let reverbEnabled = true;
+let currentOctave = 4;
+let playbackInterval = null;
+let metronomeInterval = null;
+let currentBeat = 0;
+let beatsPerMeasure = 4;
 
-    function initAudio() {
-      if (audioCtx) return;
-      
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Master Gain
-      masterGain = audioCtx.createGain();
-      masterGain.gain.value = volume;
-      
-      // Reverb (Convolver simülasyonu - basit delay ile)
-      reverbNode = audioCtx.createGain();
-      reverbNode.gain.value = 0;
-      
-      masterGain.connect(audioCtx.destination);
+// Quiz ve Training
+let quizCorrectAnswer = null;
+let quizStats = { correct: 0, total: 0 };
+let noteFinderActive = false;
+let noteFinderMode = "learn";
+let noteFinderTarget = { note: null, octave: null };
+let noteFinderStats = { correct: 0, wrong: 0, streak: 0 };
+let chordRecogTarget = { root: null, type: null, fullName: null };
+let chordRecogSelected = { root: null, type: null };
+let chordRecogStats = { correct: 0, total: 0 };
+
+// === GERÇEKÇİ PİYANO SES MOTORU ===
+// Fiziksel modelleme + Karplus-Strong algoritması ile gerçekçi piyano
+
+async function initAudio() {
+  if (audioInitialized) return;
+  
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Resume if suspended (gerekli kullanıcı etkileşimi sonrası)
+    if (audioCtx.state === "suspended") {
+      await audioCtx.resume();
     }
+    
+    // Dynamics Compressor
+    compressor = audioCtx.createDynamicsCompressor();
+    compressor.threshold.value = -20;
+    compressor.knee.value = 20;
+    compressor.ratio.value = 4;
+    compressor.attack.value = 0.003;
+    compressor.release.value = 0.15;
+    
+    // Master Gain
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = volume;
+    
+    // Dry/Wet for Reverb
+    dryGain = audioCtx.createGain();
+    dryGain.gain.value = 0.65;
+    
+    wetGain = audioCtx.createGain();
+    wetGain.gain.value = reverbEnabled ? 0.35 : 0;
+    
+    // Create Convolution Reverb (Concert Hall simulation)
+    createConvolutionReverb();
+    
+    // Signal Chain
+    masterGain.connect(compressor);
+    compressor.connect(dryGain);
+    dryGain.connect(audioCtx.destination);
+    
+    compressor.connect(convolver);
+    convolver.connect(wetGain);
+    wetGain.connect(audioCtx.destination);
+    
+    // Generate piano samples
+    generatePianoSamples();
+    
+    audioInitialized = true;
+    console.log("Audio initialized successfully!");
+    
+  } catch (err) {
+    console.error("Audio init error:", err);
+    // Fallback: hide overlay anyway
+    const overlay = document.getElementById("loadingOverlay");
+    if (overlay) overlay.style.display = "none";
+  }
+}
 
-    function resumeAudio() {
-      if (audioCtx && audioCtx.state === "suspended") {
-        audioCtx.resume();
-      }
+// Konser salonu reverb impulse response
+function createConvolutionReverb() {
+  convolver = audioCtx.createConvolver();
+  
+  const sampleRate = audioCtx.sampleRate;
+  const length = sampleRate * 2.8; // 2.8 saniye kuyruk
+  const impulse = audioCtx.createBuffer(2, length, sampleRate);
+  
+  for (let channel = 0; channel < 2; channel++) {
+    const data = impulse.getChannelData(channel);
+    for (let i = 0; i < length; i++) {
+      // Exponential decay
+      const decay = Math.pow(1 - i / length, 2);
+      // Early reflections (0-100ms)
+      const earlyReflections = i < sampleRate * 0.1 ? 
+        Math.sin(i * 0.015) * Math.exp(-20 * i / sampleRate) * 0.4 : 0;
+      // Diffuse reverb tail
+      const diffuse = (Math.random() * 2 - 1) * decay;
+      // Stereo spread
+      const stereoOffset = channel === 0 ? 0.02 : -0.02;
+      data[i] = (earlyReflections + diffuse * 0.6) * (1 + stereoOffset);
     }
+  }
+  
+  convolver.buffer = impulse;
+}
 
-    // === SES ÜRETİMİ FONKSİYONLARI ===
+// Karplus-Strong + Fiziksel modelleme ile piyano sample üretimi
+function generatePianoSamples() {
+  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const octaves = [2, 3, 4, 5, 6]; // Geniş oktav aralığı
+  
+  octaves.forEach(octave => {
+    notes.forEach(note => {
+      const key = `${note}${octave}`;
+      pianoSamples[key] = createPianoSample(note, octave);
+    });
+  });
+  
+  samplesLoaded = true;
+  document.getElementById("loadingOverlay").style.display = "none";
+}
 
-    // Enstrüman dalga formları
-    const INSTRUMENT_WAVES = {
-      piano: "triangle",
-      epiano: "sine",
-      organ: "square",
-      strings: "sawtooth",
-      synth: "sine",
-      guitar: "triangle"
-    };
-
-    // Enstrüman ADSR zarfları (Attack, Decay, Sustain, Release)
-    const INSTRUMENT_ENVELOPES = {
-      piano: { attack: 0.01, decay: 0.3, sustain: 0.4, release: 0.5 },
-      epiano: { attack: 0.02, decay: 0.2, sustain: 0.5, release: 0.4 },
-      organ: { attack: 0.05, decay: 0.1, sustain: 0.8, release: 0.2 },
-      strings: { attack: 0.15, decay: 0.2, sustain: 0.7, release: 0.8 },
-      synth: { attack: 0.1, decay: 0.3, sustain: 0.6, release: 0.5 },
-      guitar: { attack: 0.005, decay: 0.4, sustain: 0.2, release: 0.3 }
-    };
-
-    // Artikülasyon parametreleri
-    const ARTICULATION_PARAMS = {
-      normal: { durationMult: 1.0, velocityMult: 1.0, attackMult: 1.0 },
-      staccato: { durationMult: 0.3, velocityMult: 1.1, attackMult: 0.8 },
-      legato: { durationMult: 1.2, velocityMult: 0.9, attackMult: 1.5 },
-      accent: { durationMult: 0.9, velocityMult: 1.4, attackMult: 0.7 },
-      tenuto: { durationMult: 1.1, velocityMult: 1.0, attackMult: 1.2 },
-      marcato: { durationMult: 0.8, velocityMult: 1.5, attackMult: 0.5 },
-      sforzando: { durationMult: 0.7, velocityMult: 1.8, attackMult: 0.3 },
-      arpeggio: { durationMult: 1.0, velocityMult: 1.0, attackMult: 1.0, isArpeggio: true }
-    };
-
-    // Nota frekansı hesaplama (oktav dahil)
-    function getNoteFrequency(noteName, octave = 4) {
-      const baseFreq = BASE_FREQS[noteName];
-      if (!baseFreq) return 440;
+// Tek piyano notası için fiziksel modelleme
+function createPianoSample(note, octave) {
+  const sampleRate = audioCtx.sampleRate;
+  const duration = 4.0; // 4 saniye decay
+  const length = sampleRate * duration;
+  const buffer = audioCtx.createBuffer(2, length, sampleRate);
+  
+  const midiNote = NOTE_TO_MIDI[note] + (octave + 1) * 12;
+  const frequency = 440 * Math.pow(2, (midiNote - 69) / 12);
+  
+  // Piyano harmonikleri (gerçek ölçümlerden)
+  const harmonics = [
+    { ratio: 1.0, amp: 1.0, decay: 1.0 },
+    { ratio: 2.0, amp: 0.45, decay: 0.85 },
+    { ratio: 3.0, amp: 0.28, decay: 0.72 },
+    { ratio: 4.0, amp: 0.18, decay: 0.62 },
+    { ratio: 5.0, amp: 0.12, decay: 0.52 },
+    { ratio: 6.0, amp: 0.08, decay: 0.45 },
+    { ratio: 7.0, amp: 0.05, decay: 0.38 },
+    { ratio: 8.0, amp: 0.03, decay: 0.32 }
+  ];
+  
+  // Inharmonicity faktörü (gerçek piyano telleri için)
+  const inharmonicity = 0.0005 * Math.pow(frequency / 261.63, 1.5);
+  
+  for (let channel = 0; channel < 2; channel++) {
+    const data = buffer.getChannelData(channel);
+    
+    for (let i = 0; i < length; i++) {
+      const t = i / sampleRate;
+      let sample = 0;
       
-      // Oktav 4 baz alınarak hesapla
-      const octaveDiff = octave - 4;
-      return baseFreq * Math.pow(2, octaveDiff);
-    }
-
-    // Tek nota çalma
-    function playNote(frequency, duration = 0.5, delay = 0, velocityMult = 1.0) {
-      if (!audioCtx) initAudio();
-      resumeAudio();
-
-      const envelope = INSTRUMENT_ENVELOPES[currentInstrument];
-      const artParams = ARTICULATION_PARAMS[currentArticulation];
-      
-      const actualDuration = duration * artParams.durationMult;
-      const actualVelocity = volume * velocityMult * artParams.velocityMult;
-      const actualAttack = envelope.attack * artParams.attackMult;
-
-      const startTime = audioCtx.currentTime + delay;
-
-      // Oscillator
-      const osc = audioCtx.createOscillator();
-      osc.type = INSTRUMENT_WAVES[currentInstrument];
-      osc.frequency.setValueAtTime(frequency, startTime);
-
-      // Gain (ADSR zarf)
-      const gainNode = audioCtx.createGain();
-      gainNode.gain.setValueAtTime(0, startTime);
-      
-      // Attack
-      gainNode.gain.linearRampToValueAtTime(actualVelocity * 0.5, startTime + actualAttack);
-      
-      // Decay -> Sustain
-      gainNode.gain.linearRampToValueAtTime(
-        actualVelocity * 0.5 * envelope.sustain,
-        startTime + actualAttack + envelope.decay
-      );
-      
-      // Release
-      const releaseStart = startTime + actualDuration - envelope.release;
-      gainNode.gain.setValueAtTime(actualVelocity * 0.5 * envelope.sustain, releaseStart);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + actualDuration);
-
-      // Bağlantılar
-      osc.connect(gainNode);
-      gainNode.connect(masterGain);
-
-      osc.start(startTime);
-      osc.stop(startTime + actualDuration + 0.1);
-    }
-
-    // Akor çalma
-    function playChord(chordName, duration = 0.8) {
-      if (!audioCtx) initAudio();
-      resumeAudio();
-
-      const notes = getChordNotes(chordName);
-      const artParams = ARTICULATION_PARAMS[currentArticulation];
-
-      if (artParams.isArpeggio) {
-        // Arpeggio: notaları sırayla çal
-        const noteDelay = 0.08;
-        notes.forEach((freq, index) => {
-          playNote(freq, duration, index * noteDelay);
-        });
-      } else {
-        // Normal: tüm notaları aynı anda çal
-        notes.forEach(freq => {
-          playNote(freq, duration);
-        });
-      }
-    }
-
-    // Akor notalarını frekans olarak al
-    function getChordNotes(chordName) {
-      const parsed = parseChordName(chordName);
-      if (!parsed) return [];
-
-      const { root, type } = parsed;
-      const chordDef = CHORD_TYPES[type];
-      if (!chordDef) return [];
-
-      const rootIndex = NOTES_SHARP.indexOf(root) !== -1 
-        ? NOTES_SHARP.indexOf(root) 
-        : NOTES_FLAT.indexOf(root);
-      
-      if (rootIndex === -1) return [];
-
-      return chordDef.intervals.map(interval => {
-        const noteIndex = (rootIndex + interval) % 12;
-        const octaveAdd = Math.floor((rootIndex + interval) / 12);
-        const noteName = NOTES_SHARP[noteIndex];
-        return getNoteFrequency(noteName, currentOctave + octaveAdd);
-      });
-    }
-
-    // Akor notalarını isim olarak al
-    function getChordNoteNames(chordName) {
-      const parsed = parseChordName(chordName);
-      if (!parsed) return [];
-
-      const { root, type } = parsed;
-      const chordDef = CHORD_TYPES[type];
-      if (!chordDef) return [];
-
-      const rootIndex = NOTES_SHARP.indexOf(root) !== -1 
-        ? NOTES_SHARP.indexOf(root) 
-        : NOTES_FLAT.indexOf(root);
-      
-      if (rootIndex === -1) return [];
-
-      return chordDef.intervals.map(interval => {
-        const noteIndex = (rootIndex + interval) % 12;
-        return NOTES_SHARP[noteIndex];
-      });
-    }
-
-    // Akor adını parse et
-    function parseChordName(chordName) {
-      if (!chordName) return null;
-
-      // Root notayı bul (ilk 1 veya 2 karakter)
-      let root = chordName[0];
-      let suffix = chordName.slice(1);
-
-      if (suffix.startsWith("#") || suffix.startsWith("b")) {
-        root += suffix[0];
-        suffix = suffix.slice(1);
-      }
-
-      // Suffix'ten akor tipini belirle
-      let type = "maj";
-
-      if (suffix === "" || suffix === "M") {
-        type = "maj";
-      } else if (suffix === "m" || suffix === "min") {
-        type = "min";
-      } else if (suffix === "°" || suffix === "dim") {
-        type = "dim";
-      } else if (suffix === "+" || suffix === "aug") {
-        type = "aug";
-      } else if (suffix === "7") {
-        type = "dom7";
-      } else if (suffix === "maj7" || suffix === "M7") {
-        type = "maj7";
-      } else if (suffix === "m7" || suffix === "min7") {
-        type = "min7";
-      } else if (suffix === "°7" || suffix === "dim7") {
-        type = "dim7";
-      } else if (suffix === "ø7" || suffix === "m7b5") {
-        type = "hdim7";
-      } else if (suffix === "sus2") {
-        type = "sus2";
-      } else if (suffix === "sus4") {
-        type = "sus4";
-      } else if (suffix === "9") {
-        type = "dom9";
-      } else if (suffix === "maj9") {
-        type = "maj9";
-      } else if (suffix === "m9") {
-        type = "min9";
-      } else if (suffix === "add9") {
-        type = "add9";
-      } else if (suffix === "6") {
-        type = "6";
-      } else if (suffix === "m6") {
-        type = "m6";
-      } else if (suffix === "7sus4") {
-        type = "7sus4";
-      } else if (suffix === "7#9") {
-        type = "7#9";
-      } else if (suffix === "7b9") {
-        type = "7b9";
-      } else if (suffix === "11") {
-        type = "dom11";
-      } else if (suffix === "13") {
-        type = "dom13";
-      }
-
-      return { root, type, suffix };
-    }
-
-    // === GAM VE AKOR OLUŞTURMA ===
-
-    // Belirli bir ton ve gamda diyatonik akorları oluştur
-    function buildScaleChords(key, scaleType, chordTypeOption = "triads") {
-      const pattern = SCALE_PATTERNS[scaleType];
-      if (!pattern) return [];
-
-      const rootIndex = NOTES_SHARP.indexOf(key);
-      if (rootIndex === -1) return [];
-
-      // Gam notalarını oluştur
-      const scaleNotes = pattern.map(interval => {
-        return NOTES_SHARP[(rootIndex + interval) % 12];
-      });
-
-      const chords = [];
-
-      // Her derece için akor oluştur
-      for (let degree = 0; degree < scaleNotes.length; degree++) {
-        const chordRoot = scaleNotes[degree];
+      // Harmonikleri topla
+      harmonics.forEach((h, idx) => {
+        // Inharmonicity ile frekans düzeltmesi
+        const harmonicFreq = frequency * h.ratio * Math.sqrt(1 + inharmonicity * h.ratio * h.ratio);
         
-        // 3lü ve 5li intervallerini hesapla (gam içinde)
-        const thirdDegree = (degree + 2) % scaleNotes.length;
-        const fifthDegree = (degree + 4) % scaleNotes.length;
+        // Decay - her harmonik farklı hızda söner
+        const harmonicDecay = Math.exp(-3.5 * t / (duration * h.decay));
+        
+        // Faz kayması (daha doğal ses için)
+        const phase = channel * 0.1 + idx * 0.05;
+        
+        // Sine + hafif triangle karışımı
+        const sine = Math.sin(2 * Math.PI * harmonicFreq * t + phase);
+        const triangle = 2 * Math.abs(2 * ((harmonicFreq * t + phase) % 1) - 1) - 1;
+        const wave = sine * 0.85 + triangle * 0.15;
+        
+        sample += wave * h.amp * harmonicDecay;
+      });
+      
+      // Attack transient (çekiç vuruşu)
+      const attackEnv = t < 0.003 ? t / 0.003 : 1;
+      const hammerNoise = t < 0.015 ? (Math.random() * 2 - 1) * Math.exp(-200 * t) * 0.3 : 0;
+      
+      // Karplus-Strong benzeri string excitation
+      const stringExcitation = t < 0.02 ? 
+        Math.sin(2 * Math.PI * frequency * 3 * t) * Math.exp(-100 * t) * 0.2 : 0;
+      
+      // Final sample
+      data[i] = (sample * attackEnv + hammerNoise + stringExcitation) * 0.25;
+    }
+  }
+  
+  return buffer;
+}
 
-        const thirdNote = scaleNotes[thirdDegree];
-        const fifthNote = scaleNotes[fifthDegree];
+// MIDI notadan frekans
+function midiToFrequency(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
 
-        // Yarım ton cinsinden intervalleri hesapla
-        const rootIdx = NOTES_SHARP.indexOf(chordRoot);
-        const thirdIdx = NOTES_SHARP.indexOf(thirdNote);
-        const fifthIdx = NOTES_SHARP.indexOf(fifthNote);
+// Nota çalma
+async function playNote(noteName, octave = 4, duration = 2.0, velocity = 1.0, delay = 0) {
+  if (!audioInitialized) await initAudio();
+  if (!audioCtx) return;
+  if (audioCtx.state === "suspended") await audioCtx.resume();
+  
+  const key = `${noteName}${octave}`;
+  const buffer = pianoSamples[key];
+  
+  if (!buffer) {
+    // Fallback: synthesis ile çal
+    playNoteSynth(noteName, octave, duration, velocity, delay);
+    return;
+  }
+  
+  const startTime = audioCtx.currentTime + delay;
+  
+  // Buffer source
+  const source = audioCtx.createBufferSource();
+  source.buffer = buffer;
+  
+  // Velocity gain
+  const velocityGain = audioCtx.createGain();
+  velocityGain.gain.value = velocity * volume;
+  
+  // Artikülasyon
+  const artParams = ARTICULATION_PARAMS[currentArticulation];
+  const actualDuration = duration * artParams.durationMult;
+  
+  // Release envelope
+  velocityGain.gain.setValueAtTime(velocity * volume * artParams.velocityMult, startTime);
+  velocityGain.gain.setValueAtTime(velocity * volume * artParams.velocityMult, startTime + actualDuration * 0.7);
+  velocityGain.gain.exponentialRampToValueAtTime(0.001, startTime + actualDuration);
+  
+  source.connect(velocityGain);
+  velocityGain.connect(masterGain);
+  
+  source.start(startTime);
+  source.stop(startTime + actualDuration + 0.1);
+}
 
-        const thirdInterval = (thirdIdx - rootIdx + 12) % 12;
-        const fifthInterval = (fifthIdx - rootIdx + 12) % 12;
+// Fallback synthesizer
+function playNoteSynth(noteName, octave, duration, velocity, delay) {
+  const midiNote = NOTE_TO_MIDI[noteName] + (octave + 1) * 12;
+  const frequency = midiToFrequency(midiNote);
+  
+  const startTime = audioCtx.currentTime + delay;
+  const artParams = ARTICULATION_PARAMS[currentArticulation];
+  const actualDuration = duration * artParams.durationMult;
+  
+  // Oscillators
+  const osc1 = audioCtx.createOscillator();
+  osc1.type = "triangle";
+  osc1.frequency.value = frequency;
+  
+  const osc2 = audioCtx.createOscillator();
+  osc2.type = "sine";
+  osc2.frequency.value = frequency * 2;
+  
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(velocity * volume * 0.3 * artParams.velocityMult, startTime + 0.01);
+  gain.gain.exponentialRampToValueAtTime(velocity * volume * 0.15, startTime + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + actualDuration);
+  
+  const gain2 = audioCtx.createGain();
+  gain2.gain.value = 0.15;
+  
+  osc1.connect(gain);
+  osc2.connect(gain2);
+  gain2.connect(gain);
+  gain.connect(masterGain);
+  
+  osc1.start(startTime);
+  osc2.start(startTime);
+  osc1.stop(startTime + actualDuration + 0.1);
+  osc2.stop(startTime + actualDuration + 0.1);
+}
 
-        // Akor kalitesini belirle
-        let quality, suffix;
+// Artikülasyon parametreleri
+const ARTICULATION_PARAMS = {
+  normal: { durationMult: 1.0, velocityMult: 1.0 },
+  staccato: { durationMult: 0.3, velocityMult: 1.1 },
+  legato: { durationMult: 1.3, velocityMult: 0.9 },
+  accent: { durationMult: 0.9, velocityMult: 1.4 },
+  tenuto: { durationMult: 1.1, velocityMult: 1.0 },
+  marcato: { durationMult: 0.7, velocityMult: 1.5 },
+  sforzando: { durationMult: 0.6, velocityMult: 1.8 },
+  arpeggio: { durationMult: 1.0, velocityMult: 1.0, isArpeggio: true }
+};
 
-        if (thirdInterval === 4 && fifthInterval === 7) {
-          quality = "maj";
-          suffix = "";
-        } else if (thirdInterval === 3 && fifthInterval === 7) {
-          quality = "min";
-          suffix = "m";
-        } else if (thirdInterval === 3 && fifthInterval === 6) {
-          quality = "dim";
-          suffix = "°";
-        } else if (thirdInterval === 4 && fifthInterval === 8) {
-          quality = "aug";
-          suffix = "+";
+// Akor çalma
+async function playChord(chordName, duration = 1.0) {
+  if (!audioInitialized) await initAudio();
+  if (!audioCtx) return;
+  if (audioCtx.state === "suspended") await audioCtx.resume();
+  
+  const notes = getChordNoteNames(chordName);
+  if (!notes || notes.length === 0) return;
+  
+  const artParams = ARTICULATION_PARAMS[currentArticulation];
+  
+  if (artParams.isArpeggio) {
+    // Arpeggio
+    notes.forEach((note, idx) => {
+      const velocity = 0.9 + Math.random() * 0.1;
+      playNote(note, currentOctave, duration * 1.2, velocity, idx * 0.07);
+    });
+  } else {
+    // Normal akor (humanize ile)
+    notes.forEach((note, idx) => {
+      const humanizeDelay = Math.random() * 0.012;
+      const humanizeVel = 0.92 + Math.random() * 0.16;
+      playNote(note, currentOctave, duration, humanizeVel, humanizeDelay);
+    });
+  }
+}
+
+// Metronom click
+async function playMetronomeClick(isAccent) {
+  if (!audioInitialized) await initAudio();
+  if (!audioCtx) return;
+  if (audioCtx.state === "suspended") await audioCtx.resume();
+  
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  
+  osc.type = "sine";
+  osc.frequency.value = isAccent ? 1200 : 900;
+  
+  gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+  
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.05);
+}
+
+// === AKOR VE GAM FONKSİYONLARI ===
+
+function parseChordName(chordName) {
+  if (!chordName || typeof chordName !== 'string') return null;
+  
+  chordName = chordName.trim();
+  if (chordName.length === 0) return null;
+  
+  let root = chordName[0].toUpperCase();
+  let suffix = chordName.slice(1);
+  
+  if (suffix.startsWith("#") || suffix.startsWith("b")) {
+    root += suffix[0];
+    suffix = suffix.slice(1);
+  }
+  
+  // Root kontrolü
+  if (!NOTES_SHARP.includes(root) && !NOTES_FLAT.includes(root)) {
+    return null;
+  }
+  
+  // Flat'ı sharp'a çevir
+  const flatToSharp = { "Db": "C#", "Eb": "D#", "Gb": "F#", "Ab": "G#", "Bb": "A#" };
+  if (flatToSharp[root]) root = flatToSharp[root];
+  
+  // Suffix'ten tip belirle
+  let type = "maj";
+  
+  if (suffix === "" || suffix === "M" || suffix === "maj") {
+    type = "maj";
+  } else if (suffix === "m" || suffix === "min" || suffix === "-") {
+    type = "min";
+  } else if (suffix === "°" || suffix === "dim" || suffix === "o") {
+    type = "dim";
+  } else if (suffix === "+" || suffix === "aug") {
+    type = "aug";
+  } else if (suffix === "7" || suffix === "dom7") {
+    type = "dom7";
+  } else if (suffix === "maj7" || suffix === "M7" || suffix === "Δ7") {
+    type = "maj7";
+  } else if (suffix === "m7" || suffix === "min7" || suffix === "-7") {
+    type = "min7";
+  } else if (suffix === "°7" || suffix === "dim7") {
+    type = "dim7";
+  } else if (suffix === "ø7" || suffix === "m7b5" || suffix === "ø") {
+    type = "hdim7";
+  } else if (suffix === "sus2") {
+    type = "sus2";
+  } else if (suffix === "sus4" || suffix === "sus") {
+    type = "sus4";
+  } else if (suffix === "9") {
+    type = "dom9";
+  } else if (suffix === "add9") {
+    type = "add9";
+  }
+  
+  return { root, type, suffix };
+}
+
+function getChordNoteNames(chordName) {
+  const parsed = parseChordName(chordName);
+  if (!parsed) return [];
+  
+  const { root, type } = parsed;
+  const chordDef = CHORD_TYPES[type];
+  if (!chordDef) return [];
+  
+  const rootIndex = NOTES_SHARP.indexOf(root);
+  if (rootIndex === -1) return [];
+  
+  return chordDef.intervals.map(interval => {
+    const noteIndex = (rootIndex + interval) % 12;
+    return NOTES_SHARP[noteIndex];
+  });
+}
+
+function buildScaleChords(key, scaleType, chordTypeOption = "triads") {
+  const pattern = SCALE_PATTERNS[scaleType];
+  if (!pattern) return [];
+  
+  const rootIndex = NOTES_SHARP.indexOf(key);
+  if (rootIndex === -1) return [];
+  
+  const scaleNotes = pattern.map(interval => NOTES_SHARP[(rootIndex + interval) % 12]);
+  const chords = [];
+  
+  for (let degree = 0; degree < Math.min(7, scaleNotes.length); degree++) {
+    const chordRoot = scaleNotes[degree];
+    
+    // 3lü ve 5li
+    const thirdDegree = (degree + 2) % scaleNotes.length;
+    const fifthDegree = (degree + 4) % scaleNotes.length;
+    
+    const thirdNote = scaleNotes[thirdDegree];
+    const fifthNote = scaleNotes[fifthDegree];
+    
+    const rootIdx = NOTES_SHARP.indexOf(chordRoot);
+    const thirdIdx = NOTES_SHARP.indexOf(thirdNote);
+    const fifthIdx = NOTES_SHARP.indexOf(fifthNote);
+    
+    const thirdInterval = (thirdIdx - rootIdx + 12) % 12;
+    const fifthInterval = (fifthIdx - rootIdx + 12) % 12;
+    
+    let quality, suffix;
+    
+    if (thirdInterval === 4 && fifthInterval === 7) {
+      quality = "maj"; suffix = "";
+    } else if (thirdInterval === 3 && fifthInterval === 7) {
+      quality = "min"; suffix = "m";
+    } else if (thirdInterval === 3 && fifthInterval === 6) {
+      quality = "dim"; suffix = "°";
+    } else if (thirdInterval === 4 && fifthInterval === 8) {
+      quality = "aug"; suffix = "+";
+    } else {
+      quality = "maj"; suffix = "";
+    }
+    
+    // 7li ekleme
+    if (chordTypeOption === "sevenths" || (chordTypeOption === "mixed" && Math.random() > 0.5)) {
+      if (quality === "maj") {
+        if (degree === 0 || degree === 3) {
+          suffix = "maj7"; quality = "maj7";
         } else {
-          quality = "maj";
-          suffix = "";
+          suffix = "7"; quality = "dom7";
         }
-
-        // 7li akor istendiyse ekle
-        if (chordTypeOption === "sevenths" || chordTypeOption === "extended" || chordTypeOption === "mixed") {
-          const seventhDegree = (degree + 6) % scaleNotes.length;
-          const seventhNote = scaleNotes[seventhDegree];
-          const seventhIdx = NOTES_SHARP.indexOf(seventhNote);
-          const seventhInterval = (seventhIdx - rootIdx + 12) % 12;
-
-          if (chordTypeOption === "sevenths" || (chordTypeOption === "mixed" && Math.random() > 0.5)) {
-            if (quality === "maj") {
-              if (seventhInterval === 11) {
-                suffix = "maj7";
-                quality = "maj7";
-              } else {
-                suffix = "7";
-                quality = "dom7";
-              }
-            } else if (quality === "min") {
-              suffix = "m7";
-              quality = "min7";
-            } else if (quality === "dim") {
-              suffix = "ø7";
-              quality = "hdim7";
-            }
-          }
-        }
-
-        chords.push({
-          degree: degree + 1,
-          name: chordRoot + suffix,
-          root: chordRoot,
-          quality,
-          suffix
-        });
+      } else if (quality === "min") {
+        suffix = "m7"; quality = "min7";
+      } else if (quality === "dim") {
+        suffix = "ø7"; quality = "hdim7";
       }
-
-      return chords;
     }
+    
+    chords.push({
+      degree: degree + 1,
+      name: chordRoot + suffix,
+      root: chordRoot,
+      quality,
+      suffix
+    });
+  }
+  
+  return chords;
+}
 
-    // Roma rakamı oluştur
-    function romanNumeral(degree, quality) {
-      const numerals = ["I", "II", "III", "IV", "V", "VI", "VII"];
-      let roman = numerals[degree - 1] || "?";
+function romanNumeral(degree, quality) {
+  const numerals = ["I", "II", "III", "IV", "V", "VI", "VII"];
+  let roman = numerals[degree - 1] || "?";
+  
+  if (["min", "min7", "dim", "hdim7"].includes(quality)) {
+    roman = roman.toLowerCase();
+  }
+  
+  if (quality === "dim" || quality === "dim7") roman += "°";
+  else if (quality === "hdim7") roman += "ø";
+  else if (quality === "aug") roman += "+";
+  
+  if (quality.includes("7")) {
+    if (quality === "maj7") roman += "Δ";
+    else roman += "⁷";
+  }
+  
+  return roman;
+}
 
-      // Minör ve diminished küçük harfle
-      if (quality === "min" || quality === "min7" || quality === "dim" || quality === "hdim7") {
-        roman = roman.toLowerCase();
-      }
+// === YARDIMCI FONKSİYONLAR ===
 
-      // Ek semboller
-      if (quality === "dim" || quality === "dim7") {
-        roman += "°";
-      } else if (quality === "hdim7") {
-        roman += "ø";
-      } else if (quality === "aug") {
-        roman += "+";
-      }
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-      // 7li gösterimi
-      if (quality.includes("7") || quality.includes("maj7")) {
-        if (quality === "maj7") {
-          roman += "Δ7";
-        } else if (quality === "dom7") {
-          roman += "7";
-        } else if (quality === "min7") {
-          roman += "7";
-        } else if (quality === "hdim7") {
-          roman += "7";
-        }
-      }
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-      return roman;
-    }
+function getMillisecondsPerBeat() {
+  return 60000 / tempo;
+}
 
-    // === YARDIMCI FONKSİYONLAR ===
+function getChordDuration() {
+  return getMillisecondsPerBeat() * 2;
+}
 
-    function pickRandom(array) {
-      return array[Math.floor(Math.random() * array.length)];
-    }
-
-    function shuffleArray(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    // Tempo'dan milisaniye hesapla (bir vuruş)
-    function getMillisecondsPerBeat() {
-      return 60000 / tempo;
-    }
-
-    // Tempo'dan bir akor süresi (genellikle 2 veya 4 vuruş)
-    function getChordDuration() {
-      return getMillisecondsPerBeat() * 2; // 2 vuruş per akor
-    }
-
-    // ============================================
-    // BÖLÜM 2 SONU - BÖLÜM 3'Ü BURAYA YAPIŞTIRIN
-    // ============================================
 // ============================================
-    // BÖLÜM 3 BAŞLANGICI
-    // ============================================
+// BÖLÜM 2 SONU - BÖLÜM 3'Ü BURAYA YAPIŞTIRIN
+// ============================================
+// ============================================
+// BÖLÜM 3 BAŞLANGICI - UI VE TÜM MODLAR
+// ============================================
 
-    // === AKOR DİZİSİ ÜRETME ===
+// === UI OLUŞTURMA ===
 
-    function generateChordProgression() {
-      const key = document.getElementById("keySelect").value;
-      const scaleType = document.getElementById("scaleSelect").value;
-      const style = document.getElementById("styleSelect").value;
-      const length = parseInt(document.getElementById("lengthSelect").value, 10);
-      const chordTypeOption = document.getElementById("chordTypeSelect").value;
+function initializeApp() {
+  // Ses başlatmayı kullanıcı etkileşimine bırak
+  renderSidebar();
+  renderContentArea();
+  setupEventListeners();
+  updateProgress();
+  
+  // Loading overlay'i gizle ve kullanıcıya tıklamasını söyle
+  const overlay = document.getElementById("loadingOverlay");
+  overlay.innerHTML = `
+    <div class="loading-content">
+      <div class="loading-icon">🎹</div>
+      <div class="loading-text">Başlamak için tıklayın</div>
+    </div>
+  `;
+  
+  // Herhangi bir tıklamada ses motorunu başlat
+  const startAudio = async () => {
+    overlay.innerHTML = `
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Piyano sesleri yükleniyor...</div>
+      </div>
+    `;
+    await initAudio();
+    document.removeEventListener("click", startAudio);
+    document.removeEventListener("touchstart", startAudio);
+  };
+  
+  document.addEventListener("click", startAudio, { once: true });
+  document.addEventListener("touchstart", startAudio, { once: true });
+}
 
-      // Gam akorlarını oluştur
-      const scaleChords = buildScaleChords(key, scaleType, chordTypeOption);
-      if (!scaleChords.length) {
-        alert("Bu ton/gam kombinasyonu için akorlar oluşturulamadı.");
+function renderSidebar() {
+  const sidebarHTML = getSidebarHTML('desktop');
+  document.getElementById("sidebar").innerHTML = sidebarHTML;
+  
+  // Mobil ayarlar için farklı ID'lerle
+  document.getElementById("mobileSettingsContent").innerHTML = getSidebarHTML('mobile');
+}
+
+function getSidebarHTML(prefix) {
+  const idPrefix = prefix === 'mobile' ? 'mobile_' : '';
+  
+  return `
+    <!-- Ton & Gam -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🎵</div>
+        <div class="panel-title">Ton & Gam</div>
+      </div>
+      <div class="controls-grid">
+        <div class="control-group">
+          <label class="control-label">Ton</label>
+          <select class="sync-control" data-sync="keySelect" id="${idPrefix}keySelect">
+            ${NOTES_SHARP.map(n => `<option value="${n}">${n}</option>`).join("")}
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Gam</label>
+          <select class="sync-control" data-sync="scaleSelect" id="${idPrefix}scaleSelect">
+            <option value="major">Major</option>
+            <option value="naturalMinor">Minor</option>
+            <option value="harmonicMinor">Harm. Minör</option>
+            <option value="dorian">Dorian</option>
+            <option value="phrygian">Phrygian</option>
+            <option value="lydian">Lydian</option>
+            <option value="mixolydian">Mixolydian</option>
+            <option value="pentatonicMajor">Penta. Maj</option>
+            <option value="blues">Blues</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stil & Uzunluk -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🎸</div>
+        <div class="panel-title">Stil</div>
+      </div>
+      <div class="controls-grid">
+        <div class="control-group">
+          <label class="control-label">Tür</label>
+          <select class="sync-control" data-sync="styleSelect" id="${idPrefix}styleSelect">
+            <option value="pop">Pop</option>
+            <option value="rock">Rock</option>
+            <option value="jazz">Jazz</option>
+            <option value="blues">Blues</option>
+            <option value="ballad">Ballad</option>
+            <option value="edm">EDM</option>
+            <option value="latin">Latin</option>
+            <option value="random">Rastgele</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Akor Sayısı</label>
+          <select class="sync-control" data-sync="lengthSelect" id="${idPrefix}lengthSelect">
+            <option value="4">4</option>
+            <option value="8" selected>8</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        <div class="control-group full-width">
+          <label class="control-label">Akor Tipi</label>
+          <select class="sync-control" data-sync="chordTypeSelect" id="${idPrefix}chordTypeSelect">
+            <option value="triads">Üçlüler</option>
+            <option value="sevenths">7'li Akorlar</option>
+            <option value="mixed">Karışık</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Artikülasyon -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🎼</div>
+        <div class="panel-title">Artikülasyon</div>
+      </div>
+      <div class="articulation-panel">
+        <button class="articulation-btn active" data-articulation="normal">
+          <span class="articulation-icon">—</span>Normal
+        </button>
+        <button class="articulation-btn" data-articulation="staccato">
+          <span class="articulation-icon">•</span>Staccato
+        </button>
+        <button class="articulation-btn" data-articulation="legato">
+          <span class="articulation-icon">⌒</span>Legato
+        </button>
+        <button class="articulation-btn" data-articulation="arpeggio">
+          <span class="articulation-icon">⟿</span>Arpeggio
+        </button>
+      </div>
+    </div>
+
+    <!-- Ses Ayarları -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">🔊</div>
+        <div class="panel-title">Ses</div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Ses Seviyesi</label>
+        <div class="slider-container">
+          <input type="range" class="sync-control" data-sync="volumeSlider" id="${idPrefix}volumeSlider" min="0" max="100" value="70">
+          <div class="slider-value" id="${idPrefix}volumeValue">70%</div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Oktav</label>
+        <select class="sync-control" data-sync="octaveSelect" id="${idPrefix}octaveSelect">
+          <option value="2">2 (Çok Düşük)</option>
+          <option value="3">3 (Düşük)</option>
+          <option value="4" selected>4 (Orta)</option>
+          <option value="5">5 (Yüksek)</option>
+        </select>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Reverb</span>
+        <button class="toggle-btn active sync-control" data-sync="reverbToggle" id="${idPrefix}reverbToggle"></button>
+      </div>
+    </div>
+
+    <!-- Presetler -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-icon">⚡</div>
+        <div class="panel-title">Presetler</div>
+      </div>
+      <div class="preset-list">
+        <button class="preset-chip" data-preset="pop1">I-V-vi-IV</button>
+        <button class="preset-chip" data-preset="jazz1">ii-V-I</button>
+        <button class="preset-chip" data-preset="blues1">Blues</button>
+        <button class="preset-chip" data-preset="rock1">I-IV-V</button>
+        <button class="preset-chip" data-preset="sad1">Sad</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderContentArea() {
+  const content = document.getElementById("contentArea");
+  content.innerHTML = `
+    <!-- Transport Bar -->
+    <div class="transport-bar">
+      <div class="transport-row">
+        <button class="transport-btn" id="stopBtn" title="Durdur">⏹</button>
+        <button class="transport-btn play-btn" id="playBtn" title="Çal">▶</button>
+        <button class="transport-btn" id="loopBtn" title="Döngü">🔁</button>
+        <button class="transport-btn" id="metronomeBtn" title="Metronom">🥁</button>
+      </div>
+      
+      <div class="tempo-section">
+        <button class="tempo-btn" id="tempoDown">−</button>
+        <div>
+          <div class="tempo-value" id="tempoDisplay">${tempo}</div>
+          <div class="tempo-label">BPM</div>
+        </div>
+        <button class="tempo-btn" id="tempoUp">+</button>
+      </div>
+      
+      <div class="metronome-section">
+        <div class="metronome-visual" id="metronomeVisual">
+          <div class="beat-dot"></div>
+          <div class="beat-dot"></div>
+          <div class="beat-dot"></div>
+          <div class="beat-dot"></div>
+        </div>
+      </div>
+      
+      <div class="progress-section">
+        <div class="progress-info">
+          <span id="currentChordNum">Akor 0/0</span>
+          <span id="currentTime">0:00</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <button class="btn btn-primary btn-full" id="generateBtn">
+      ✨ Yeni Akor Dizisi Üret
+    </button>
+
+    <!-- Chord Display -->
+    <div class="chord-display" id="chordDisplayPanel">
+      <div class="chord-display-header">
+        <div class="chord-display-title">Akor Dizisi</div>
+        <div class="chord-info-tags">
+          <div class="info-tag">Ton: <span id="tagKey">C</span></div>
+          <div class="info-tag">Gam: <span id="tagScale">Major</span></div>
+          <div class="info-tag">Tür: <span id="tagStyle">Pop</span></div>
+        </div>
+      </div>
+      <div class="chords-container" id="chordsContainer">
+        <div class="empty-state">
+          <div class="empty-state-icon">🎹</div>
+          <p>Akor dizisi üretmek için butona tıklayın</p>
+        </div>
+      </div>
+      <div class="roman-line" id="romanLine">Roma rakamları burada görünecek</div>
+    </div>
+
+    <!-- Piano -->
+    <div class="piano-section" id="pianoSection">
+      <div class="piano-header">
+        <div class="piano-title">🎹 Piyano</div>
+        <div class="current-chord-display">
+          <span class="current-chord-name" id="currentChordName">-</span>
+          <span class="current-chord-notes" id="currentChordNotes"></span>
+        </div>
+      </div>
+      <div class="piano-wrapper">
+        <svg id="pianoSvg" class="piano-svg" viewBox="0 0 700 140" preserveAspectRatio="xMidYMid meet">
+          ${generatePianoSVG(currentOctave)}
+        </svg>
+      </div>
+    </div>
+
+    <!-- Training Panel -->
+    <div class="panel" id="trainingPanel" style="display: none;">
+      <div class="panel-header">
+        <div class="panel-icon">📊</div>
+        <div class="panel-title">Antrenman İstatistikleri</div>
+      </div>
+      <div class="training-stats">
+        <div class="stat-box">
+          <div class="stat-value" id="statCorrect">0</div>
+          <div class="stat-label">Doğru</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Toplam</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="statAccuracy">0%</div>
+          <div class="stat-label">Başarı</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note Finder Panel -->
+    <div class="panel" id="noteFinderPanel" style="display: none;">
+      <div class="panel-header">
+        <div class="panel-icon">🎯</div>
+        <div class="panel-title">Nota Yeri Bulma</div>
+      </div>
+      <div class="note-finder-modes">
+        <button class="btn btn-secondary" id="noteFinderLearn">📚 Öğren</button>
+        <button class="btn btn-secondary" id="noteFinderTest">✏️ Test</button>
+      </div>
+      <div id="noteFinderTarget" style="display: none;">
+        <div class="target-note-display">
+          <span class="target-note-name" id="targetNoteName">C</span>
+          <span class="target-note-octave" id="targetNoteOctave">4</span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center;">Bu notayı piyanoda bulun!</p>
+      </div>
+      <div class="note-finder-feedback" id="noteFinderFeedback"></div>
+      <div class="note-finder-stats">
+        <div class="stat-mini">
+          <span class="stat-mini-value" id="nfCorrect">0</span>
+          <span class="stat-mini-label">Doğru</span>
+        </div>
+        <div class="stat-mini">
+          <span class="stat-mini-value" id="nfWrong">0</span>
+          <span class="stat-mini-label">Yanlış</span>
+        </div>
+        <div class="stat-mini">
+          <span class="stat-mini-value" id="nfStreak">0</span>
+          <span class="stat-mini-label">Seri</span>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" id="noteFinderNext" style="margin-top: 12px;">🎲 Yeni Nota</button>
+    </div>
+
+    <!-- Chord Recognition Panel -->
+    <div class="panel" id="chordRecogPanel" style="display: none;">
+      <div class="panel-header">
+        <div class="panel-icon">👂</div>
+        <div class="panel-title">Akor Tanıma</div>
+      </div>
+      <div class="control-group" style="margin-bottom: 12px;">
+        <label class="control-label">Zorluk</label>
+        <select id="chordRecogDifficulty">
+          <option value="easy">Kolay (Maj/Min)</option>
+          <option value="medium">Orta (+Dim/Aug)</option>
+          <option value="hard">Zor (+7'li)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full" id="chordRecogPlay">🔊 Akoru Çal</button>
+      <div id="chordRecogAnswer" style="display: none; margin-top: 16px;">
+        <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 8px;">Kök Nota:</p>
+        <div class="root-note-options" id="rootNoteOptions"></div>
+        <p style="color: var(--text-muted); font-size: 0.8rem; margin: 12px 0 8px;">Akor Tipi:</p>
+        <div class="chord-type-options" id="chordTypeOptions"></div>
+        <button class="btn btn-secondary btn-full" id="chordRecogSubmit" style="margin-top: 12px;">✓ Kontrol Et</button>
+      </div>
+      <div class="chord-recog-result" id="chordRecogResult"></div>
+      <div class="chord-recog-stats">
+        <div class="stat-mini">
+          <span class="stat-mini-value" id="crCorrect">0</span>
+          <span class="stat-mini-label">Doğru</span>
+        </div>
+        <div class="stat-mini">
+          <span class="stat-mini-value" id="crTotal">0</span>
+          <span class="stat-mini-label">Toplam</span>
+        </div>
+        <div class="stat-mini">
+          <span class="stat-mini-value" id="crAccuracy">0%</span>
+          <span class="stat-mini-label">Başarı</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Detection Panel -->
+    <div class="panel" id="keyDetectPanel" style="display: none;">
+      <div class="panel-header">
+        <div class="panel-icon">🔑</div>
+        <div class="panel-title">Tonalite Analizi</div>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 12px;">Akor dizisini analiz ederek tonaliteyi tespit eder.</p>
+      <button class="btn btn-primary btn-full" id="analyzeKeyBtn">🔍 Analiz Et</button>
+      <div class="control-group" style="margin-top: 12px;">
+        <label class="control-label">Manuel Giriş (ör: C Am F G)</label>
+        <input type="text" id="manualChordInput" placeholder="C Am F G">
+      </div>
+      <button class="btn btn-secondary btn-full" id="analyzeManualBtn" style="margin-top: 8px;">Manuel Analiz</button>
+      <div id="keyDetectResults" style="display: none; margin-top: 16px;">
+        <div class="key-result-primary">
+          <span class="key-result-label">Tespit Edilen Tonalite</span>
+          <span class="key-result-value" id="detectedKey">-</span>
+        </div>
+        <div class="key-result-confidence">
+          <span class="key-result-label">Güven:</span>
+          <div class="confidence-bar"><div class="confidence-fill" id="confidenceFill"></div></div>
+          <span class="confidence-value" id="confidenceValue">0%</span>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <span class="key-result-label">Alternatifler:</span>
+          <div class="alternative-keys" id="alternativeKeys"></div>
+        </div>
+        <div class="analysis-section">
+          <span class="analysis-title">📊 Nota Dağılımı</span>
+          <div class="note-distribution" id="noteDistribution"></div>
+        </div>
+        <div class="analysis-section">
+          <span class="analysis-title">🎼 Fonksiyonel Analiz</span>
+          <div class="functional-analysis" id="functionalAnalysis"></div>
+        </div>
+        <div class="analysis-section">
+          <span class="analysis-title">🎭 Modal Karakter</span>
+          <div class="modal-character" id="modalCharacter"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generatePianoSVG(baseOctave = 4) {
+  let svg = '';
+  const whiteKeyWidth = 50;
+  const blackKeyWidth = 32;
+  const whiteKeyHeight = 140;
+  const blackKeyHeight = 85;
+  
+  // 2 oktav: baseOctave ve baseOctave+1
+  const octave1 = baseOctave;
+  const octave2 = baseOctave + 1;
+  
+  const whiteNotes = [
+    {note: "C", octave: octave1}, {note: "D", octave: octave1}, {note: "E", octave: octave1},
+    {note: "F", octave: octave1}, {note: "G", octave: octave1}, {note: "A", octave: octave1}, {note: "B", octave: octave1},
+    {note: "C", octave: octave2}, {note: "D", octave: octave2}, {note: "E", octave: octave2},
+    {note: "F", octave: octave2}, {note: "G", octave: octave2}, {note: "A", octave: octave2}, {note: "B", octave: octave2}
+  ];
+  
+  // Beyaz tuşlar
+  whiteNotes.forEach((n, i) => {
+    const x = i * whiteKeyWidth;
+    svg += `<rect class="piano-key white-key" data-note="${n.note}" data-octave="${n.octave}" 
+            x="${x}" y="0" width="${whiteKeyWidth}" height="${whiteKeyHeight}" rx="0" ry="4"/>`;
+  });
+  
+  // Siyah tuşlar
+  const blackPositions = [
+    {note: "C#", octave: octave1, offset: 0}, {note: "D#", octave: octave1, offset: 1},
+    {note: "F#", octave: octave1, offset: 3}, {note: "G#", octave: octave1, offset: 4}, {note: "A#", octave: octave1, offset: 5},
+    {note: "C#", octave: octave2, offset: 7}, {note: "D#", octave: octave2, offset: 8},
+    {note: "F#", octave: octave2, offset: 10}, {note: "G#", octave: octave2, offset: 11}, {note: "A#", octave: octave2, offset: 12}
+  ];
+  
+  blackPositions.forEach(n => {
+    const x = (n.offset + 1) * whiteKeyWidth - blackKeyWidth / 2 - 2;
+    svg += `<rect class="piano-key black-key" data-note="${n.note}" data-octave="${n.octave}" 
+            x="${x}" y="0" width="${blackKeyWidth}" height="${blackKeyHeight}" rx="0" ry="3"/>`;
+  });
+  
+  // Nota isimleri
+  whiteNotes.forEach((n, i) => {
+    const x = i * whiteKeyWidth + whiteKeyWidth / 2;
+    const label = (i === 0 || i === 7) ? `${n.note}${n.octave}` : n.note;
+    svg += `<text x="${x}" y="130" text-anchor="middle" font-size="10" fill="#888" font-family="JetBrains Mono">${label}</text>`;
+  });
+  
+  return svg;
+}
+
+// Piyanoyu yeniden çiz
+function updatePianoOctave() {
+  const pianoSvg = document.getElementById("pianoSvg");
+  pianoSvg.innerHTML = generatePianoSVG(currentOctave);
+  
+  // Event listener'ları tekrar ekle
+  pianoSvg.querySelectorAll(".piano-key").forEach(key => {
+    const handler = () => {
+      const note = key.dataset.note;
+      const octave = parseInt(key.dataset.octave);
+      playNote(note, octave, 1.0, 1.0);
+      
+      if (currentMode === "noteFinder" && noteFinderActive) {
+        checkNoteFinder(note, octave, key);
+      }
+    };
+    key.addEventListener("click", handler);
+    key.addEventListener("touchstart", (e) => { e.preventDefault(); handler(); }, { passive: false });
+  });
+}
+
+// === AKOR DİZİSİ OLUŞTURMA ===
+
+function generateChordProgression() {
+  const key = document.getElementById("keySelect").value;
+  const scaleType = document.getElementById("scaleSelect").value;
+  const style = document.getElementById("styleSelect").value;
+  const length = parseInt(document.getElementById("lengthSelect").value, 10);
+  const chordTypeOption = document.getElementById("chordTypeSelect").value;
+  
+  const scaleChords = buildScaleChords(key, scaleType, chordTypeOption);
+  if (!scaleChords.length) {
+    alert("Akorlar oluşturulamadı!");
+    return;
+  }
+  
+  let degreeSequence = [];
+  
+  if (style === "random") {
+    let lastDegree = null;
+    for (let i = 0; i < length; i++) {
+      let d;
+      do {
+        d = Math.floor(Math.random() * scaleChords.length) + 1;
+      } while (d === lastDegree && scaleChords.length > 1);
+      degreeSequence.push(d);
+      lastDegree = d;
+    }
+  } else {
+    const patterns = PROGRESSION_PATTERNS[style];
+    if (patterns && patterns.length > 0) {
+      const pattern = pickRandom(patterns);
+      while (degreeSequence.length < length) {
+        degreeSequence = degreeSequence.concat(pattern.degrees);
+      }
+      degreeSequence = degreeSequence.slice(0, length);
+    } else {
+      degreeSequence = [1, 4, 5, 1];
+    }
+  }
+  
+  currentChords = degreeSequence.map(degree => {
+    const adjustedDegree = ((degree - 1) % scaleChords.length) + 1;
+    return { ...scaleChords[adjustedDegree - 1], degree: adjustedDegree };
+  });
+  
+  updateChordDisplay();
+  updateTags(key, scaleType, style);
+  
+  if (currentChords.length > 0) {
+    selectChord(0);
+  }
+  
+  stopPlayback();
+  startPlayback();
+}
+
+function updateChordDisplay() {
+  const container = document.getElementById("chordsContainer");
+  
+  if (currentChords.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎹</div><p>Akor dizisi üretmek için butona tıklayın</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = currentChords.map((chord, idx) => {
+    const notes = getChordNoteNames(chord.name);
+    return `
+      <div class="chord-chip" data-index="${idx}" data-quality="${chord.quality}">
+        <span class="chord-index">${idx + 1}</span>
+        <span class="chord-name">${chord.name}</span>
+        <span class="chord-roman">${romanNumeral(chord.degree, chord.quality)}</span>
+        <span class="chord-notes-mini">${notes.join("-")}</span>
+      </div>
+    `;
+  }).join("");
+  
+  // Roma rakamları
+  document.getElementById("romanLine").textContent = 
+    currentChords.map(ch => romanNumeral(ch.degree, ch.quality)).join("  —  ");
+  
+  // Event listeners
+  container.querySelectorAll(".chord-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const idx = parseInt(chip.dataset.index);
+      selectChord(idx);
+      playChord(currentChords[idx].name, 1.0);
+    });
+  });
+}
+
+function selectChord(index) {
+  document.querySelectorAll(".chord-chip").forEach(c => c.classList.remove("active"));
+  const chips = document.querySelectorAll(".chord-chip");
+  if (chips[index]) chips[index].classList.add("active");
+  
+  currentChordIndex = index;
+  const chord = currentChords[index];
+  if (chord) {
+    highlightPiano(chord.name);
+    updateCurrentChordInfo(chord.name);
+  }
+}
+
+function highlightPlayingChord(index) {
+  document.querySelectorAll(".chord-chip").forEach(c => c.classList.remove("playing"));
+  const chips = document.querySelectorAll(".chord-chip");
+  if (chips[index]) chips[index].classList.add("playing");
+}
+
+function updateTags(key, scaleType, style) {
+  document.getElementById("tagKey").textContent = key;
+  const scaleNames = { major: "Major", naturalMinor: "Minor", harmonicMinor: "Harm.Min", dorian: "Dorian", phrygian: "Phrygian", lydian: "Lydian", mixolydian: "Mixo", pentatonicMajor: "Penta", blues: "Blues" };
+  document.getElementById("tagScale").textContent = scaleNames[scaleType] || scaleType;
+  const styleNames = { pop: "Pop", rock: "Rock", jazz: "Jazz", blues: "Blues", ballad: "Ballad", edm: "EDM", latin: "Latin", random: "Random" };
+  document.getElementById("tagStyle").textContent = styleNames[style] || style;
+}
+
+function updateCurrentChordInfo(chordName) {
+  document.getElementById("currentChordName").textContent = chordName;
+  document.getElementById("currentChordNotes").textContent = getChordNoteNames(chordName).join(" - ");
+}
+
+// === PİYANO ===
+
+function highlightPiano(chordName) {
+  document.querySelectorAll(".piano-key").forEach(k => k.classList.remove("active"));
+  const notes = getChordNoteNames(chordName);
+  
+  // Mevcut piyano oktavlarına göre highlight
+  document.querySelectorAll(".piano-key").forEach(k => {
+    const keyOctave = parseInt(k.dataset.octave);
+    // Piyano gösterilen oktavlardaki notaları highlight et
+    if (notes.includes(k.dataset.note) && (keyOctave === currentOctave || keyOctave === currentOctave + 1)) {
+      k.classList.add("active");
+    }
+  });
+}
+
+function clearPianoHighlight() {
+  document.querySelectorAll(".piano-key").forEach(k => k.classList.remove("active", "hint", "correct-hit", "wrong-hit"));
+}
+
+// === PLAYBACK ===
+
+function startPlayback() {
+  if (currentChords.length === 0 || isPlaying) return;
+  
+  isPlaying = true;
+  currentChordIndex = 0;
+  updatePlayButton();
+  
+  const chordDuration = getChordDuration();
+  
+  // İlk akoru çal
+  const firstChord = currentChords[0];
+  playChord(firstChord.name, chordDuration / 1000 * 0.9);
+  selectChord(0);
+  highlightPlayingChord(0);
+  currentChordIndex = 1;
+  
+  playbackInterval = setInterval(() => {
+    if (currentChordIndex >= currentChords.length) {
+      if (isLooping) {
+        currentChordIndex = 0;
+      } else {
+        stopPlayback();
         return;
       }
+    }
+    
+    const chord = currentChords[currentChordIndex];
+    playChord(chord.name, chordDuration / 1000 * 0.9);
+    selectChord(currentChordIndex);
+    highlightPlayingChord(currentChordIndex);
+    updateProgress();
+    currentChordIndex++;
+  }, chordDuration);
+}
 
-      let degreeSequence = [];
+function stopPlayback() {
+  isPlaying = false;
+  if (playbackInterval) {
+    clearInterval(playbackInterval);
+    playbackInterval = null;
+  }
+  currentChordIndex = 0;
+  updatePlayButton();
+  updateProgress();
+  document.querySelectorAll(".chord-chip").forEach(c => c.classList.remove("playing"));
+}
 
-      if (style === "random") {
-        // Tam rastgele
-        let lastDegree = null;
-        for (let i = 0; i < length; i++) {
-          let d;
-          do {
-            d = Math.floor(Math.random() * scaleChords.length) + 1;
-          } while (d === lastDegree && scaleChords.length > 1);
-          degreeSequence.push(d);
-          lastDegree = d;
-        }
-      } else {
-        // Stil bazlı kalıp seç
-        const patterns = PROGRESSION_PATTERNS[style];
-        if (patterns && patterns.length > 0) {
-          const selectedPattern = pickRandom(patterns);
-          const patternDegrees = selectedPattern.degrees;
-
-          // Kalıbı uzunluğa göre tekrarla
-          while (degreeSequence.length < length) {
-            degreeSequence = degreeSequence.concat(patternDegrees);
-          }
-          degreeSequence = degreeSequence.slice(0, length);
-        } else {
-          // Fallback: basit I-IV-V-I
-          degreeSequence = [1, 4, 5, 1];
-          while (degreeSequence.length < length) {
-            degreeSequence = degreeSequence.concat([1, 4, 5, 1]);
-          }
-          degreeSequence = degreeSequence.slice(0, length);
-        }
-      }
-
-      // Derece dizisini akor objelerine çevir
-      currentChords = degreeSequence.map(degree => {
-        // Derece gam uzunluğunu aşarsa modulo al
-        const adjustedDegree = ((degree - 1) % scaleChords.length) + 1;
-        const chord = scaleChords[adjustedDegree - 1];
-        return {
-          ...chord,
-          degree: adjustedDegree
-        };
-      });
-
-      // UI'ı güncelle
-      updateChordDisplay();
-      updateTags(key, scaleType, style);
-      
-      // İlk akoru göster
-      if (currentChords.length > 0) {
-        selectChord(0);
-      }
-
-      // Otomatik çalmayı başlat
-      stopPlayback();
+function togglePlayback() {
+  if (isPlaying) {
+    stopPlayback();
+  } else {
+    if (currentChords.length === 0) {
+      generateChordProgression();
+    } else {
       startPlayback();
     }
+  }
+}
 
-    // === AKOR GÖSTERME ===
+function toggleLoop() {
+  isLooping = !isLooping;
+  document.getElementById("loopBtn").classList.toggle("active", isLooping);
+}
 
-    function updateChordDisplay() {
-      const container = document.getElementById("chordsContainer");
-      container.innerHTML = "";
+function updatePlayButton() {
+  const btn = document.getElementById("playBtn");
+  btn.textContent = isPlaying ? "⏸" : "▶";
+  btn.classList.toggle("playing", isPlaying);
+}
 
-      if (currentChords.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-state-icon">🎹</div>
-            <p>Akor dizisi üretmek için butona tıklayın</p>
-          </div>
-        `;
-        return;
-      }
+function updateProgress() {
+  const fill = document.getElementById("progressFill");
+  const numEl = document.getElementById("currentChordNum");
+  const timeEl = document.getElementById("currentTime");
+  
+  if (currentChords.length === 0) {
+    fill.style.width = "0%";
+    numEl.textContent = "Akor 0/0";
+    timeEl.textContent = "0:00";
+    return;
+  }
+  
+  const progress = (currentChordIndex / currentChords.length) * 100;
+  fill.style.width = `${Math.min(progress, 100)}%`;
+  numEl.textContent = `Akor ${Math.min(currentChordIndex + 1, currentChords.length)}/${currentChords.length}`;
+  
+  const totalMs = currentChords.length * getChordDuration();
+  const currentMs = currentChordIndex * getChordDuration();
+  const formatTime = (ms) => {
+    const s = Math.floor(ms / 1000);
+    return `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
+  };
+  timeEl.textContent = `${formatTime(currentMs)} / ${formatTime(totalMs)}`;
+}
 
-      currentChords.forEach((chord, index) => {
-        const chip = document.createElement("div");
-        chip.className = "chord-chip";
-        chip.dataset.index = index;
-        chip.dataset.quality = chord.quality;
+// === METRONOM ===
 
-        const noteNames = getChordNoteNames(chord.name);
+function startMetronome() {
+  if (metronomeInterval) return;
+  metronomeOn = true;
+  currentBeat = 0;
+  document.getElementById("metronomeBtn").classList.add("active");
+  
+  const beatDuration = getMillisecondsPerBeat();
+  
+  playMetronomeClick(true);
+  updateMetronomeVisual(0);
+  currentBeat = 1;
+  
+  metronomeInterval = setInterval(() => {
+    playMetronomeClick(currentBeat === 0);
+    updateMetronomeVisual(currentBeat);
+    currentBeat = (currentBeat + 1) % beatsPerMeasure;
+  }, beatDuration);
+}
 
-        chip.innerHTML = `
-          <span class="chord-index">${index + 1}</span>
-          <span class="chord-name">${chord.name}</span>
-          <span class="chord-roman">${romanNumeral(chord.degree, chord.quality)}</span>
-          <span class="chord-notes-mini">${noteNames.join(" - ")}</span>
-        `;
+function stopMetronome() {
+  metronomeOn = false;
+  document.getElementById("metronomeBtn").classList.remove("active");
+  if (metronomeInterval) {
+    clearInterval(metronomeInterval);
+    metronomeInterval = null;
+  }
+  document.querySelectorAll(".beat-dot").forEach(d => d.classList.remove("active", "accent"));
+}
 
-        chip.addEventListener("click", () => {
-          selectChord(index);
-          playChord(chord.name, 0.8);
-        });
+function toggleMetronome() {
+  metronomeOn ? stopMetronome() : startMetronome();
+}
 
-        container.appendChild(chip);
-      });
-
-      // Roma rakamları satırını güncelle
-      const romanLine = document.getElementById("romanLine");
-      const romanNumerals = currentChords.map(ch => romanNumeral(ch.degree, ch.quality));
-      romanLine.textContent = romanNumerals.join("  —  ");
+function updateMetronomeVisual(beat) {
+  document.querySelectorAll(".beat-dot").forEach((d, i) => {
+    d.classList.remove("active", "accent");
+    if (i === beat) {
+      d.classList.add("active");
+      if (beat === 0) d.classList.add("accent");
     }
+  });
+}
 
-    function selectChord(index) {
-      // Önceki seçimi kaldır
-      document.querySelectorAll(".chord-chip").forEach(chip => {
-        chip.classList.remove("active");
-      });
+function changeTempo(delta) {
+  tempo = Math.max(40, Math.min(240, tempo + delta));
+  document.getElementById("tempoDisplay").textContent = tempo;
+  
+  if (metronomeOn) { stopMetronome(); startMetronome(); }
+  if (isPlaying) { stopPlayback(); startPlayback(); }
+}
 
-      // Yeni seçimi işaretle
-      const chips = document.querySelectorAll(".chord-chip");
-      if (chips[index]) {
-        chips[index].classList.add("active");
-      }
+// === PRESET ===
 
-      currentChordIndex = index;
+function applyPreset(presetId) {
+  const preset = PRESETS[presetId];
+  if (!preset) return;
+  
+  document.getElementById("keySelect").value = preset.key;
+  document.getElementById("scaleSelect").value = preset.scale;
+  if (preset.chordType) document.getElementById("chordTypeSelect").value = preset.chordType;
+  
+  const scaleChords = buildScaleChords(preset.key, preset.scale, preset.chordType || "triads");
+  currentChords = preset.degrees.map(d => {
+    const adj = ((d - 1) % scaleChords.length) + 1;
+    return { ...scaleChords[adj - 1], degree: adj };
+  });
+  
+  updateChordDisplay();
+  updateTags(preset.key, preset.scale, "preset");
+  document.getElementById("tagStyle").textContent = preset.name;
+  
+  if (currentChords.length > 0) selectChord(0);
+}
 
-      // Piyano ve nota gösterimini güncelle
-      const chord = currentChords[index];
-      if (chord) {
-        highlightPiano(chord.name);
-        updateStaffNotation(chord.name);
-        updateCurrentChordInfo(chord.name);
-      }
+// === MOD DEĞİŞTİRME ===
+
+function setMode(mode) {
+  currentMode = mode;
+  
+  document.querySelectorAll(".mode-tab").forEach(t => t.classList.remove("active"));
+  document.querySelector(`.mode-tab[data-mode="${mode}"]`)?.classList.add("active");
+  
+  // Panelleri gizle
+  ["trainingPanel", "noteFinderPanel", "chordRecogPanel", "keyDetectPanel"].forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
+  
+  // Seçilen paneli göster
+  switch(mode) {
+    case "practice":
+      document.getElementById("trainingPanel").style.display = "block";
+      break;
+    case "noteFinder":
+      document.getElementById("noteFinderPanel").style.display = "block";
+      initNoteFinder();
+      break;
+    case "chordRecog":
+      document.getElementById("chordRecogPanel").style.display = "block";
+      initChordRecognition();
+      break;
+    case "keyDetect":
+      document.getElementById("keyDetectPanel").style.display = "block";
+      break;
+  }
+}
+
+// === NOTA BULMA ===
+
+function initNoteFinder() {
+  noteFinderActive = false;
+  noteFinderStats = { correct: 0, wrong: 0, streak: 0 };
+  updateNoteFinderStats();
+  document.getElementById("noteFinderTarget").style.display = "none";
+  document.getElementById("noteFinderFeedback").textContent = "";
+}
+
+function startNoteFinderMode(mode) {
+  noteFinderMode = mode;
+  noteFinderActive = true;
+  document.getElementById("noteFinderLearn").classList.toggle("active", mode === "learn");
+  document.getElementById("noteFinderTest").classList.toggle("active", mode === "test");
+  generateNoteFinderQuestion();
+}
+
+function generateNoteFinderQuestion() {
+  noteFinderActive = true;
+  clearPianoHighlight();
+  
+  noteFinderTarget.note = pickRandom(NOTES_SHARP);
+  noteFinderTarget.octave = pickRandom([currentOctave, currentOctave + 1]);
+  
+  document.getElementById("noteFinderTarget").style.display = "block";
+  document.getElementById("targetNoteName").textContent = noteFinderTarget.note;
+  document.getElementById("targetNoteOctave").textContent = noteFinderTarget.octave;
+  document.getElementById("noteFinderFeedback").textContent = "";
+  document.getElementById("noteFinderFeedback").className = "note-finder-feedback";
+  
+  if (noteFinderMode === "learn") {
+    playNote(noteFinderTarget.note, noteFinderTarget.octave, 1.0, 1.0);
+    setTimeout(() => highlightTargetNote(), 800);
+  }
+}
+
+function highlightTargetNote() {
+  document.querySelectorAll(".piano-key").forEach(k => {
+    k.classList.remove("hint");
+    if (k.dataset.note === noteFinderTarget.note && parseInt(k.dataset.octave) === noteFinderTarget.octave) {
+      k.classList.add("hint");
     }
-
-    function highlightPlayingChord(index) {
-      document.querySelectorAll(".chord-chip").forEach(chip => {
-        chip.classList.remove("playing");
-      });
-
-      const chips = document.querySelectorAll(".chord-chip");
-      if (chips[index]) {
-        chips[index].classList.add("playing");
-      }
-    }
-
-    function updateTags(key, scaleType, style) {
-      document.getElementById("tagKey").textContent = key;
-
-      const scaleNames = {
-        major: "Major",
-        naturalMinor: "Natural Minor",
-        harmonicMinor: "Harmonik Minör",
-        melodicMinor: "Melodik Minör",
-        dorian: "Dorian",
-        phrygian: "Phrygian",
-        lydian: "Lydian",
-        mixolydian: "Mixolydian",
-        locrian: "Locrian",
-        pentatonicMajor: "Pentatonik Major",
-        pentatonicMinor: "Pentatonik Minor",
-        blues: "Blues"
-      };
-      document.getElementById("tagScale").textContent = scaleNames[scaleType] || scaleType;
-
-      const styleNames = {
-        pop: "Pop", rock: "Rock", ballad: "Ballad", jazz: "Jazz",
-        blues: "Blues", funk: "Funk", soul: "Soul/R&B", metal: "Metal",
-        edm: "EDM", lofi: "Lo-Fi", latin: "Latin", classical: "Classical",
-        gospel: "Gospel", country: "Country", reggae: "Reggae", bossa: "Bossa Nova",
-        random: "Rastgele"
-      };
-      document.getElementById("tagStyle").textContent = styleNames[style] || style;
-    }
-
-    function updateCurrentChordInfo(chordName) {
-      document.getElementById("currentChordName").textContent = chordName;
-      const noteNames = getChordNoteNames(chordName);
-      document.getElementById("currentChordNotes").textContent = noteNames.join(" - ");
-    }
-
-    // === PİYANO GÖSTERİMİ ===
-
-    function highlightPiano(chordName) {
-      // Tüm tuşları temizle
-      document.querySelectorAll(".piano-key").forEach(key => {
-        key.classList.remove("active");
-      });
-
-      const noteNames = getChordNoteNames(chordName);
-
-      // Eşleşen tuşları işaretle
-      document.querySelectorAll(".piano-key").forEach(key => {
-        const keyNote = key.dataset.note;
-        if (noteNames.includes(keyNote)) {
-          key.classList.add("active");
-        }
-      });
-    }
-
-    function clearPianoHighlight() {
-      document.querySelectorAll(".piano-key").forEach(key => {
-        key.classList.remove("active");
-      });
-    }
-
-    // === NOTA YAZIMI (STAFF NOTATION) ===
-
-    function updateStaffNotation(chordName) {
-      const notesGroup = document.getElementById("notesGroup");
-      notesGroup.innerHTML = "";
-
-      const noteNames = getChordNoteNames(chordName);
-      if (noteNames.length === 0) return;
-
-      // Nota pozisyonları (treble clef, middle C = ledger line below)
-      const notePositions = {
-        "C": 125, "D": 117.5, "E": 110, "F": 102.5,
-        "G": 95, "A": 87.5, "B": 80,
-        "C#": 125, "D#": 117.5, "F#": 102.5, "G#": 95, "A#": 87.5
-      };
-
-      // Her nota için
-      noteNames.forEach((note, index) => {
-        const xPos = 150 + index * 80;
-        const yPos = notePositions[note] || 90;
-        const isSharp = note.includes("#");
-        const baseNote = note.replace("#", "");
-
-        // Nota kafası (filled oval)
-        const noteHead = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-        noteHead.setAttribute("cx", xPos);
-        noteHead.setAttribute("cy", yPos);
-        noteHead.setAttribute("rx", 8);
-        noteHead.setAttribute("ry", 6);
-        noteHead.setAttribute("fill", "#222");
-        noteHead.setAttribute("transform", `rotate(-20, ${xPos}, ${yPos})`);
-        notesGroup.appendChild(noteHead);
-
-        // Nota sapı (stem)
-        const stem = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        if (yPos > 90) {
-          // Sap yukarı
-          stem.setAttribute("x1", xPos + 7);
-          stem.setAttribute("y1", yPos);
-          stem.setAttribute("x2", xPos + 7);
-          stem.setAttribute("y2", yPos - 35);
-        } else {
-          // Sap aşağı
-          stem.setAttribute("x1", xPos - 7);
-          stem.setAttribute("y1", yPos);
-          stem.setAttribute("x2", xPos - 7);
-          stem.setAttribute("y2", yPos + 35);
-        }
-        stem.setAttribute("stroke", "#222");
-        stem.setAttribute("stroke-width", "1.5");
-        notesGroup.appendChild(stem);
-
-        // Diyez işareti
-        if (isSharp) {
-          const sharp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-          sharp.setAttribute("x", xPos - 18);
-          sharp.setAttribute("y", yPos + 5);
-          sharp.setAttribute("font-size", "16");
-          sharp.setAttribute("fill", "#222");
-          sharp.textContent = "♯";
-          notesGroup.appendChild(sharp);
-        }
-
-        // Ledger line (C için)
-        if (note === "C" || note === "C#") {
-          const ledger = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          ledger.setAttribute("x1", xPos - 12);
-          ledger.setAttribute("y1", 128);
-          ledger.setAttribute("x2", xPos + 12);
-          ledger.setAttribute("y2", 128);
-          ledger.setAttribute("stroke", "#333");
-          ledger.setAttribute("stroke-width", "1");
-          notesGroup.appendChild(ledger);
-        }
-
-        // Nota ismi (altında)
-        const noteName = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        noteName.setAttribute("x", xPos);
-        noteName.setAttribute("y", 170);
-        noteName.setAttribute("text-anchor", "middle");
-        noteName.setAttribute("font-size", "14");
-        noteName.setAttribute("font-family", "JetBrains Mono");
-        noteName.setAttribute("fill", "#666");
-        noteName.textContent = note;
-        notesGroup.appendChild(noteName);
-      });
-
-      // Akor ismini ekle
-      const chordLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      chordLabel.setAttribute("x", 150 + (noteNames.length - 1) * 40);
-      chordLabel.setAttribute("y", 45);
-      chordLabel.setAttribute("text-anchor", "middle");
-      chordLabel.setAttribute("font-size", "18");
-      chordLabel.setAttribute("font-weight", "bold");
-      chordLabel.setAttribute("font-family", "JetBrains Mono");
-      chordLabel.setAttribute("fill", "#00aa55");
-      chordLabel.textContent = chordName;
-      notesGroup.appendChild(chordLabel);
-    }
-
-    // === PLAYBACK (ÇALMA) SİSTEMİ ===
-
-    function startPlayback() {
-      if (currentChords.length === 0) return;
-      if (isPlaying) return;
-
-      isPlaying = true;
-      currentChordIndex = 0;
-
-      updatePlayButton();
-
-      const chordDuration = getChordDuration();
-
-      playbackInterval = setInterval(() => {
-        if (currentChordIndex >= currentChords.length) {
-          if (isLooping) {
-            currentChordIndex = 0;
-          } else {
-            stopPlayback();
-            return;
-          }
-        }
-
-        const chord = currentChords[currentChordIndex];
-        playChord(chord.name, chordDuration / 1000 * 0.9);
-        selectChord(currentChordIndex);
-        highlightPlayingChord(currentChordIndex);
-        updateProgress();
-
-        currentChordIndex++;
-      }, chordDuration);
-
-      // İlk akoru hemen çal
-      const firstChord = currentChords[0];
-      playChord(firstChord.name, chordDuration / 1000 * 0.9);
-      selectChord(0);
-      highlightPlayingChord(0);
-      currentChordIndex = 1;
-    }
-
-    function stopPlayback() {
-      isPlaying = false;
-      currentChordIndex = 0;
-
-      if (playbackInterval) {
-        clearInterval(playbackInterval);
-        playbackInterval = null;
-      }
-
-      updatePlayButton();
-      updateProgress();
-
-      document.querySelectorAll(".chord-chip").forEach(chip => {
-        chip.classList.remove("playing");
-      });
-    }
-
-    function togglePlayback() {
-      if (isPlaying) {
-        stopPlayback();
-      } else {
-        if (currentChords.length === 0) {
-          generateChordProgression();
-        } else {
-          startPlayback();
-        }
-      }
-    }
-
-    function toggleLoop() {
-      isLooping = !isLooping;
-      document.getElementById("loopBtn").classList.toggle("active", isLooping);
-    }
-
-    function updatePlayButton() {
-      const playBtn = document.getElementById("playBtn");
-      if (isPlaying) {
-        playBtn.textContent = "⏸";
-        playBtn.classList.add("playing");
-      } else {
-        playBtn.textContent = "▶";
-        playBtn.classList.remove("playing");
-      }
-    }
-
-    function updateProgress() {
-      const progressFill = document.getElementById("progressFill");
-      const currentChordNum = document.getElementById("currentChordNum");
-      const currentTime = document.getElementById("currentTime");
-
-      if (currentChords.length === 0) {
-        progressFill.style.width = "0%";
-        currentChordNum.textContent = "Akor 0/0";
-        currentTime.textContent = "0:00";
-        return;
-      }
-
-      const progress = (currentChordIndex / currentChords.length) * 100;
-      progressFill.style.width = `${progress}%`;
-      currentChordNum.textContent = `Akor ${Math.min(currentChordIndex + 1, currentChords.length)}/${currentChords.length}`;
-
-      // Tahmini süre
-      const totalMs = currentChords.length * getChordDuration();
-      const currentMs = currentChordIndex * getChordDuration();
-      const totalSec = Math.floor(totalMs / 1000);
-      const currentSec = Math.floor(currentMs / 1000);
-      currentTime.textContent = `${Math.floor(currentSec / 60)}:${(currentSec % 60).toString().padStart(2, "0")} / ${Math.floor(totalSec / 60)}:${(totalSec % 60).toString().padStart(2, "0")}`;
-    }
-
-    // === METRONOM ===
-
-    function startMetronome() {
-      if (metronomeInterval) return;
-
-      metronomeOn = true;
-      currentBeat = 0;
-      document.getElementById("metronomeBtn").classList.add("active");
-
-      const beatDuration = getMillisecondsPerBeat();
-
-      metronomeInterval = setInterval(() => {
-        playMetronomeClick(currentBeat === 0);
-        updateMetronomeVisual(currentBeat);
-
-        currentBeat = (currentBeat + 1) % beatsPerMeasure;
-      }, beatDuration);
-
-      // İlk vuruşu hemen çal
-      playMetronomeClick(true);
-      updateMetronomeVisual(0);
-      currentBeat = 1;
-    }
-
-    function stopMetronome() {
-      metronomeOn = false;
-      document.getElementById("metronomeBtn").classList.remove("active");
-
-      if (metronomeInterval) {
-        clearInterval(metronomeInterval);
-        metronomeInterval = null;
-      }
-
-      // Görsel sıfırla
-      document.querySelectorAll(".beat-dot").forEach(dot => {
-        dot.classList.remove("active", "accent");
-      });
-    }
-
-    function toggleMetronome() {
-      if (metronomeOn) {
-        stopMetronome();
-      } else {
-        startMetronome();
-      }
-    }
-
-    function playMetronomeClick(isAccent) {
-      if (!audioCtx) initAudio();
-      resumeAudio();
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = "sine";
-      osc.frequency.value = isAccent ? 1000 : 800;
-
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-
-      osc.connect(gain);
-      gain.connect(masterGain);
-
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
-    }
-
-    function updateMetronomeVisual(beat) {
-      const dots = document.querySelectorAll(".beat-dot");
-      dots.forEach((dot, index) => {
-        dot.classList.remove("active", "accent");
-        if (index === beat) {
-          dot.classList.add("active");
-          if (beat === 0) {
-            dot.classList.add("accent");
-          }
-        }
-      });
-    }
-
-    // Tempo değiştirme
-    function changeTempo(delta) {
-      tempo = Math.max(40, Math.min(240, tempo + delta));
-      document.getElementById("tempoDisplay").textContent = tempo;
-
-      // Metronom çalıyorsa yeniden başlat
-      if (metronomeOn) {
-        stopMetronome();
-        startMetronome();
-      }
-
-      // Playback çalıyorsa yeniden başlat
-      if (isPlaying) {
-        stopPlayback();
-        startPlayback();
-      }
-    }
-
-    // === PRESET'LER ===
-
-    function applyPreset(presetId) {
-      const preset = PRESETS[presetId];
-      if (!preset) return;
-
-      document.getElementById("keySelect").value = preset.key;
-      document.getElementById("scaleSelect").value = preset.scale;
-
-      if (preset.chordType) {
-        document.getElementById("chordTypeSelect").value = preset.chordType;
-      }
-
-      // Uzunluğu preset'e göre ayarla
-      const presetLength = preset.degrees.length;
-      const lengthSelect = document.getElementById("lengthSelect");
-      if (presetLength <= 4) {
-        lengthSelect.value = "4";
-      } else if (presetLength <= 8) {
-        lengthSelect.value = "8";
-      } else {
-        lengthSelect.value = "12";
-      }
-
-      // Akorları manuel oluştur
-      const scaleChords = buildScaleChords(preset.key, preset.scale, preset.chordType || "triads");
-
-      currentChords = preset.degrees.map(degree => {
-        const adjustedDegree = ((degree - 1) % scaleChords.length) + 1;
-        return {
-          ...scaleChords[adjustedDegree - 1],
-          degree: adjustedDegree
-        };
-      });
-
-      updateChordDisplay();
-      updateTags(preset.key, preset.scale, "preset");
-      document.getElementById("tagStyle").textContent = preset.name;
-
-      if (currentChords.length > 0) {
-        selectChord(0);
-      }
-    }
-
-    // === ARTİKÜLASYON SEÇİMİ ===
-
-    function setArticulation(articulation) {
-      currentArticulation = articulation;
-
-      document.querySelectorAll(".articulation-btn").forEach(btn => {
-        btn.classList.remove("active");
-      });
-
-      document.querySelector(`.articulation-btn[data-articulation="${articulation}"]`)?.classList.add("active");
-    }
-
-    // === MOD DEĞİŞTİRME ===
-
-    function setMode(mode) {
-      currentMode = mode;
-
-      document.querySelectorAll(".mode-tab").forEach(tab => {
-        tab.classList.remove("active");
-      });
-      document.querySelector(`.mode-tab[data-mode="${mode}"]`)?.classList.add("active");
-
-      // Panelleri göster/gizle
-      document.getElementById("trainingPanel").style.display = mode === "practice" ? "block" : "none";
-      document.getElementById("quizPanel").style.display = mode === "quiz" ? "block" : "none";
-
-      if (mode === "quiz") {
-        startQuiz();
-      }
-    }
-
-    // === ANTRENMAN MODU ===
-
-    function updateTrainingStats() {
-      document.getElementById("statCorrect").textContent = quizStats.correct;
-      document.getElementById("statTotal").textContent = quizStats.total;
-      const accuracy = quizStats.total > 0 ? Math.round((quizStats.correct / quizStats.total) * 100) : 0;
-      document.getElementById("statAccuracy").textContent = accuracy + "%";
-    }
-
-    // === QUİZ MODU ===
-
-    function startQuiz() {
-      // Rastgele bir akor seç
-      const allRoots = NOTES_SHARP;
-      const allTypes = ["maj", "min", "dim", "aug", "maj7", "min7", "dom7"];
-
-      const randomRoot = pickRandom(allRoots);
-      const randomType = pickRandom(allTypes);
-      const correctChord = randomRoot + CHORD_TYPES[randomType].symbol;
-
-      quizCorrectAnswer = correctChord;
-
-      // 4 seçenek oluştur (1 doğru, 3 yanlış)
-      const options = [correctChord];
-
-      while (options.length < 4) {
-        const wrongRoot = pickRandom(allRoots);
-        const wrongType = pickRandom(allTypes);
-        const wrongChord = wrongRoot + CHORD_TYPES[wrongType].symbol;
-
-        if (!options.includes(wrongChord)) {
-          options.push(wrongChord);
-        }
-      }
-
-      // Karıştır
-      const shuffled = shuffleArray(options);
-
-      // UI güncelle
-      const quizOptions = document.getElementById("quizOptions");
-      quizOptions.innerHTML = "";
-
-      shuffled.forEach(option => {
-        const btn = document.createElement("button");
-        btn.className = "quiz-option";
-        btn.textContent = option;
-        btn.addEventListener("click", () => checkQuizAnswer(option, btn));
-        quizOptions.appendChild(btn);
-      });
-
-      // Akoru çal
-      playChord(correctChord, 1.2);
-      highlightPiano(correctChord);
-    }
-
-    function checkQuizAnswer(answer, btnElement) {
-      quizStats.total++;
-
-      if (answer === quizCorrectAnswer) {
-        quizStats.correct++;
-        btnElement.classList.add("correct");
-      } else {
-        btnElement.classList.add("wrong");
-        // Doğru cevabı göster
-        document.querySelectorAll(".quiz-option").forEach(btn => {
-          if (btn.textContent === quizCorrectAnswer) {
-            btn.classList.add("correct");
-          }
-        });
-      }
-
-      updateTrainingStats();
-
-      // 1.5 saniye sonra yeni soru
-      setTimeout(() => {
-        startQuiz();
-      }, 1500);
-    }
-
-    function playQuizChordAgain() {
-      if (quizCorrectAnswer) {
-        playChord(quizCorrectAnswer, 1.2);
-      }
-    }
-
-    // === SES AYARLARI ===
-
-    function setVolume(value) {
-      volume = value / 100;
-      if (masterGain) {
-        masterGain.gain.value = volume;
-      }
-      document.getElementById("volumeValue").textContent = value + "%";
-    }
-
-    function toggleReverb() {
-      reverbEnabled = !reverbEnabled;
-      document.getElementById("reverbToggle").classList.toggle("active", reverbEnabled);
-    }
-
-    function setOctave(octave) {
-      currentOctave = parseInt(octave, 10);
-    }
-
-    function setInstrument(instrument) {
-      currentInstrument = instrument;
-    }
-
-    // === EVENT LISTENERS ===
-
-    document.addEventListener("DOMContentLoaded", () => {
-      // Audio context'i kullanıcı etkileşimiyle başlat
-      document.body.addEventListener("click", () => {
-        if (!audioCtx) initAudio();
-      }, { once: true });
-
-      // Generate butonu
-      document.getElementById("generateBtn").addEventListener("click", () => {
-        stopPlayback();
-        generateChordProgression();
-      });
-
-      // Transport kontrolleri
-      document.getElementById("playBtn").addEventListener("click", togglePlayback);
-      document.getElementById("stopBtn").addEventListener("click", stopPlayback);
-      document.getElementById("loopBtn").addEventListener("click", toggleLoop);
-      document.getElementById("metronomeBtn").addEventListener("click", toggleMetronome);
-
-      // Tempo kontrolleri
-      document.getElementById("tempoUp").addEventListener("click", () => changeTempo(5));
-      document.getElementById("tempoDown").addEventListener("click", () => changeTempo(-5));
-
-      // Mod sekmeleri
-      document.querySelectorAll(".mode-tab").forEach(tab => {
-        tab.addEventListener("click", () => {
-          setMode(tab.dataset.mode);
-        });
-      });
-
-      // Artikülasyon butonları
-      document.querySelectorAll(".articulation-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          setArticulation(btn.dataset.articulation);
-        });
-      });
-
-      // Preset butonları
-      document.querySelectorAll(".preset-chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          applyPreset(chip.dataset.preset);
-        });
-      });
-
-      // Ses ayarları
-      document.getElementById("volumeSlider").addEventListener("input", (e) => {
-        setVolume(e.target.value);
-      });
-
-      document.getElementById("reverbToggle").addEventListener("click", toggleReverb);
-
-      document.getElementById("octaveSelect").addEventListener("change", (e) => {
-        setOctave(e.target.value);
-      });
-
-      document.getElementById("instrumentSelect").addEventListener("change", (e) => {
-        setInstrument(e.target.value);
-      });
-
-      // Quiz tekrar çal butonu
-      document.getElementById("playQuizChord").addEventListener("click", playQuizChordAgain);
-
-      // Piyano tuşlarına tıklama
-      document.querySelectorAll(".piano-key").forEach(key => {
-        key.addEventListener("click", () => {
-          const note = key.dataset.note;
-          const octave = parseInt(key.dataset.octave, 10) || 4;
-          const freq = getNoteFrequency(note, octave);
-          playNote(freq, 0.5);
-        });
-      });
-
-      // Klavye kısayolları
-      document.addEventListener("keydown", (e) => {
-        if (e.code === "Space") {
-          e.preventDefault();
-          togglePlayback();
-        } else if (e.code === "KeyM") {
-          toggleMetronome();
-        } else if (e.code === "KeyL") {
-          toggleLoop();
-        } else if (e.code === "KeyG") {
-          generateChordProgression();
-        } else if (e.code === "Escape") {
-          stopPlayback();
-          stopMetronome();
-        } else if (e.code === "ArrowUp") {
-          changeTempo(5);
-        } else if (e.code === "ArrowDown") {
-          changeTempo(-5);
-        }
-      });
-
-      // İlk yüklemede progress güncelle
-      updateProgress();
+  });
+}
+
+function checkNoteFinder(note, octave, keyElement) {
+  const isCorrect = note === noteFinderTarget.note && octave === noteFinderTarget.octave;
+  const feedback = document.getElementById("noteFinderFeedback");
+  
+  if (isCorrect) {
+    noteFinderStats.correct++;
+    noteFinderStats.streak++;
+    feedback.textContent = `✓ Doğru! ${noteFinderStats.streak > 1 ? `(${noteFinderStats.streak} seri)` : ""}`;
+    feedback.className = "note-finder-feedback correct";
+    keyElement.classList.add("correct-hit");
+    setTimeout(() => {
+      keyElement.classList.remove("correct-hit");
+      generateNoteFinderQuestion();
+    }, 800);
+  } else {
+    noteFinderStats.wrong++;
+    noteFinderStats.streak = 0;
+    feedback.textContent = `✗ Bu ${note}${octave}. Aranan: ${noteFinderTarget.note}${noteFinderTarget.octave}`;
+    feedback.className = "note-finder-feedback wrong";
+    keyElement.classList.add("wrong-hit");
+    setTimeout(() => keyElement.classList.remove("wrong-hit"), 300);
+    if (noteFinderMode === "learn") highlightTargetNote();
+  }
+  
+  updateNoteFinderStats();
+}
+
+function updateNoteFinderStats() {
+  document.getElementById("nfCorrect").textContent = noteFinderStats.correct;
+  document.getElementById("nfWrong").textContent = noteFinderStats.wrong;
+  document.getElementById("nfStreak").textContent = noteFinderStats.streak;
+}
+
+// === AKOR TANIMA ===
+
+function initChordRecognition() {
+  chordRecogStats = { correct: 0, total: 0 };
+  chordRecogSelected = { root: null, type: null };
+  updateChordRecogStats();
+  document.getElementById("chordRecogAnswer").style.display = "none";
+  document.getElementById("chordRecogResult").textContent = "";
+  document.getElementById("chordRecogResult").className = "chord-recog-result";
+}
+
+function playChordRecogQuestion() {
+  const difficulty = document.getElementById("chordRecogDifficulty").value;
+  
+  let types = [];
+  if (difficulty === "easy") types = ["maj", "min"];
+  else if (difficulty === "medium") types = ["maj", "min", "dim", "aug"];
+  else types = ["maj", "min", "dim", "aug", "maj7", "min7", "dom7"];
+  
+  chordRecogTarget.root = pickRandom(NOTES_SHARP);
+  chordRecogTarget.type = pickRandom(types);
+  chordRecogTarget.fullName = chordRecogTarget.root + CHORD_TYPES[chordRecogTarget.type].symbol;
+  
+  playChord(chordRecogTarget.fullName, 1.5);
+  highlightPiano(chordRecogTarget.fullName);
+  
+  // Seçenekleri göster
+  document.getElementById("chordRecogAnswer").style.display = "block";
+  document.getElementById("chordRecogResult").textContent = "";
+  document.getElementById("chordRecogResult").className = "chord-recog-result";
+  chordRecogSelected = { root: null, type: null };
+  
+  // Kök nota butonları
+  const rootDiv = document.getElementById("rootNoteOptions");
+  rootDiv.innerHTML = NOTES_SHARP.map(n => `<button class="note-option" data-note="${n}">${n}</button>`).join("");
+  rootDiv.querySelectorAll(".note-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      rootDiv.querySelectorAll(".note-option").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      chordRecogSelected.root = btn.dataset.note;
     });
+  });
+  
+  // Tip butonları
+  const typeDiv = document.getElementById("chordTypeOptions");
+  typeDiv.innerHTML = types.map(t => `<button class="type-option" data-type="${t}">${CHORD_TYPES[t].short}</button>`).join("");
+  typeDiv.querySelectorAll(".type-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      typeDiv.querySelectorAll(".type-option").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      chordRecogSelected.type = btn.dataset.type;
+    });
+  });
+}
 
-    // ============================================
-    // BÖLÜM 3 SONU - KOD TAMAMLANDI
-    // ============================================
+function checkChordRecogAnswer() {
+  if (!chordRecogSelected.root || !chordRecogSelected.type) {
+    document.getElementById("chordRecogResult").textContent = "Kök nota ve tip seçin!";
+    return;
+  }
+  
+  chordRecogStats.total++;
+  const isCorrect = chordRecogSelected.root === chordRecogTarget.root && chordRecogSelected.type === chordRecogTarget.type;
+  const result = document.getElementById("chordRecogResult");
+  
+  if (isCorrect) {
+    chordRecogStats.correct++;
+    result.textContent = `✓ Doğru! ${chordRecogTarget.fullName}`;
+    result.className = "chord-recog-result correct";
+  } else {
+    result.textContent = `✗ Yanlış! Doğru: ${chordRecogTarget.fullName}`;
+    result.className = "chord-recog-result wrong";
+  }
+  
+  updateChordRecogStats();
+}
+
+function updateChordRecogStats() {
+  document.getElementById("crCorrect").textContent = chordRecogStats.correct;
+  document.getElementById("crTotal").textContent = chordRecogStats.total;
+  const acc = chordRecogStats.total > 0 ? Math.round((chordRecogStats.correct / chordRecogStats.total) * 100) : 0;
+  document.getElementById("crAccuracy").textContent = acc + "%";
+}
+
+// === TONALİTE ANALİZİ ===
+
+const KEY_PROFILES = {
+  major: [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88],
+  minor: [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17]
+};
+
+function analyzeCurrentProgression() {
+  if (currentChords.length === 0) {
+    alert("Önce akor dizisi oluşturun!");
+    return;
+  }
+  performKeyAnalysis(currentChords.map(c => c.name));
+}
+
+function analyzeManualChords() {
+  const input = document.getElementById("manualChordInput").value.trim();
+  if (!input) {
+    alert("Akor girin (ör: C Am F G)");
+    return;
+  }
+  performKeyAnalysis(input.split(/[\s,]+/).filter(c => c.length > 0));
+}
+
+function performKeyAnalysis(chordNames) {
+  const validChords = chordNames.filter(c => parseChordName(c));
+  if (validChords.length === 0) {
+    alert("Geçerli akor bulunamadı!");
+    return;
+  }
+  
+  // Notaları topla
+  const allNotes = [];
+  const chordRoots = [];
+  
+  validChords.forEach(name => {
+    const notes = getChordNoteNames(name);
+    allNotes.push(...notes);
+    const parsed = parseChordName(name);
+    if (parsed) {
+      chordRoots.push(parsed.root);
+      allNotes.push(parsed.root, parsed.root); // Kök nota ağırlıklı
+    }
+  });
+  
+  // Nota sayımı
+  const noteCount = {};
+  NOTES_SHARP.forEach(n => noteCount[n] = 0);
+  allNotes.forEach(n => {
+    const norm = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"}[n] || n;
+    if (noteCount[norm] !== undefined) noteCount[norm]++;
+  });
+  
+  // Skorlama
+  const keyScores = [];
+  NOTES_SHARP.forEach((root, idx) => {
+    let majScore = 0, minScore = 0;
+    KEY_PROFILES.major.forEach((w, i) => majScore += noteCount[NOTES_SHARP[(idx + i) % 12]] * w);
+    KEY_PROFILES.minor.forEach((w, i) => minScore += noteCount[NOTES_SHARP[(idx + i) % 12]] * w);
+    
+    if (chordRoots.includes(root)) { majScore += 5; minScore += 5; }
+    if (chordRoots.includes(NOTES_SHARP[(idx + 7) % 12])) { majScore += 3; minScore += 3; }
+    
+    keyScores.push({ key: root, mode: "Major", score: majScore, display: root + " Major" });
+    keyScores.push({ key: root, mode: "Minor", score: minScore, display: root + " Minor" });
+  });
+  
+  keyScores.sort((a, b) => b.score - a.score);
+  
+  const top = keyScores[0];
+  const maxScore = top.score;
+  const confidence = Math.min(100, Math.round(((top.score - keyScores[1].score) / (maxScore || 1)) * 150 + 40));
+  
+  // Sonuçları göster
+  document.getElementById("keyDetectResults").style.display = "block";
+  document.getElementById("detectedKey").textContent = top.display;
+  document.getElementById("confidenceFill").style.width = confidence + "%";
+  document.getElementById("confidenceValue").textContent = confidence + "%";
+  
+  // Alternatifler
+  const altDiv = document.getElementById("alternativeKeys");
+  altDiv.innerHTML = keyScores.slice(1, 4).map(k => 
+    `<span class="alt-key-chip">${k.display} <span class="confidence">${Math.round(k.score / maxScore * 100)}%</span></span>`
+  ).join("");
+  
+  // Nota dağılımı
+  const distDiv = document.getElementById("noteDistribution");
+  const maxCount = Math.max(...Object.values(noteCount), 1);
+  distDiv.innerHTML = NOTES_SHARP.map(n => 
+    `<div class="note-bar"><div class="note-bar-fill" style="height:${(noteCount[n]/maxCount)*35}px"></div><span class="note-bar-label">${n.replace("#","♯")}</span></div>`
+  ).join("");
+  
+  // Fonksiyonel analiz
+  const funcDiv = document.getElementById("functionalAnalysis");
+  const scaleChords = buildScaleChords(top.key, top.mode === "Minor" ? "naturalMinor" : "major", "triads");
+  const funcNames = top.mode === "Minor" ? ["i","ii°","III","iv","v","VI","VII"] : ["I","ii","iii","IV","V","vi","vii°"];
+  
+  funcDiv.innerHTML = validChords.map(name => {
+    const parsed = parseChordName(name);
+    let func = "?";
+    scaleChords.forEach((sc, i) => { if (sc.root === parsed?.root) func = funcNames[i]; });
+    return `<span class="function-chip"><span class="chord-name">${name}</span><span class="function-name">(${func})</span></span>`;
+  }).join("");
+  
+  // Modal karakter
+  const modalDiv = document.getElementById("modalCharacter");
+  modalDiv.innerHTML = `Tespit: <span class="highlight">${top.display}</span>. Göreceli: ${top.mode === "Minor" ? NOTES_SHARP[(NOTES_SHARP.indexOf(top.key)+3)%12]+" Major" : NOTES_SHARP[(NOTES_SHARP.indexOf(top.key)+9)%12]+" Minor"}`;
+}
+
+// === SES AYARLARI ===
+
+function setVolume(val) {
+  volume = val / 100;
+  if (masterGain) masterGain.gain.value = volume;
+  document.getElementById("volumeValue").textContent = val + "%";
+}
+
+function toggleReverb() {
+  reverbEnabled = !reverbEnabled;
+  document.getElementById("reverbToggle").classList.toggle("active", reverbEnabled);
+  if (wetGain) wetGain.gain.value = reverbEnabled ? 0.35 : 0;
+  if (dryGain) dryGain.gain.value = reverbEnabled ? 0.65 : 1.0;
+}
+
+function setArticulation(art) {
+  currentArticulation = art;
+  document.querySelectorAll(".articulation-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(`.articulation-btn[data-articulation="${art}"]`)?.classList.add("active");
+}
+
+// === MOBİL AYARLAR ===
+
+function toggleMobileSettings() {
+  const sheet = document.getElementById("mobileBottomSheet");
+  const overlay = document.getElementById("mobileOverlay");
+  const isVisible = sheet.classList.contains("visible");
+  
+  sheet.classList.toggle("visible", !isVisible);
+  overlay.classList.toggle("visible", !isVisible);
+}
+
+// === EVENT LISTENERS ===
+
+// Sync helper: Bir kontrolü değiştirdiğinde diğerini de güncelle
+function syncControl(syncKey, value) {
+  document.querySelectorAll(`[data-sync="${syncKey}"]`).forEach(el => {
+    if (el.type === 'range' || el.tagName === 'SELECT') {
+      el.value = value;
+    }
+  });
+  // Volume value display'i de güncelle
+  if (syncKey === 'volumeSlider') {
+    document.querySelectorAll('[id$="volumeValue"]').forEach(el => {
+      el.textContent = value + '%';
+    });
+  }
+}
+
+function setupEventListeners() {
+  // Generate
+  document.getElementById("generateBtn").addEventListener("click", () => {
+    stopPlayback();
+    generateChordProgression();
+  });
+  
+  // Transport
+  document.getElementById("playBtn").addEventListener("click", togglePlayback);
+  document.getElementById("stopBtn").addEventListener("click", stopPlayback);
+  document.getElementById("loopBtn").addEventListener("click", toggleLoop);
+  document.getElementById("metronomeBtn").addEventListener("click", toggleMetronome);
+  document.getElementById("tempoUp").addEventListener("click", () => changeTempo(5));
+  document.getElementById("tempoDown").addEventListener("click", () => changeTempo(-5));
+  
+  // Modlar
+  document.querySelectorAll(".mode-tab").forEach(tab => {
+    tab.addEventListener("click", () => setMode(tab.dataset.mode));
+  });
+  
+  // Piyano tuşları
+  document.querySelectorAll(".piano-key").forEach(key => {
+    const handler = () => {
+      const note = key.dataset.note;
+      const octave = parseInt(key.dataset.octave);
+      playNote(note, octave, 1.0, 1.0);
+      
+      if (currentMode === "noteFinder" && noteFinderActive) {
+        checkNoteFinder(note, octave, key);
+      }
+    };
+    key.addEventListener("click", handler);
+    key.addEventListener("touchstart", (e) => { e.preventDefault(); handler(); }, { passive: false });
+  });
+  
+  // Note Finder
+  document.getElementById("noteFinderLearn").addEventListener("click", () => startNoteFinderMode("learn"));
+  document.getElementById("noteFinderTest").addEventListener("click", () => startNoteFinderMode("test"));
+  document.getElementById("noteFinderNext").addEventListener("click", generateNoteFinderQuestion);
+  
+  // Chord Recognition
+  document.getElementById("chordRecogPlay").addEventListener("click", playChordRecogQuestion);
+  document.getElementById("chordRecogSubmit").addEventListener("click", checkChordRecogAnswer);
+  
+  // Key Detection
+  document.getElementById("analyzeKeyBtn").addEventListener("click", analyzeCurrentProgression);
+  document.getElementById("analyzeManualBtn").addEventListener("click", analyzeManualChords);
+  
+  // Mobil
+  document.getElementById("mobileSettingsBtn").addEventListener("click", toggleMobileSettings);
+  document.getElementById("mobileOverlay").addEventListener("click", toggleMobileSettings);
+  
+  // Klavye kısayolları
+  document.addEventListener("keydown", e => {
+    if (e.code === "Space") { e.preventDefault(); togglePlayback(); }
+    else if (e.code === "KeyM") toggleMetronome();
+    else if (e.code === "KeyL") toggleLoop();
+    else if (e.code === "KeyG") generateChordProgression();
+    else if (e.code === "Escape") { stopPlayback(); stopMetronome(); }
+    else if (e.code === "ArrowUp") changeTempo(5);
+    else if (e.code === "ArrowDown") changeTempo(-5);
+  });
+  
+  // === SENKRONIZE KONTROLLER (Hem Desktop hem Mobile) ===
+  setupSyncedControls();
+}
+
+function setupSyncedControls() {
+  // Artikülasyon butonları - tüm sayfada
+  document.querySelectorAll(".articulation-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const art = btn.dataset.articulation;
+      setArticulation(art);
+      // Tüm artikülasyon butonlarını güncelle
+      document.querySelectorAll(".articulation-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.articulation === art);
+      });
+    });
+  });
+  
+  // Preset butonları - tüm sayfada
+  document.querySelectorAll(".preset-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      applyPreset(chip.dataset.preset);
+      // Mobil açıksa kapat
+      const sheet = document.getElementById("mobileBottomSheet");
+      if (sheet.classList.contains("visible")) {
+        toggleMobileSettings();
+      }
+    });
+  });
+  
+  // Volume slider - desktop
+  const desktopVolume = document.getElementById("volumeSlider");
+  if (desktopVolume) {
+    desktopVolume.addEventListener("input", e => {
+      setVolume(e.target.value);
+      syncControl('volumeSlider', e.target.value);
+    });
+  }
+  
+  // Volume slider - mobile
+  const mobileVolume = document.getElementById("mobile_volumeSlider");
+  if (mobileVolume) {
+    mobileVolume.addEventListener("input", e => {
+      setVolume(e.target.value);
+      syncControl('volumeSlider', e.target.value);
+    });
+  }
+  
+  // Oktav select - desktop
+  const desktopOctave = document.getElementById("octaveSelect");
+  if (desktopOctave) {
+    desktopOctave.addEventListener("change", e => {
+      currentOctave = parseInt(e.target.value);
+      updatePianoOctave();
+      syncControl('octaveSelect', e.target.value);
+    });
+  }
+  
+  // Oktav select - mobile
+  const mobileOctave = document.getElementById("mobile_octaveSelect");
+  if (mobileOctave) {
+    mobileOctave.addEventListener("change", e => {
+      currentOctave = parseInt(e.target.value);
+      updatePianoOctave();
+      syncControl('octaveSelect', e.target.value);
+    });
+  }
+  
+  // Reverb toggle - desktop
+  const desktopReverb = document.getElementById("reverbToggle");
+  if (desktopReverb) {
+    desktopReverb.addEventListener("click", () => {
+      toggleReverb();
+      // Tüm reverb toggle'ları güncelle
+      document.querySelectorAll('[data-sync="reverbToggle"]').forEach(el => {
+        el.classList.toggle("active", reverbEnabled);
+      });
+    });
+  }
+  
+  // Reverb toggle - mobile
+  const mobileReverb = document.getElementById("mobile_reverbToggle");
+  if (mobileReverb) {
+    mobileReverb.addEventListener("click", () => {
+      toggleReverb();
+      // Tüm reverb toggle'ları güncelle
+      document.querySelectorAll('[data-sync="reverbToggle"]').forEach(el => {
+        el.classList.toggle("active", reverbEnabled);
+      });
+    });
+  }
+  
+  // Diğer select'ler için senkronizasyon
+  ['keySelect', 'scaleSelect', 'styleSelect', 'lengthSelect', 'chordTypeSelect'].forEach(controlName => {
+    const desktop = document.getElementById(controlName);
+    const mobile = document.getElementById('mobile_' + controlName);
+    
+    if (desktop) {
+      desktop.addEventListener("change", e => {
+        syncControl(controlName, e.target.value);
+      });
+    }
+    
+    if (mobile) {
+      mobile.addEventListener("change", e => {
+        syncControl(controlName, e.target.value);
+      });
+    }
+  });
+}
+
+// === BAŞLAT ===
+
+document.addEventListener("DOMContentLoaded", initializeApp);
+
+// ============================================
+// BÖLÜM 3 SONU - KOD TAMAMLANDI
+// ============================================
   </script>
 </body>
 </html>
