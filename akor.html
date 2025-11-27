@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rastgele Akor Üretici (Piyano Resimli)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .app {
+      background: #020617;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid #1f2937;
+    }
+
+    .app h1 {
+      margin-top: 0;
+      margin-bottom: 4px;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 18px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    label {
+      color: #9ca3af;
+    }
+
+    select {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 4px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: none;
+      background: #22c55e;
+      color: #022c22;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.05s ease, box-shadow 0.1s ease, background 0.1s ease;
+    }
+
+    button:hover {
+      background: #16a34a;
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .result-box {
+      margin-top: 18px;
+      padding: 14px 12px;
+      border-radius: 12px;
+      background: #020617;
+      border: 1px solid #1f2937;
+    }
+
+    .result-title {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .chords {
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chord-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.1s ease, transform 0.05s ease, border-color 0.1s ease;
+    }
+
+    .chord-chip:hover {
+      background: #111827;
+      border-color: #6b7280;
+      transform: translateY(-1px);
+    }
+
+    .chord-chip.active {
+      background: #22c55e;
+      color: #022c22;
+      border-color: #22c55e;
+    }
+
+    .info {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      line-height: 1.4;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.7rem;
+    }
+
+    .tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #9ca3af;
+    }
+
+    /* PİYANO RESMİ (SVG) */
+    .piano-section {
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px solid #1f2937;
+    }
+
+    .piano-wrapper {
+      margin-top: 8px;
+      background: #020617;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+    }
+
+    .piano-svg {
+      width: 100%;
+      max-width: 480px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .piano-key {
+      transition: fill 0.1s ease, stroke 0.1s ease;
+      cursor: default;
+    }
+
+    .white-key {
+      fill: #f9fafb;
+      stroke: #e5e7eb;
+      stroke-width: 1;
+    }
+
+    .black-key {
+      fill: #020617;
+      stroke: #111827;
+      stroke-width: 1;
+    }
+
+    .piano-key.active.white-key {
+      fill: #bbf7d0;
+      stroke: #22c55e;
+      stroke-width: 2;
+    }
+
+    .piano-key.active.black-key {
+      fill: #4ade80;
+      stroke: #22c55e;
+      stroke-width: 2;
+    }
+
+    .piano-notes-text {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      .app {
+        border-radius: 0;
+        height: 100vh;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Rastgele Akor Üretici</h1>
+    <div class="subtitle">
+      Tonu, gamı ve müzik türünü seçin. <br />
+      Akorları hem dinleyin hem de gerçek bir piyano görüntüsü üzerinde görün. 🎹
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="keySelect">Ton (Key)</label>
+        <select id="keySelect">
+          <option value="C">C</option>
+          <option value="C#">C#</option>
+          <option value="D">D</option>
+          <option value="D#">D# / Eb</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="F#">F# / Gb</option>
+          <option value="G">G</option>
+          <option value="G#">G# / Ab</option>
+          <option value="A">A</option>
+          <option value="A#">A# / Bb</option>
+          <option value="B">B</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="scaleSelect">Gam / Mod</label>
+        <select id="scaleSelect">
+          <option value="major">Major (Ionian)</option>
+          <option value="naturalMinor">Natural Minor (Aeolian)</option>
+          <option value="harmonicMinor">Harmonik Minör</option>
+          <option value="melodicMinor">Melodik Minör</option>
+          <option value="dorian">Dorian</option>
+          <option value="phrygian">Phrygian</option>
+          <option value="lydian">Lydian</option>
+          <option value="mixolydian">Mixolydian</option>
+          <option value="locrian">Locrian</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="styleSelect">Müzik Türü</label>
+        <select id="styleSelect">
+          <option value="pop">Pop</option>
+          <option value="rock">Rock</option>
+          <option value="ballad">Ballad</option>
+          <option value="jazz">Jazz</option>
+          <option value="blues">Blues</option>
+          <option value="funk">Funk</option>
+          <option value="metal">Metal</option>
+          <option value="edm">EDM</option>
+          <option value="lofi">Lo-Fi</option>
+          <option value="latin">Latin</option>
+          <option value="random">Tam Rastgele</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="lengthSelect">Dizi Uzunluğu</label>
+        <select id="lengthSelect">
+          <option value="4">4 Akor</option>
+          <option value="8">8 Akor</option>
+          <option value="12">12 Akor</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="generateBtn">Akor Dizisi Üret ve Çal</button>
+
+    <div class="result-box">
+      <div class="result-title">Üretilen Akor Dizisi (Her akora tıklanabilir)</div>
+      <div id="chordOutput" class="chords">
+        Henüz akor üretilmedi.
+      </div>
+      <div id="extraInfo" class="info"></div>
+
+      <div class="tag-row">
+        <div id="tagKey" class="tag">Ton: -</div>
+        <div id="tagScale" class="tag">Gam: -</div>
+        <div id="tagStyle" class="tag">Tür: -</div>
+      </div>
+
+      <div class="piano-section">
+        <div class="result-title">Seçilen Akorun Piyanoda Gösterimi</div>
+        <div class="piano-wrapper">
+          <!-- 1 oktavlık piyano resmi (SVG ile çizilmiş) -->
+          <svg
+            id="pianoSvg"
+            class="piano-svg"
+            viewBox="0 0 700 120"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <!-- Beyaz tuşlar (C D E F G A B) -->
+            <!-- Her beyaz tuş 100 genişlik, 120 yükseklik -->
+            <rect class="piano-key white-key" data-note="C" x="0"   y="0" width="100" height="120" />
+            <rect class="piano-key white-key" data-note="D" x="100" y="0" width="100" height="120" />
+            <rect class="piano-key white-key" data-note="E" x="200" y="0" width="100" height="120" />
+            <rect class="piano-key white-key" data-note="F" x="300" y="0" width="100" height="120" />
+            <rect class="piano-key white-key" data-note="G" x="400" y="0" width="100" height="120" />
+            <rect class="piano-key white-key" data-note="A" x="500" y="0" width="100" height="120" />
+            <rect class="piano-key white-key" data-note="B" x="600" y="0" width="100" height="120" />
+
+            <!-- Siyah tuşlar (C#, D#, F#, G#, A#) -->
+            <!-- Daha kısa yükseklik, üstte ve beyazların üzerine konumlanmış -->
+            <rect class="piano-key black-key" data-note="C#" x="75"  y="0" width="50" height="70" />
+            <rect class="piano-key black-key" data-note="D#" x="175" y="0" width="50" height="70" />
+            <rect class="piano-key black-key" data-note="F#" x="375" y="0" width="50" height="70" />
+            <rect class="piano-key black-key" data-note="G#" x="475" y="0" width="50" height="70" />
+            <rect class="piano-key black-key" data-note="A#" x="575" y="0" width="50" height="70" />
+
+            <!-- Tuş isimleri (beyazların alt kısmına) -->
+            <text x="50"  y="110" text-anchor="middle" font-size="16" fill="#4b5563">C</text>
+            <text x="150" y="110" text-anchor="middle" font-size="16" fill="#4b5563">D</text>
+            <text x="250" y="110" text-anchor="middle" font-size="16" fill="#4b5563">E</text>
+            <text x="350" y="110" text-anchor="middle" font-size="16" fill="#4b5563">F</text>
+            <text x="450" y="110" text-anchor="middle" font-size="16" fill="#4b5563">G</text>
+            <text x="550" y="110" text-anchor="middle" font-size="16" fill="#4b5563">A</text>
+            <text x="650" y="110" text-anchor="middle" font-size="16" fill="#4b5563">B</text>
+          </svg>
+
+          <div id="pianoNotes" class="piano-notes-text">
+            Bir akora tıklayın; bu piyano görüntüsü üzerinde hangi tuşlara basacağınızı görün.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- TEMEL NOTA VE GAM TANIMLARI ---
+
+    const NOTES_SHARP = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+    const SCALE_PATTERNS = {
+      major: [0, 2, 4, 5, 7, 9, 11],            // Ionian
+      naturalMinor: [0, 2, 3, 5, 7, 8, 10],     // Aeolian
+      harmonicMinor: [0, 2, 3, 5, 7, 8, 11],
+      melodicMinor: [0, 2, 3, 5, 7, 9, 11],
+      dorian: [0, 2, 3, 5, 7, 9, 10],
+      phrygian: [0, 1, 3, 5, 7, 8, 10],
+      lydian: [0, 2, 4, 6, 7, 9, 11],
+      mixolydian: [0, 2, 4, 5, 7, 9, 10],
+      locrian: [0, 1, 3, 5, 6, 8, 10]
+    };
+
+    const PROGRESSION_PATTERNS = {
+      pop: [
+        [1, 5, 6, 4],
+        [6, 4, 1, 5],
+        [1, 6, 4, 5],
+        [1, 4, 5, 4]
+      ],
+      rock: [
+        [1, 4, 5, 4],
+        [1, 5, 4, 5],
+        [1, 3, 4, 5]
+      ],
+      ballad: [
+        [1, 6, 2, 5],
+        [1, 4, 2, 5],
+        [1, 3, 6, 4]
+      ],
+      jazz: [
+        [2, 5, 1],
+        [2, 5, 1, 6],
+        [6, 2, 5, 1]
+      ],
+      blues: [
+        [1, 1, 1, 1, 4, 4, 1, 1, 5, 4, 1, 1],
+        [1, 4, 1, 1, 4, 4, 1, 1, 5, 4, 1, 5]
+      ],
+      funk: [
+        [1, 1, 4, 4, 5, 5, 1, 1],
+        [1, 4, 1, 5, 4, 1, 5, 5]
+      ],
+      metal: [
+        [1, 6, 7, 1],
+        [1, 7, 6, 5],
+        [1, 5, 6, 7]
+      ],
+      edm: [
+        [1, 5, 6, 4],
+        [6, 4, 1, 5],
+        [1, 3, 6, 5]
+      ],
+      lofi: [
+        [2, 5, 1, 6],
+        [6, 4, 1, 5],
+        [1, 7, 6, 4]
+      ],
+      latin: [
+        [2, 5, 1, 1],
+        [1, 4, 5, 5],
+        [1, 5, 1, 5]
+      ]
+    };
+
+    function pickRandom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function buildScaleChords(key, scaleType) {
+      const pattern = SCALE_PATTERNS[scaleType];
+      if (!pattern) return [];
+
+      const rootIndex = NOTES_SHARP.indexOf(key);
+      if (rootIndex === -1) return [];
+
+      const steps = pattern;
+      const extendedSteps = steps.concat(steps.map(v => v + 12));
+
+      const chords = [];
+
+      for (let i = 0; i < 7; i++) {
+        const rootOffset = extendedSteps[i];
+        const thirdOffset = extendedSteps[i + 2];
+        const fifthOffset = extendedSteps[i + 4];
+
+        const intervalThird = thirdOffset - rootOffset;
+        const intervalFifth = fifthOffset - rootOffset;
+
+        let quality = "maj";
+        let suffix = "";
+
+        if (intervalThird === 4 && intervalFifth === 7) {
+          quality = "maj";
+          suffix = "";
+        } else if (intervalThird === 3 && intervalFifth === 7) {
+          quality = "min";
+          suffix = "m";
+        } else if (intervalThird === 3 && intervalFifth === 6) {
+          quality = "dim";
+          suffix = "°";
+        } else if (intervalThird === 4 && intervalFifth === 8) {
+          quality = "aug";
+          suffix = "+";
+        } else {
+          quality = "maj";
+          suffix = "";
+        }
+
+        const noteIndex = (rootIndex + rootOffset) % 12;
+        const noteName = NOTES_SHARP[noteIndex];
+
+        chords.push({
+          degree: i + 1,
+          name: noteName + suffix,
+          quality
+        });
+      }
+
+      return chords;
+    }
+
+    // --- SES MOTORU (Web Audio API) ---
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playNote(frequency, duration = 0.5) {
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+      gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioCtx.currentTime + duration
+      );
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    const NOTE_FREQS = {
+      "C": 261.63, "C#": 277.18, "D": 293.66, "D#": 311.13,
+      "E": 329.63, "F": 349.23, "F#": 369.99, "G": 392.00,
+      "G#": 415.30, "A": 440.00, "A#": 466.16, "B": 493.88
+    };
+
+    function getChordToneNames(chordName) {
+      const root = chordName.replace(/m|°|\+/g, "");
+      const quality =
+        chordName.includes("°") ? "dim" :
+        chordName.includes("+") ? "aug" :
+        chordName.includes("m") ? "min" :
+        "maj";
+
+      const rootIndex = NOTES_SHARP.indexOf(root);
+      if (rootIndex === -1) return [];
+
+      let thirdSemis = 4;
+      let fifthSemis = 7;
+
+      if (quality === "min") {
+        thirdSemis = 3;
+        fifthSemis = 7;
+      } else if (quality === "dim") {
+        thirdSemis = 3;
+        fifthSemis = 6;
+      } else if (quality === "aug") {
+        thirdSemis = 4;
+        fifthSemis = 8;
+      }
+
+      const thirdIndex = (rootIndex + thirdSemis) % 12;
+      const fifthIndex = (rootIndex + fifthSemis) % 12;
+
+      return [
+        NOTES_SHARP[rootIndex],
+        NOTES_SHARP[thirdIndex],
+        NOTES_SHARP[fifthIndex]
+      ];
+    }
+
+    function getChordNotes(chordName) {
+      const root = chordName.replace(/m|°|\+/g, "");
+      const quality =
+        chordName.includes("°") ? "dim" :
+        chordName.includes("+") ? "aug" :
+        chordName.includes("m") ? "min" :
+        "maj";
+
+      const rootFreq = NOTE_FREQS[root];
+      if (!rootFreq) return [];
+
+      if (quality === "maj") {
+        return [rootFreq, rootFreq * 1.25, rootFreq * 1.5];
+      }
+      if (quality === "min") {
+        return [rootFreq, rootFreq * 1.2, rootFreq * 1.5];
+      }
+      if (quality === "dim") {
+        return [rootFreq, rootFreq * 1.2, rootFreq * 1.44];
+      }
+      if (quality === "aug") {
+        return [rootFreq, rootFreq * 1.25, rootFreq * 1.6];
+      }
+      return [rootFreq];
+    }
+
+    function playChord(chordName, hold = 0.7) {
+      const freqs = getChordNotes(chordName);
+      freqs.forEach(freq => playNote(freq, hold));
+    }
+
+    function playChordSequence(chords) {
+      let t = 0;
+      chords.forEach(chord => {
+        setTimeout(() => {
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume();
+          }
+          playChord(chord);
+        }, t * 800);
+        t++;
+      });
+    }
+
+    // --- ROMA RAKAMLARI ---
+
+    function romanForDegree(degree, quality) {
+      const baseNumerals = ["I", "II", "III", "IV", "V", "VI", "VII"];
+      let base = baseNumerals[degree - 1] || "?";
+
+      if (quality === "min" || quality === "dim") {
+        base = base.toLowerCase();
+      }
+      if (quality === "dim") {
+        base += "°";
+      }
+      if (quality === "aug") {
+        base += "+";
+      }
+
+      return base;
+    }
+
+    // --- PİYANO GÖSTERİMİ (SVG) ---
+
+    function clearPianoHighlight() {
+      document.querySelectorAll(".piano-key").forEach(key => {
+        key.classList.remove("active");
+      });
+    }
+
+    function highlightChordOnPiano(chordName) {
+      const tones = getChordToneNames(chordName);
+      const pianoNotesText = document.getElementById("pianoNotes");
+
+      if (!tones.length) {
+        clearPianoHighlight();
+        pianoNotesText.textContent = "Bu akorun notaları çözümlenemedi.";
+        return;
+      }
+
+      clearPianoHighlight();
+
+      document.querySelectorAll(".piano-key").forEach(key => {
+        const note = key.getAttribute("data-note");
+        if (tones.includes(note)) {
+          key.classList.add("active");
+        }
+      });
+
+      pianoNotesText.textContent =
+        chordName + " akoru için bu piyano görüntüsünde basılacak tuşlar: " +
+        tones.join(" – ");
+    }
+
+    // --- ANA FONKSİYON: Akor üret + seslendirme + piyano göstergesi ---
+
+    function generateChordProgression() {
+      const keySelect = document.getElementById("keySelect");
+      const scaleSelect = document.getElementById("scaleSelect");
+      const styleSelect = document.getElementById("styleSelect");
+      const lengthSelect = document.getElementById("lengthSelect");
+
+      const key = keySelect.value;
+      const scaleType = scaleSelect.value;
+      const style = styleSelect.value;
+      const length = parseInt(lengthSelect.value, 10);
+
+      const chords = buildScaleChords(key, scaleType);
+      if (!chords.length) {
+        alert("Bu ton/gam için akorlar hesaplanamadı.");
+        return;
+      }
+
+      let degreesSequence = [];
+
+      if (style === "random") {
+        let lastDegree = null;
+        for (let i = 0; i < length; i++) {
+          let d;
+          do {
+            d = Math.floor(Math.random() * 7) + 1;
+          } while (d === lastDegree);
+          degreesSequence.push(d);
+          lastDegree = d;
+        }
+      } else {
+        const patterns = PROGRESSION_PATTERNS[style];
+        const pattern = pickRandom(patterns);
+        while (degreesSequence.length < length) {
+          degreesSequence = degreesSequence.concat(pattern);
+        }
+        degreesSequence = degreesSequence.slice(0, length);
+      }
+
+      const chordObjs = degreesSequence.map(d => chords[d - 1]);
+      const chordNames = chordObjs.map(ch => ch.name);
+
+      const romanNumerals = chordObjs.map(ch =>
+        romanForDegree(ch.degree, ch.quality)
+      );
+
+      // Akorları "chip" şeklinde yaz
+      const chordOutput = document.getElementById("chordOutput");
+      chordOutput.innerHTML = "";
+      chordNames.forEach((name, idx) => {
+        const chip = document.createElement("span");
+        chip.className = "chord-chip";
+        chip.textContent = name;
+        chip.dataset.chordName = name;
+        chip.addEventListener("click", () => {
+          document
+            .querySelectorAll(".chord-chip")
+            .forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume();
+          }
+          playChord(name);
+          highlightChordOnPiano(name);
+        });
+        chordOutput.appendChild(chip);
+      });
+
+      document.getElementById("extraInfo").textContent =
+        "Dereceler (Roma rakamları): " + romanNumerals.join(" – ");
+
+      document.getElementById("tagKey").textContent = "Ton: " + key;
+
+      const scaleLabelMap = {
+        major: "Major (Ionian)",
+        naturalMinor: "Natural Minor (Aeolian)",
+        harmonicMinor: "Harmonik Minör",
+        melodicMinor: "Melodik Minör",
+        dorian: "Dorian",
+        phrygian: "Phrygian",
+        lydian: "Lydian",
+        mixolydian: "Mixolydian",
+        locrian: "Locrian"
+      };
+      document.getElementById("tagScale").textContent =
+        "Gam: " + (scaleLabelMap[scaleType] || scaleType);
+
+      const styleLabelMap = {
+        pop: "Pop",
+        rock: "Rock",
+        ballad: "Ballad",
+        jazz: "Jazz",
+        blues: "Blues",
+        funk: "Funk",
+        metal: "Metal",
+        edm: "EDM",
+        lofi: "Lo-Fi",
+        latin: "Latin",
+        random: "Tam Rastgele"
+      };
+      document.getElementById("tagStyle").textContent =
+        "Tür: " + (styleLabelMap[style] || style);
+
+      // İlk akoru piyanoda ve seste göster
+      clearPianoHighlight();
+      if (chordNames.length > 0) {
+        highlightChordOnPiano(chordNames[0]);
+      }
+
+      // Tüm diziyi sırayla sesli çal
+      playChordSequence(chordNames);
+    }
+
+    document
+      .getElementById("generateBtn")
+      .addEventListener("click", generateChordProgression);
+  </script>
+</body>
+</html>
