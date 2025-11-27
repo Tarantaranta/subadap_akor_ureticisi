@@ -473,6 +473,24 @@
       color: var(--accent-coral);
     }
 
+    .bass-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      margin-left: 8px;
+    }
+
+    .bass-name {
+      min-width: 95px;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #22c55e; /* Yeşil - bass için */
+    }
+
     /* Tempo Display */
     .tempo-section {
       display: flex;
@@ -2757,6 +2775,10 @@ let currentBeat = 0;
 let beatsPerMeasure = 4;
 let currentSubdivision = 0;
 
+// Yeni özellikler
+let arpeggiatorEnabled = false;
+let bassLineEnabled = false;
+
 // Quiz ve Training
 let quizCorrectAnswer = null;
 let quizStats = { correct: 0, total: 0 };
@@ -2768,8 +2790,124 @@ let chordRecogTarget = { root: null, type: null, fullName: null };
 let chordRecogSelected = { root: null, type: null };
 let chordRecogStats = { correct: 0, total: 0 };
 
-// === GERÇEKÇİ PİYANO SES MOTORU ===
-// Fiziksel modelleme + Karplus-Strong algoritması ile gerçekçi piyano
+// === PROFESYONEl SOUNDFONT SES MOTORU ===
+// Gerçek enstrüman samples (nbrosowsky/tonejs-instruments repo'sundan)
+
+// Base URL - nbrosowsky GitHub Pages
+const SAMPLE_BASE_URL = "https://nbrosowsky.github.io/tonejs-instruments/samples/";
+
+// Enstrüman tanımları
+const INSTRUMENTS = {
+  piano: { 
+    name: "Akustik Piano", 
+    program: 0, 
+    category: "piano",
+    fallbackType: "piano",
+    tonejsUrl: SAMPLE_BASE_URL + "piano/" // Gerçek piano
+  },
+  epiano: { 
+    name: "Electric Piano", 
+    program: 4,
+    category: "piano",
+    fallbackType: "epiano",
+    tonejsUrl: null // Soundfont kullan
+  },
+  organ: { 
+    name: "Church Organ", 
+    program: 19, 
+    category: "organ",
+    fallbackType: "organ",
+    tonejsUrl: SAMPLE_BASE_URL + "organ/" // Gerçek organ
+  },
+  synth: { 
+    name: "Synth Pad", 
+    program: 89,
+    category: "synth",
+    fallbackType: "synth",
+    tonejsUrl: SAMPLE_BASE_URL + "harmonium/" // Harmonium as synth alternative
+  },
+  guitar: { 
+    name: "Akustik Gitar (Steel)", 
+    program: 25,
+    category: "guitar",
+    fallbackType: "guitar",
+    tonejsUrl: SAMPLE_BASE_URL + "guitar-acoustic/" // Gerçek akustik gitar!
+  },
+  nylonGuitar: { 
+    name: "Klasik Gitar (Nylon)", 
+    program: 24,
+    category: "guitar",
+    fallbackType: "guitar",
+    tonejsUrl: SAMPLE_BASE_URL + "guitar-nylon/" // Gerçek klasik gitar!
+  },
+  electricGuitar: { 
+    name: "Elektro Gitar", 
+    program: 27,
+    category: "guitar",
+    fallbackType: "guitar",
+    tonejsUrl: SAMPLE_BASE_URL + "guitar-electric/" // Gerçek elektro gitar!
+  },
+  strings: { 
+    name: "Violin", 
+    program: 40, 
+    category: "strings",
+    fallbackType: "strings",
+    tonejsUrl: SAMPLE_BASE_URL + "violin/" // Gerçek violin
+  },
+  bass: {
+    name: "Electric Bass",
+    program: 33,
+    category: "bass",
+    fallbackType: "bass",
+    tonejsUrl: SAMPLE_BASE_URL + "bass-electric/" // Gerçek bas gitar
+  },
+  cello: {
+    name: "Cello",
+    program: 42,
+    category: "strings",
+    fallbackType: "strings",
+    tonejsUrl: SAMPLE_BASE_URL + "cello/" // Gerçek çello
+  },
+  trumpet: {
+    name: "Trumpet",
+    program: 56,
+    category: "brass",
+    fallbackType: "synth",
+    tonejsUrl: SAMPLE_BASE_URL + "trumpet/" // Gerçek trompet
+  },
+  saxophone: {
+    name: "Saxophone",
+    program: 65,
+    category: "woodwind",
+    fallbackType: "synth",
+    tonejsUrl: SAMPLE_BASE_URL + "saxophone/" // Gerçek saksofon
+  },
+  flute: {
+    name: "Flute",
+    program: 73,
+    category: "woodwind",
+    fallbackType: "synth",
+    tonejsUrl: SAMPLE_BASE_URL + "flute/" // Gerçek flüt
+  },
+  harp: {
+    name: "Harp",
+    program: 46,
+    category: "strings",
+    fallbackType: "piano",
+    tonejsUrl: SAMPLE_BASE_URL + "harp/" // Gerçek harp
+  }
+};
+
+// Mevcut enstrüman
+let currentInstrument = "piano";
+let instrumentSamples = {};
+let loadingInstrument = false;
+
+// Soundfont CDN URL'leri (Gleitz Soundfonts - yüksek kalite)
+const SOUNDFONT_BASE_URL = "https://gleitz.github.io/midi-js-soundfonts/MusyngKite/";
+
+// Nota isimleri (Soundfont formatı)
+const SF_NOTE_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
 
 async function initAudio() {
   if (audioInitialized) return;
@@ -2777,7 +2915,6 @@ async function initAudio() {
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
-    // Resume if suspended (gerekli kullanıcı etkileşimi sonrası)
     if (audioCtx.state === "suspended") {
       await audioCtx.resume();
     }
@@ -2801,7 +2938,7 @@ async function initAudio() {
     wetGain = audioCtx.createGain();
     wetGain.gain.value = reverbEnabled ? 0.35 : 0;
     
-    // Create Convolution Reverb (Concert Hall simulation)
+    // Create Convolution Reverb
     createConvolutionReverb();
     
     // Signal Chain
@@ -2813,17 +2950,395 @@ async function initAudio() {
     convolver.connect(wetGain);
     wetGain.connect(audioCtx.destination);
     
-    // Generate piano samples
+    // Önce synthesized samples oluştur (hızlı başlangıç)
     generatePianoSamples();
     
     audioInitialized = true;
-    console.log("Audio initialized successfully!");
+    console.log("Audio initialized!");
+    
+    // Arka planda gerçek soundfont'u yükle
+    loadSoundfontInstrument(currentInstrument);
     
   } catch (err) {
     console.error("Audio init error:", err);
-    // Fallback: hide overlay anyway
     const overlay = document.getElementById("loadingOverlay");
     if (overlay) overlay.style.display = "none";
+  }
+}
+
+// Soundfont enstrüman yükleme
+async function loadSoundfontInstrument(instrumentId) {
+  if (loadingInstrument) return;
+  if (instrumentSamples[instrumentId]) {
+    console.log(`${instrumentId} zaten yüklü`);
+    return;
+  }
+  
+  const instrument = INSTRUMENTS[instrumentId];
+  if (!instrument) return;
+  
+  loadingInstrument = true;
+  showLoadingStatus(`${instrument.name} yükleniyor...`);
+  
+  try {
+    // Önce Tonejs URL'i dene (daha kaliteli)
+    if (instrument.tonejsUrl) {
+      console.log(`Loading from Tonejs: ${instrument.tonejsUrl}`);
+      const samples = await loadTonejsSamples(instrument.tonejsUrl, instrumentId);
+      
+      if (samples && Object.keys(samples).length > 0) {
+        instrumentSamples[instrumentId] = samples;
+        console.log(`${instrument.name} loaded from Tonejs: ${Object.keys(samples).length} samples`);
+        showLoadingStatus(`${instrument.name} yüklendi! ✓`);
+        setTimeout(hideLoadingStatus, 1000);
+        loadingInstrument = false;
+        return;
+      }
+    }
+    
+    // Tonejs yoksa veya başarısızsa Soundfont dene
+    const programName = getGMProgramName(instrument.program);
+    const url = `https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/${programName}-mp3.js`;
+    
+    console.log(`Loading soundfont: ${url}`);
+    
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const jsContent = await response.text();
+    const samples = await parseSoundfontData(jsContent, programName);
+    
+    if (samples && Object.keys(samples).length > 0) {
+      instrumentSamples[instrumentId] = samples;
+      console.log(`${instrument.name} loaded: ${Object.keys(samples).length} samples`);
+      showLoadingStatus(`${instrument.name} yüklendi! ✓`);
+      setTimeout(hideLoadingStatus, 1000);
+    } else {
+      throw new Error("No samples parsed");
+    }
+    
+  } catch (err) {
+    console.warn(`Soundfont yüklenemedi (${instrumentId}):`, err.message);
+    // Fallback: Synthesized samples oluştur
+    console.log(`Generating synth samples for ${instrumentId}...`);
+    generateSynthSamplesForInstrument(instrumentId);
+    showLoadingStatus(`${INSTRUMENTS[instrumentId].name} (synth) hazır`);
+    setTimeout(hideLoadingStatus, 1000);
+  }
+  
+  loadingInstrument = false;
+}
+
+// Tonejs sample'larını yükle (nbrosowsky GitHub Pages'den)
+async function loadTonejsSamples(baseUrl, instrumentId) {
+  const samples = {};
+  
+  // nbrosowsky/tonejs-instruments repo'sundan sample'lar
+  // Format: https://nbrosowsky.github.io/tonejs-instruments/samples/{instrument}/{note}.mp3
+  
+  // Enstrümana göre nota listesi (her enstrümanın sample'ları farklı)
+  let availableNotes;
+  
+  if (baseUrl.includes("salamander") || baseUrl.includes("piano")) {
+    // Piano: geniş aralık
+    availableNotes = [
+      "A0", "C1", "D#1", "F#1", "A1", "C2", "D#2", "F#2", 
+      "A2", "C3", "D#3", "F#3", "A3", "C4", "D#4", "F#4", 
+      "A4", "C5", "D#5", "F#5", "A5", "C6", "D#6", "F#6",
+      "A6", "C7", "D#7", "F#7", "A7", "C8"
+    ];
+  } else if (baseUrl.includes("guitar")) {
+    // Gitar: E2 - E5 arası (standart gitar aralığı)
+    availableNotes = [
+      "A2", "A3", "A4",
+      "C3", "C4", "C5",
+      "D#3", "D#4", "D#5",
+      "E2", "E3", "E4",
+      "F#2", "F#3", "F#4"
+    ];
+  } else if (baseUrl.includes("bass")) {
+    // Bass: düşük oktavlar
+    availableNotes = [
+      "A#1", "A#2",
+      "C#1", "C#2", "C#3",
+      "E1", "E2",
+      "G1", "G2"
+    ];
+  } else if (baseUrl.includes("cello")) {
+    // Cello
+    availableNotes = [
+      "A2", "A3", "A4",
+      "C2", "C3", "C4",
+      "D#2", "D#3", "D#4",
+      "F#2", "F#3", "F#4"
+    ];
+  } else {
+    // Genel
+    availableNotes = [
+      "A2", "A3", "A4", "A5",
+      "C3", "C4", "C5",
+      "D#3", "D#4", "D#5",
+      "F#3", "F#4", "F#5"
+    ];
+  }
+  
+  let loadedCount = 0;
+  const totalNotes = availableNotes.length;
+  
+  // Paralel yükleme için Promise'ler
+  const loadPromises = availableNotes.map(async (noteName) => {
+    try {
+      // Nota adını dosya formatına çevir (D# -> Ds, F# -> Fs)
+      const fileName = noteName.replace("#", "s");
+      const url = `${baseUrl}${fileName}.mp3`;
+      
+      const response = await fetch(url);
+      if (!response.ok) return null;
+      
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      
+      loadedCount++;
+      showLoadingStatus(`${INSTRUMENTS[instrumentId].name}: ${loadedCount}/${totalNotes}`);
+      
+      return { noteName, audioBuffer };
+      
+    } catch (e) {
+      return null;
+    }
+  });
+  
+  // Tüm yüklemeleri bekle
+  const results = await Promise.all(loadPromises);
+  
+  // Başarılı olanları kaydet
+  results.forEach(result => {
+    if (result) {
+      samples[result.noteName] = result.audioBuffer;
+    }
+  });
+  
+  // En az 3 nota yüklendiyse başarılı say
+  if (Object.keys(samples).length >= 3) {
+    // Eksik notaları mevcut notalardan interpolasyon ile doldur
+    fillMissingSamples(samples);
+  }
+  
+  return samples;
+}
+
+// Eksik notaları en yakın mevcut notadan doldur
+function fillMissingSamples(samples) {
+  const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const octaves = [2, 3, 4, 5];
+  
+  for (const octave of octaves) {
+    for (const note of allNotes) {
+      const key = `${note}${octave}`;
+      if (!samples[key]) {
+        // En yakın mevcut notayı bul
+        const nearest = findNearestSample(samples, note, octave);
+        if (nearest) {
+          samples[key] = nearest;
+        }
+      }
+    }
+  }
+}
+
+// En yakın mevcut sample'ı bul
+function findNearestSample(samples, targetNote, targetOctave) {
+  const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const targetMidi = allNotes.indexOf(targetNote) + targetOctave * 12;
+  
+  let nearestSample = null;
+  let nearestDistance = Infinity;
+  
+  for (const [key, buffer] of Object.entries(samples)) {
+    const match = key.match(/^([A-G]#?)(\d)$/);
+    if (!match) continue;
+    
+    const sampleNote = match[1];
+    const sampleOctave = parseInt(match[2]);
+    const sampleMidi = allNotes.indexOf(sampleNote) + sampleOctave * 12;
+    
+    const distance = Math.abs(sampleMidi - targetMidi);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestSample = buffer;
+    }
+  }
+  
+  return nearestSample;
+}
+
+// Belirli bir enstrüman için synthesized samples oluştur
+function generateSynthSamplesForInstrument(instrumentId) {
+  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const octaves = [2, 3, 4, 5, 6];
+  const instrument = INSTRUMENTS[instrumentId];
+  const type = instrument?.fallbackType || "piano";
+  
+  instrumentSamples[instrumentId] = {};
+  
+  octaves.forEach(octave => {
+    notes.forEach(note => {
+      const key = `${note}${octave}`;
+      instrumentSamples[instrumentId][key] = createSynthSample(note, octave, type);
+    });
+  });
+  
+  console.log(`Synth samples generated for ${instrumentId}`);
+}
+
+// GM Program numarasından isim
+function getGMProgramName(program) {
+  const gmNames = [
+    "acoustic_grand_piano", "bright_acoustic_piano", "electric_grand_piano", "honkytonk_piano",
+    "electric_piano_1", "electric_piano_2", "harpsichord", "clavinet",
+    "celesta", "glockenspiel", "music_box", "vibraphone",
+    "marimba", "xylophone", "tubular_bells", "dulcimer",
+    "drawbar_organ", "percussive_organ", "rock_organ", "church_organ",
+    "reed_organ", "accordion", "harmonica", "tango_accordion",
+    "acoustic_guitar_nylon", "acoustic_guitar_steel", "electric_guitar_jazz", "electric_guitar_clean",
+    "electric_guitar_muted", "overdriven_guitar", "distortion_guitar", "guitar_harmonics",
+    "acoustic_bass", "electric_bass_finger", "electric_bass_pick", "fretless_bass",
+    "slap_bass_1", "slap_bass_2", "synth_bass_1", "synth_bass_2",
+    "violin", "viola", "cello", "contrabass",
+    "tremolo_strings", "pizzicato_strings", "orchestral_harp", "timpani",
+    "string_ensemble_1", "string_ensemble_2", "synth_strings_1", "synth_strings_2",
+    "choir_aahs", "voice_oohs", "synth_choir", "orchestra_hit",
+    "trumpet", "trombone", "tuba", "muted_trumpet",
+    "french_horn", "brass_section", "synth_brass_1", "synth_brass_2",
+    "soprano_sax", "alto_sax", "tenor_sax", "baritone_sax",
+    "oboe", "english_horn", "bassoon", "clarinet",
+    "piccolo", "flute", "recorder", "pan_flute",
+    "blown_bottle", "shakuhachi", "whistle", "ocarina",
+    "lead_1_square", "lead_2_sawtooth", "lead_3_calliope", "lead_4_chiff",
+    "lead_5_charang", "lead_6_voice", "lead_7_fifths", "lead_8_bass_lead",
+    "pad_1_new_age", "pad_2_warm", "pad_3_polysynth", "pad_4_choir",
+    "pad_5_bowed", "pad_6_metallic", "pad_7_halo", "pad_8_sweep"
+  ];
+  return gmNames[program] || "acoustic_grand_piano";
+}
+
+// Soundfont JS verisi parse et
+async function parseSoundfontData(jsContent, programName) {
+  const samples = {};
+  
+  try {
+    // MIDI.Soundfont.instrument_name = {...} formatını parse et
+    const dataMatch = jsContent.match(/MIDI\.Soundfont\.[\w_]+\s*=\s*(\{[\s\S]*\})/);
+    if (!dataMatch) {
+      console.warn("Soundfont data format not recognized");
+      return samples;
+    }
+    
+    // JSON olarak parse et
+    const dataStr = dataMatch[1]
+      .replace(/'/g, '"')
+      .replace(/(\w+):/g, '"$1":');
+    
+    const soundfontData = JSON.parse(dataStr);
+    
+    // Her nota için audio buffer oluştur
+    const notePromises = Object.entries(soundfontData).map(async ([noteName, dataUrl]) => {
+      try {
+        // data:audio/mp3;base64,... formatından base64'ü çıkar
+        const base64Data = dataUrl.split(',')[1];
+        if (!base64Data) return;
+        
+        // Base64'ü ArrayBuffer'a çevir
+        const binaryString = atob(base64Data);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        
+        // Audio buffer'a decode et
+        const audioBuffer = await audioCtx.decodeAudioData(bytes.buffer.slice(0));
+        
+        // Nota adını standart formata çevir (Ab4 -> G#4)
+        const standardNote = convertNoteNameToStandard(noteName);
+        samples[standardNote] = audioBuffer;
+        
+      } catch (e) {
+        // Sessizce geç
+      }
+    });
+    
+    // Tüm notaları bekle (maksimum 3 saniye)
+    await Promise.race([
+      Promise.all(notePromises),
+      new Promise(resolve => setTimeout(resolve, 3000))
+    ]);
+    
+  } catch (err) {
+    console.warn("Soundfont parse error:", err);
+  }
+  
+  return samples;
+}
+
+// Nota adını standart formata çevir
+function convertNoteNameToStandard(sfNote) {
+  // Ab4 -> G#4, Bb3 -> A#3, Db5 -> C#5 vb.
+  const conversions = {
+    'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#'
+  };
+  
+  for (const [from, to] of Object.entries(conversions)) {
+    if (sfNote.startsWith(from)) {
+      return sfNote.replace(from, to);
+    }
+  }
+  return sfNote;
+}
+
+// Loading status göster
+function showLoadingStatus(message) {
+  let status = document.getElementById("instrumentLoadingStatus");
+  if (!status) {
+    status = document.createElement("div");
+    status.id = "instrumentLoadingStatus";
+    status.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(139, 92, 246, 0.9);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    `;
+    document.body.appendChild(status);
+  }
+  status.innerHTML = `<span class="loading-spinner"></span> ${message}`;
+  status.style.display = "flex";
+}
+
+function hideLoadingStatus() {
+  const status = document.getElementById("instrumentLoadingStatus");
+  if (status) {
+    status.style.display = "none";
+  }
+}
+
+// Enstrüman değiştir
+async function changeInstrument(instrumentId) {
+  if (!INSTRUMENTS[instrumentId]) return;
+  
+  currentInstrument = instrumentId;
+  console.log(`Switching to: ${INSTRUMENTS[instrumentId].name}`);
+  
+  // Eğer soundfont yüklü değilse yükle
+  if (!instrumentSamples[instrumentId]) {
+    await loadSoundfontInstrument(instrumentId);
   }
 }
 
@@ -2832,20 +3347,16 @@ function createConvolutionReverb() {
   convolver = audioCtx.createConvolver();
   
   const sampleRate = audioCtx.sampleRate;
-  const length = sampleRate * 2.8; // 2.8 saniye kuyruk
+  const length = sampleRate * 2.8;
   const impulse = audioCtx.createBuffer(2, length, sampleRate);
   
   for (let channel = 0; channel < 2; channel++) {
     const data = impulse.getChannelData(channel);
     for (let i = 0; i < length; i++) {
-      // Exponential decay
       const decay = Math.pow(1 - i / length, 2);
-      // Early reflections (0-100ms)
       const earlyReflections = i < sampleRate * 0.1 ? 
         Math.sin(i * 0.015) * Math.exp(-20 * i / sampleRate) * 0.4 : 0;
-      // Diffuse reverb tail
       const diffuse = (Math.random() * 2 - 1) * decay;
-      // Stereo spread
       const stereoOffset = channel === 0 ? 0.02 : -0.02;
       data[i] = (earlyReflections + diffuse * 0.6) * (1 + stereoOffset);
     }
@@ -2854,46 +3365,102 @@ function createConvolutionReverb() {
   convolver.buffer = impulse;
 }
 
-// Karplus-Strong + Fiziksel modelleme ile piyano sample üretimi
+// Fallback: Synthesized samples (hızlı başlangıç için)
 function generatePianoSamples() {
   const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-  const octaves = [2, 3, 4, 5, 6]; // Geniş oktav aralığı
+  const octaves = [2, 3, 4, 5, 6];
   
   octaves.forEach(octave => {
     notes.forEach(note => {
       const key = `${note}${octave}`;
-      pianoSamples[key] = createPianoSample(note, octave);
+      pianoSamples[key] = createSynthSample(note, octave, "piano");
     });
   });
   
   samplesLoaded = true;
-  document.getElementById("loadingOverlay").style.display = "none";
+  const overlay = document.getElementById("loadingOverlay");
+  if (overlay) overlay.style.display = "none";
 }
 
-// Tek piyano notası için fiziksel modelleme
-function createPianoSample(note, octave) {
+// Enstrümana göre synthesized sample oluştur
+function createSynthSample(note, octave, type) {
   const sampleRate = audioCtx.sampleRate;
-  const duration = 4.0; // 4 saniye decay
+  const duration = type === "organ" ? 6.0 : (type === "strings" ? 5.0 : 4.0);
   const length = sampleRate * duration;
   const buffer = audioCtx.createBuffer(2, length, sampleRate);
   
   const midiNote = NOTE_TO_MIDI[note] + (octave + 1) * 12;
   const frequency = 440 * Math.pow(2, (midiNote - 69) / 12);
   
-  // Piyano harmonikleri (gerçek ölçümlerden)
-  const harmonics = [
-    { ratio: 1.0, amp: 1.0, decay: 1.0 },
-    { ratio: 2.0, amp: 0.45, decay: 0.85 },
-    { ratio: 3.0, amp: 0.28, decay: 0.72 },
-    { ratio: 4.0, amp: 0.18, decay: 0.62 },
-    { ratio: 5.0, amp: 0.12, decay: 0.52 },
-    { ratio: 6.0, amp: 0.08, decay: 0.45 },
-    { ratio: 7.0, amp: 0.05, decay: 0.38 },
-    { ratio: 8.0, amp: 0.03, decay: 0.32 }
-  ];
+  // Enstrümana göre harmonik yapı
+  let harmonics;
+  switch (type) {
+    case "epiano":
+      harmonics = [
+        { ratio: 1.0, amp: 1.0, decay: 0.8 },
+        { ratio: 2.0, amp: 0.6, decay: 0.6 },
+        { ratio: 3.0, amp: 0.3, decay: 0.5 },
+        { ratio: 4.0, amp: 0.2, decay: 0.4 },
+        { ratio: 7.0, amp: 0.1, decay: 0.3 } // Bell-like
+      ];
+      break;
+    case "organ":
+      harmonics = [
+        { ratio: 0.5, amp: 0.5, decay: 1.0 },
+        { ratio: 1.0, amp: 1.0, decay: 1.0 },
+        { ratio: 2.0, amp: 0.8, decay: 1.0 },
+        { ratio: 3.0, amp: 0.6, decay: 1.0 },
+        { ratio: 4.0, amp: 0.4, decay: 1.0 },
+        { ratio: 6.0, amp: 0.2, decay: 1.0 },
+        { ratio: 8.0, amp: 0.1, decay: 1.0 }
+      ];
+      break;
+    case "synth":
+      harmonics = [
+        { ratio: 1.0, amp: 1.0, decay: 0.95 },
+        { ratio: 2.0, amp: 0.5, decay: 0.9 },
+        { ratio: 3.0, amp: 0.25, decay: 0.85 }
+      ];
+      break;
+    case "guitar":
+      harmonics = [
+        { ratio: 1.0, amp: 1.0, decay: 0.5 },
+        { ratio: 2.0, amp: 0.5, decay: 0.4 },
+        { ratio: 3.0, amp: 0.35, decay: 0.35 },
+        { ratio: 4.0, amp: 0.25, decay: 0.3 },
+        { ratio: 5.0, amp: 0.15, decay: 0.25 }
+      ];
+      break;
+    case "strings":
+      harmonics = [
+        { ratio: 1.0, amp: 1.0, decay: 0.9 },
+        { ratio: 2.0, amp: 0.7, decay: 0.85 },
+        { ratio: 3.0, amp: 0.5, decay: 0.8 },
+        { ratio: 4.0, amp: 0.3, decay: 0.75 },
+        { ratio: 5.0, amp: 0.15, decay: 0.7 }
+      ];
+      break;
+    case "bass":
+      harmonics = [
+        { ratio: 1.0, amp: 1.0, decay: 0.6 },
+        { ratio: 2.0, amp: 0.4, decay: 0.5 },
+        { ratio: 3.0, amp: 0.2, decay: 0.4 }
+      ];
+      break;
+    default: // piano
+      harmonics = [
+        { ratio: 1.0, amp: 1.0, decay: 1.0 },
+        { ratio: 2.0, amp: 0.45, decay: 0.85 },
+        { ratio: 3.0, amp: 0.28, decay: 0.72 },
+        { ratio: 4.0, amp: 0.18, decay: 0.62 },
+        { ratio: 5.0, amp: 0.12, decay: 0.52 },
+        { ratio: 6.0, amp: 0.08, decay: 0.45 },
+        { ratio: 7.0, amp: 0.05, decay: 0.38 },
+        { ratio: 8.0, amp: 0.03, decay: 0.32 }
+      ];
+  }
   
-  // Inharmonicity faktörü (gerçek piyano telleri için)
-  const inharmonicity = 0.0005 * Math.pow(frequency / 261.63, 1.5);
+  const inharmonicity = type === "piano" ? 0.0005 * Math.pow(frequency / 261.63, 1.5) : 0;
   
   for (let channel = 0; channel < 2; channel++) {
     const data = buffer.getChannelData(channel);
@@ -2902,35 +3469,42 @@ function createPianoSample(note, octave) {
       const t = i / sampleRate;
       let sample = 0;
       
-      // Harmonikleri topla
       harmonics.forEach((h, idx) => {
-        // Inharmonicity ile frekans düzeltmesi
         const harmonicFreq = frequency * h.ratio * Math.sqrt(1 + inharmonicity * h.ratio * h.ratio);
-        
-        // Decay - her harmonik farklı hızda söner
-        const harmonicDecay = Math.exp(-3.5 * t / (duration * h.decay));
-        
-        // Faz kayması (daha doğal ses için)
+        const harmonicDecay = type === "organ" ? 1 : Math.exp(-3.5 * t / (duration * h.decay));
         const phase = channel * 0.1 + idx * 0.05;
         
-        // Sine + hafif triangle karışımı
-        const sine = Math.sin(2 * Math.PI * harmonicFreq * t + phase);
-        const triangle = 2 * Math.abs(2 * ((harmonicFreq * t + phase) % 1) - 1) - 1;
-        const wave = sine * 0.85 + triangle * 0.15;
+        let wave;
+        if (type === "organ") {
+          wave = Math.sin(2 * Math.PI * harmonicFreq * t + phase);
+        } else if (type === "synth") {
+          // Saw + sine blend
+          const saw = 2 * ((harmonicFreq * t) % 1) - 1;
+          const sine = Math.sin(2 * Math.PI * harmonicFreq * t + phase);
+          wave = saw * 0.3 + sine * 0.7;
+        } else if (type === "strings") {
+          // Vibrato
+          const vibrato = Math.sin(2 * Math.PI * 5 * t) * 3;
+          wave = Math.sin(2 * Math.PI * (harmonicFreq + vibrato) * t + phase);
+        } else {
+          const sine = Math.sin(2 * Math.PI * harmonicFreq * t + phase);
+          const triangle = 2 * Math.abs(2 * ((harmonicFreq * t + phase) % 1) - 1) - 1;
+          wave = sine * 0.85 + triangle * 0.15;
+        }
         
         sample += wave * h.amp * harmonicDecay;
       });
       
-      // Attack transient (çekiç vuruşu)
-      const attackEnv = t < 0.003 ? t / 0.003 : 1;
-      const hammerNoise = t < 0.015 ? (Math.random() * 2 - 1) * Math.exp(-200 * t) * 0.3 : 0;
+      // Attack envelope
+      let attackTime = type === "strings" ? 0.1 : (type === "organ" ? 0.02 : 0.003);
+      const attackEnv = t < attackTime ? t / attackTime : 1;
       
-      // Karplus-Strong benzeri string excitation
-      const stringExcitation = t < 0.02 ? 
-        Math.sin(2 * Math.PI * frequency * 3 * t) * Math.exp(-100 * t) * 0.2 : 0;
+      // Transient noise
+      const noise = type === "guitar" ? 
+        (t < 0.02 ? (Math.random() * 2 - 1) * Math.exp(-100 * t) * 0.4 : 0) :
+        (t < 0.015 ? (Math.random() * 2 - 1) * Math.exp(-200 * t) * 0.2 : 0);
       
-      // Final sample
-      data[i] = (sample * attackEnv + hammerNoise + stringExcitation) * 0.25;
+      data[i] = (sample * attackEnv + noise) * 0.25;
     }
   }
   
@@ -2942,17 +3516,27 @@ function midiToFrequency(midi) {
   return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
-// Nota çalma
+// Nota çalma - önce soundfont, yoksa synthesized
 async function playNote(noteName, octave = 4, duration = 2.0, velocity = 1.0, delay = 0) {
   if (!audioInitialized) await initAudio();
   if (!audioCtx) return;
   if (audioCtx.state === "suspended") await audioCtx.resume();
   
   const key = `${noteName}${octave}`;
-  const buffer = pianoSamples[key];
+  
+  // Önce soundfont sample'ı dene
+  let buffer = null;
+  if (instrumentSamples[currentInstrument]) {
+    buffer = instrumentSamples[currentInstrument][key];
+  }
+  
+  // Yoksa synthesized piano sample kullan
+  if (!buffer) {
+    buffer = pianoSamples[key];
+  }
   
   if (!buffer) {
-    // Fallback: synthesis ile çal
+    // Son çare: synthesis ile çal
     playNoteSynth(noteName, octave, duration, velocity, delay);
     return;
   }
@@ -3044,11 +3628,24 @@ async function playChord(chordName, duration = 1.0) {
   
   const artParams = ARTICULATION_PARAMS[currentArticulation];
   
-  if (artParams.isArpeggio) {
-    // Arpeggio
-    notes.forEach((note, idx) => {
-      const velocity = 0.9 + Math.random() * 0.1;
-      playNote(note, currentOctave, duration * 1.2, velocity, idx * 0.07);
+  // NOT: Bass line artık playChord'dan değil, master clock'tan (playBassAtTick) çağrılıyor
+  
+  if (artParams.isArpeggio || arpeggiatorEnabled) {
+    // Arpeggio - farklı pattern'ler
+    const arpPatterns = [
+      [0, 1, 2, 1],         // Up-down
+      [0, 1, 2, 0, 1, 2],   // Up-up
+      [2, 1, 0, 1],         // Down-up
+      [0, 2, 1, 2],         // Broken
+    ];
+    const pattern = arpPatterns[Math.floor(Math.random() * arpPatterns.length)];
+    const noteDelay = duration / pattern.length * 0.8;
+    
+    pattern.forEach((noteIdx, i) => {
+      const note = notes[noteIdx % notes.length];
+      const velocity = 0.85 + Math.random() * 0.15;
+      const vel = i === 0 ? velocity + 0.1 : velocity;
+      playNote(note, currentOctave, duration * 0.6, vel, i * noteDelay);
     });
   } else {
     // Normal akor (humanize ile)
@@ -3591,6 +4188,21 @@ function getSidebarHTML(prefix) {
             <option value="random">🎲 Tam Rastgele</option>
           </select>
         </div>
+        <div class="control-group full-width">
+          <label class="control-label">🎸 Bass Pattern</label>
+          <select class="sync-control" data-sync="bassPatternSelect" id="${idPrefix}bassPatternSelect">
+            <option value="auto">🎯 Otomatik (Stile göre)</option>
+            <option value="root">🔴 Sadece Root</option>
+            <option value="rootFifth">🔵 Root + 5th</option>
+            <option value="walking">🚶 Walking Bass</option>
+            <option value="latin">💃 Latin / Bossa</option>
+            <option value="rock">🎸 Rock / Pop</option>
+            <option value="funk">🕺 Funk</option>
+            <option value="jazz">🎷 Jazz Walking</option>
+            <option value="ballad">💝 Ballad</option>
+            <option value="reggae">🌴 Reggae</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -3623,6 +4235,35 @@ function getSidebarHTML(prefix) {
         <div class="panel-title">Ses</div>
       </div>
       <div class="control-group">
+        <label class="control-label">Enstrüman</label>
+        <select class="sync-control" data-sync="instrumentSelect" id="${idPrefix}instrumentSelect">
+          <optgroup label="🎹 Klavye">
+            <option value="piano">🎹 Akustik Piano</option>
+            <option value="epiano">🎹 Electric Piano</option>
+            <option value="organ">🎹 Organ</option>
+            <option value="synth">🎹 Harmonium</option>
+          </optgroup>
+          <optgroup label="🎸 Gitar">
+            <option value="guitar">🎸 Akustik Gitar (Steel)</option>
+            <option value="nylonGuitar">🎸 Klasik Gitar (Nylon)</option>
+            <option value="electricGuitar">🎸 Elektro Gitar</option>
+          </optgroup>
+          <optgroup label="🎻 Yaylılar">
+            <option value="strings">🎻 Violin</option>
+            <option value="cello">🎻 Cello</option>
+            <option value="harp">🎻 Harp</option>
+          </optgroup>
+          <optgroup label="🎺 Nefesli">
+            <option value="trumpet">🎺 Trumpet</option>
+            <option value="saxophone">🎷 Saxophone</option>
+            <option value="flute">🎵 Flute</option>
+          </optgroup>
+          <optgroup label="🎸 Bass">
+            <option value="bass">🎸 Electric Bass</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="control-group">
         <label class="control-label">Ses Seviyesi</label>
         <div class="slider-container">
           <input type="range" class="sync-control" data-sync="volumeSlider" id="${idPrefix}volumeSlider" min="0" max="100" value="70">
@@ -3641,6 +4282,14 @@ function getSidebarHTML(prefix) {
       <div class="toggle-row">
         <span class="toggle-label">Reverb</span>
         <button class="toggle-btn active sync-control" data-sync="reverbToggle" id="${idPrefix}reverbToggle"></button>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Arpeggiator</span>
+        <button class="toggle-btn sync-control" data-sync="arpToggle" id="${idPrefix}arpToggle"></button>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-label">Bass Line</span>
+        <button class="toggle-btn sync-control" data-sync="bassToggle" id="${idPrefix}bassToggle"></button>
       </div>
     </div>
 
@@ -3712,6 +4361,13 @@ function renderContentArea() {
           <button class="rhythm-nav-btn" id="prevCompingBtn" title="Önceki Pattern">◀</button>
           <div class="comping-name" id="compingName">Straight</div>
           <button class="rhythm-nav-btn" id="nextCompingBtn" title="Sonraki Pattern">▶</button>
+        </div>
+        
+        <!-- Bass Pattern Seçici -->
+        <div class="bass-selector">
+          <button class="rhythm-nav-btn" id="prevBassBtn" title="Önceki Bass">◀</button>
+          <div class="bass-name" id="bassName">🎸 Root+5th</div>
+          <button class="rhythm-nav-btn" id="nextBassBtn" title="Sonraki Bass">▶</button>
         </div>
       </div>
       
@@ -4114,6 +4770,11 @@ function generateChordProgression() {
   });
   
   currentPatternName = patternName;
+  
+  // Bass line hesapla (stil bazlı pattern seçimi)
+  const bassPattern = getStyleBasedBassPattern(style);
+  currentBassPattern = bassPattern;
+  calculateBassLine(currentChords, bassPattern);
   
   updateChordDisplay();
   updateTags(key, scaleType, style, patternName);
@@ -4610,13 +5271,20 @@ function startPlayback() {
   isPlaying = true;
   tickCount = 0;
   currentChordIndex = 0;
-  currentSubdivision = -1; // -1 ile başla ki ilk tick'te 0'a geçsin
+  currentSubdivision = -1;
   compingIndex = 0;
   updatePlayButton();
   
   // Ritim pattern'ini al
   currentRhythmPattern = getCurrentRhythm();
   updateRhythmDisplay();
+  
+  // Bass line'ı yeniden hesapla (mevcut akorlar için)
+  if (bassLineEnabled && currentChords.length > 0) {
+    const style = document.getElementById("styleSelect")?.value || "pop";
+    currentBassPattern = getStyleBasedBassPattern(style);
+    calculateBassLine(currentChords, currentBassPattern);
+  }
   
   // Metronom butonunu aktif yap (eğer ritim açıksa)
   if (rhythmEnabled) {
@@ -4626,10 +5294,8 @@ function startPlayback() {
   
   // İlk akorun süresini hesapla - COMPING PATTERN'DEN
   const compPattern = getCompingPattern();
-  const firstDuration = compPattern.pattern[0]; // Beat cinsinden süre
+  const firstDuration = compPattern.pattern[0];
   ticksUntilNextChord = Math.round(firstDuration * ticksPerBeat);
-  
-  console.log("Comping pattern:", currentCompingPattern, "İlk süre:", firstDuration, "beat =", ticksUntilNextChord, "tick");
   
   // İlk akoru hemen çal
   const firstChord = currentChords[0];
@@ -4638,6 +5304,11 @@ function startPlayback() {
   selectChord(0);
   highlightPlayingChord(0);
   updateProgress();
+  
+  // İlk bass notasını çal
+  if (bassLineEnabled) {
+    playBassAtTick(0, 0);
+  }
   
   // İlk ritim vuruşunu çal (eğer açıksa)
   if (rhythmEnabled) {
@@ -4649,6 +5320,11 @@ function startPlayback() {
   tickCount = 1;
   
   masterInterval = setInterval(() => {
+    // Bass line (master clock ile senkronize)
+    if (bassLineEnabled) {
+      playBassAtTick(tickCount, currentChordIndex);
+    }
+    
     // Ritim vuruşu (eğer açıksa)
     if (rhythmEnabled) {
       playRhythmAtTick(tickCount);
@@ -5020,6 +5696,127 @@ function prevComping() {
   currentCompingIndex = (currentCompingIndex - 1 + compingPatternNames.length) % compingPatternNames.length;
   currentCompingPattern = compingPatternNames[currentCompingIndex];
   updateCompingDisplay();
+}
+
+// === BASS PATTERN TANIMLARI ===
+const BASS_PATTERNS = {
+  root: {
+    name: "Root Only",
+    pattern: [{ beat: 0, interval: 0 }]
+  },
+  rootFifth: {
+    name: "Root-Fifth",
+    pattern: [
+      { beat: 0, interval: 0 },
+      { beat: 2, interval: 7 }
+    ]
+  },
+  walking: {
+    name: "Walking Bass",
+    pattern: [
+      { beat: 0, interval: 0 },
+      { beat: 1, interval: 4 },
+      { beat: 2, interval: 7 },
+      { beat: 3, interval: 5 }
+    ]
+  },
+  latin: {
+    name: "Latin/Bossa",
+    pattern: [
+      { beat: 0, interval: 0 },
+      { beat: 1.5, interval: 7 },
+      { beat: 3, interval: 0 }
+    ]
+  },
+  rock: {
+    name: "Rock/Pop",
+    pattern: [
+      { beat: 0, interval: 0 },
+      { beat: 0, interval: 12 },
+      { beat: 2, interval: 0 },
+      { beat: 2, interval: 12 }
+    ]
+  },
+  funk: {
+    name: "Funk",
+    pattern: [
+      { beat: 0, interval: 0 },
+      { beat: 0.5, interval: 0 },
+      { beat: 1, interval: 7 },
+      { beat: 1.5, interval: 0 },
+      { beat: 2, interval: 5 },
+      { beat: 2.5, interval: 7 },
+      { beat: 3, interval: 0 },
+      { beat: 3.5, interval: 10 }
+    ]
+  },
+  jazz: {
+    name: "Jazz Walking",
+    pattern: [
+      { beat: 0, interval: 0 },
+      { beat: 1, interval: 2 },
+      { beat: 2, interval: 4 },
+      { beat: 3, interval: 6 }
+    ]
+  },
+  ballad: {
+    name: "Ballad",
+    pattern: [{ beat: 0, interval: 0 }]
+  },
+  reggae: {
+    name: "Reggae",
+    pattern: [
+      { beat: 0.5, interval: 0 },
+      { beat: 2.5, interval: 0 }
+    ]
+  }
+};
+
+let currentBassPattern = "rootFifth";
+let bassSequence = [];
+
+// Bass pattern fonksiyonları
+const bassPatternNames = Object.keys(BASS_PATTERNS);
+let currentBassIndex = 1; // rootFifth default
+
+function updateBassDisplay() {
+  const pattern = BASS_PATTERNS[currentBassPattern];
+  const bassNameEl = document.getElementById("bassName");
+  if (bassNameEl && pattern) {
+    // Emoji ekle
+    const emojis = {
+      root: "🔴", rootFifth: "🎸", walking: "🚶", latin: "💃",
+      rock: "🎸", funk: "🕺", jazz: "🎷", ballad: "💝", reggae: "🌴"
+    };
+    const emoji = emojis[currentBassPattern] || "🎸";
+    bassNameEl.textContent = `${emoji} ${pattern.name}`;
+  }
+  
+  // Sidebar select'i de güncelle
+  const bassSelect = document.getElementById("bassPatternSelect");
+  const mobileBassSelect = document.getElementById("mobile_bassPatternSelect");
+  if (bassSelect) bassSelect.value = currentBassPattern;
+  if (mobileBassSelect) mobileBassSelect.value = currentBassPattern;
+}
+
+function nextBass() {
+  currentBassIndex = (currentBassIndex + 1) % bassPatternNames.length;
+  currentBassPattern = bassPatternNames[currentBassIndex];
+  updateBassDisplay();
+  // Bass line'ı yeniden hesapla
+  if (currentChords.length > 0) {
+    calculateBassLine(currentChords, currentBassPattern);
+  }
+}
+
+function prevBass() {
+  currentBassIndex = (currentBassIndex - 1 + bassPatternNames.length) % bassPatternNames.length;
+  currentBassPattern = bassPatternNames[currentBassIndex];
+  updateBassDisplay();
+  // Bass line'ı yeniden hesapla
+  if (currentChords.length > 0) {
+    calculateBassLine(currentChords, currentBassPattern);
+  }
 }
 
 // Ritim (metronom) açma/kapama - playback'i durdurmadan
@@ -5701,8 +6498,130 @@ function toggleReverb() {
   if (dryGain) dryGain.gain.value = reverbEnabled ? 0.65 : 1.0;
 }
 
+function toggleArpeggiator() {
+  arpeggiatorEnabled = !arpeggiatorEnabled;
+  // Eğer arpeggiator aktifse, normal artikülasyonu arpeggio yap
+  if (arpeggiatorEnabled) {
+    currentArticulation = "arpeggio";
+  } else if (currentArticulation === "arpeggio") {
+    currentArticulation = "normal";
+  }
+  document.querySelectorAll(".articulation-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.articulation === currentArticulation);
+  });
+}
+
+function toggleBassLine() {
+  bassLineEnabled = !bassLineEnabled;
+}
+
+// Bass note çalma (akora eşlik eden bas)
+async function playBassNote(chordName, duration = 1.0) {
+  if (!bassLineEnabled) return;
+  
+  // Akorun root notasını bul
+  const rootMatch = chordName.match(/^([A-G][#b]?)/);
+  if (!rootMatch) return;
+  
+  const bassNote = rootMatch[1];
+  const bassOctave = 2; // Bas oktavı
+  
+  // Bas notasını çal
+  await playNote(bassNote, bassOctave, duration * 0.9, 0.75, 0);
+}
+
+// Mevcut bass pattern (BASS_PATTERNS yukarıda tanımlı)
+// currentBassPattern ve bassSequence de yukarıda tanımlı
+
+// Akor dizisine göre bass line hesapla
+function calculateBassLine(chords, patternType = null) {
+  const pattern = BASS_PATTERNS[patternType || currentBassPattern] || BASS_PATTERNS.rootFifth;
+  bassSequence = [];
+  
+  chords.forEach((chord, chordIndex) => {
+    const rootNote = chord.root || chord.name.match(/^([A-G][#b]?)/)?.[1];
+    if (!rootNote) return;
+    
+    const rootMidi = NOTE_TO_MIDI[rootNote];
+    const isMinor = chord.quality?.includes('min') || chord.name.includes('m');
+    
+    pattern.pattern.forEach(p => {
+      let interval = p.interval;
+      
+      // Minör akorlar için 3rd'ü düzelt (major 3rd = 4, minor 3rd = 3)
+      if (interval === 4 && isMinor) {
+        interval = 3;
+      }
+      
+      // Nota hesapla
+      const noteMidi = (rootMidi + interval) % 12;
+      const noteName = NOTES_SHARP[noteMidi];
+      
+      bassSequence.push({
+        chordIndex,
+        beat: p.beat,
+        note: noteName,
+        octave: 2,
+        velocity: p.beat === 0 ? 0.8 : 0.65, // Downbeat daha güçlü
+        duration: 0.4
+      });
+    });
+  });
+  
+  return bassSequence;
+}
+
+// Stil bazlı otomatik bass pattern seçimi
+function getStyleBasedBassPattern(style) {
+  const stylePatterns = {
+    pop: "rootFifth",
+    rock: "rock",
+    jazz: "jazz",
+    blues: "walking",
+    ballad: "ballad",
+    edm: "root",
+    latin: "latin",
+    rnb: "rootFifth",
+    classical: "root",
+    funk: "funk",
+    country: "rootFifth",
+    gospel: "walking",
+    world: "latin",
+    reggae: "reggae"
+  };
+  return stylePatterns[style] || "rootFifth";
+}
+
+// Bass line'ı master clock ile senkronize çal
+function playBassAtTick(tick, chordIndex) {
+  if (!bassLineEnabled || bassSequence.length === 0) return;
+  
+  const ticksPerBeat = 4;
+  const ticksPerMeasure = 16;
+  const beatInMeasure = (tick % ticksPerMeasure) / ticksPerBeat;
+  
+  // Bu tick'te çalması gereken bass notalarını bul
+  bassSequence.forEach(bassNote => {
+    if (bassNote.chordIndex === chordIndex) {
+      // Beat pozisyonu eşleşiyor mu? (0.1 tolerans)
+      if (Math.abs(bassNote.beat - beatInMeasure) < 0.1) {
+        playNote(bassNote.note, bassNote.octave, bassNote.duration, bassNote.velocity, 0);
+      }
+    }
+  });
+}
+
 function setArticulation(art) {
   currentArticulation = art;
+  // Arpeggiator toggle'ı da güncelle
+  if (art === "arpeggio") {
+    arpeggiatorEnabled = true;
+  } else {
+    arpeggiatorEnabled = false;
+  }
+  document.querySelectorAll('[data-sync="arpToggle"]').forEach(el => {
+    el.classList.toggle("active", arpeggiatorEnabled);
+  });
   document.querySelectorAll(".articulation-btn").forEach(b => b.classList.remove("active"));
   document.querySelector(`.articulation-btn[data-articulation="${art}"]`)?.classList.add("active");
 }
@@ -5758,9 +6677,14 @@ function setupEventListeners() {
   document.getElementById("prevCompingBtn").addEventListener("click", prevComping);
   document.getElementById("nextCompingBtn").addEventListener("click", nextComping);
   
-  // İlk ritim ve comping adını göster
+  // Bass pattern seçici butonları
+  document.getElementById("prevBassBtn").addEventListener("click", prevBass);
+  document.getElementById("nextBassBtn").addEventListener("click", nextBass);
+  
+  // İlk ritim, comping ve bass adını göster
   updateRhythmDisplay();
   updateCompingDisplay();
+  updateBassDisplay();
   
   // Modlar
   document.querySelectorAll(".mode-tab").forEach(tab => {
@@ -5904,8 +6828,88 @@ function setupSyncedControls() {
     });
   }
   
+  // Enstrüman seçici - desktop
+  const desktopInstrument = document.getElementById("instrumentSelect");
+  if (desktopInstrument) {
+    desktopInstrument.addEventListener("change", e => {
+      changeInstrument(e.target.value);
+      syncControl('instrumentSelect', e.target.value);
+    });
+  }
+  
+  // Enstrüman seçici - mobile
+  const mobileInstrument = document.getElementById("mobile_instrumentSelect");
+  if (mobileInstrument) {
+    mobileInstrument.addEventListener("change", e => {
+      changeInstrument(e.target.value);
+      syncControl('instrumentSelect', e.target.value);
+    });
+  }
+  
+  // Arpeggiator toggle - desktop & mobile
+  document.querySelectorAll('[data-sync="arpToggle"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      toggleArpeggiator();
+      document.querySelectorAll('[data-sync="arpToggle"]').forEach(el => {
+        el.classList.toggle("active", arpeggiatorEnabled);
+      });
+    });
+  });
+  
+  // Bass toggle - desktop & mobile
+  document.querySelectorAll('[data-sync="bassToggle"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      toggleBassLine();
+      document.querySelectorAll('[data-sync="bassToggle"]').forEach(el => {
+        el.classList.toggle("active", bassLineEnabled);
+      });
+    });
+  });
+  
+  // Bass pattern select - desktop
+  const desktopBassPattern = document.getElementById("bassPatternSelect");
+  if (desktopBassPattern) {
+    desktopBassPattern.addEventListener("change", e => {
+      const value = e.target.value;
+      if (value === "auto") {
+        // Otomatik mod - stile göre seç
+        const style = document.getElementById("styleSelect")?.value || "pop";
+        currentBassPattern = getStyleBasedBassPattern(style);
+      } else {
+        currentBassPattern = value;
+      }
+      currentBassIndex = bassPatternNames.indexOf(currentBassPattern);
+      updateBassDisplay();
+      if (currentChords.length > 0) {
+        calculateBassLine(currentChords, currentBassPattern);
+      }
+      syncControl('bassPatternSelect', e.target.value);
+    });
+  }
+  
+  // Bass pattern select - mobile
+  const mobileBassPattern = document.getElementById("mobile_bassPatternSelect");
+  if (mobileBassPattern) {
+    mobileBassPattern.addEventListener("change", e => {
+      const value = e.target.value;
+      if (value === "auto") {
+        const style = document.getElementById("mobile_styleSelect")?.value || 
+                      document.getElementById("styleSelect")?.value || "pop";
+        currentBassPattern = getStyleBasedBassPattern(style);
+      } else {
+        currentBassPattern = value;
+      }
+      currentBassIndex = bassPatternNames.indexOf(currentBassPattern);
+      updateBassDisplay();
+      if (currentChords.length > 0) {
+        calculateBassLine(currentChords, currentBassPattern);
+      }
+      syncControl('bassPatternSelect', e.target.value);
+    });
+  }
+  
   // Diğer select'ler için senkronizasyon
-  ['keySelect', 'scaleSelect', 'styleSelect', 'lengthSelect', 'chordTypeSelect', 'algorithmSelect'].forEach(controlName => {
+  ['keySelect', 'scaleSelect', 'styleSelect', 'lengthSelect', 'chordTypeSelect', 'algorithmSelect', 'instrumentSelect', 'bassPatternSelect'].forEach(controlName => {
     const desktop = document.getElementById(controlName);
     const mobile = document.getElementById('mobile_' + controlName);
     
